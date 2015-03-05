@@ -1,0 +1,24 @@
+import(methods)
+
+export(dputToString, dgetFromString,
+       is.Pnet, PnetPriorWeight, "PnetPriorWeight<-",
+       is.Pnode, PnodePriorWeight, "PnodePriorWeight<-",
+       PnodeRules, "PnodeRules<-", PnodeLink, "PnodeLink<-",
+       PnodeLnAlphas, "PnodeLnAlphas<-", PnodeBetas, "PnodeBetas<-",
+       PnodeLinkScale, "PnodeLinkScale<-",
+       PnodeBuildTable, PnetBuildTables,
+  )
+
+## S3method(print, NeticaBN)
+## S3method(toString, NeticaBN)
+## S3method(Ops, NeticaBN)
+## S3method(print, NeticaNode)
+## S3method(toString, NeticaNode)
+## S3method(Ops, NeticaNode)
+## S3method("[", NeticaNode)
+## S3method("[[", NeticaNode)
+## S3method("[<-", NeticaNode)
+## S3method(toString, NeticaCaseStream)
+## S3method(print, NeticaCaseStream)
+
+
