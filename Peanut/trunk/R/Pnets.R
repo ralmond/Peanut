@@ -107,7 +107,7 @@ PnodePriorWeight <- function (node) {
 
 PnodeBuildTable <- function (node) {
   node[] <- calcDPCTable(ParentStates(node),NodeStates(node),
-                         PnodeLnAlphas(node), PnodeBeta(node),
+                         PnodeLnAlphas(node), PnodeBetas(node),
                          PnodeRules(node),PnodeLink(node),
                          PnodeLinkScale(node))
   NodeExperience(node) <- PnodePriorWeight(node)
@@ -116,4 +116,47 @@ PnodeBuildTable <- function (node) {
 
 PnetBuildTables <- function (net) {
   lapply(NetworkNodesInSet(net,"pnodes"),PnodeBuildTable)
+}
+
+
+
+calcPnetLLike <- function (net,cases){
+  llike <- 0
+  nextRec <- "FIRST"
+  onodes <- NetworkNodesInSet(net,"onodes")
+  pos <- 0
+  WithOpenCaseStream(cases,
+    while(!is.na(pos)) {
+      ReadFindings(onodes,cases,nextRec)
+      nextRec <- "NEXT"
+      pos <- getCaseStreamPos(cases)
+      w <- getCaseStreamLastFreq(cases)
+      if (w<0) w<-1
+      llike <- llike + w*log(FindingsProbability(net))
+      lapply(onodes,RetractNodeFinding)
+    })
+  llike
+}
+
+calcExpTables <- function (net, cases, Estepit=1, tol=sqrt(.Machine$double.eps)) {
+  pnodes <- NetworkNodesInSet(net,"pnodes")
+  LearnCPTs(cases,pnodes,"EM",Estepit,tol)
+}
+
+
+maxTableParams<- function (net, Mstepit=3, tol=sqrt(.Machine$double.eps)) {
+  lapply(NetworkNodesInSet(net,"pnodes"),
+         function (nd) {maxTabParam(nd,Mstepit,tol)})
+}
+
+maxTabParam <- function (node, Mstepit=3, tol=sqrt(.Machine$double.eps)) {
+  ## Get the posterior pseudo-counts by multiplying each row of the
+  ## CPT by its experience.
+  counts <- sweep(node[[]],1,NodeExperience(node),"*")
+  mapDPC(counts,ParentStates(node),NodeStates(node),
+         PnodeLnAlphas(node), PnodeBeta(node),
+         PnodeRules(node),PnodeLink(node),
+         PnodeLinkScale(node),
+         control=list(reltol=tol,maxits=Mstepit)
+         )
 }
