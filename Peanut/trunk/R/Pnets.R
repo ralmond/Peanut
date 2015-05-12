@@ -1,19 +1,5 @@
 ### Parameterized networks.
-
-## A utility function for converting objects to strings and vise
-## versa.
-dputToString <- function (obj) {
-  con <- textConnection(NULL,open="w")
-  tryCatch({dput(obj,con);
-           textConnectionValue(con)},
-           finally=close(con))
-}
-
-dgetFromString <- function (str) {
-  con <- textConnection(str,open="r")
-  tryCatch(dget(con), finally=close(con))
-}
-
+### Generic functions
 
 ## Parameterized networks have the following properties:
 
@@ -23,16 +9,29 @@ dgetFromString <- function (str) {
 ## to use.
 
 is.Pnet <- function (x) {
-  is.NeticaBN(x) && length(NetworkNodesInSet(x,"Pnodes")) > 0
+  UseMethod("is.Pnet")
 }
+is.Pnet.default <- function (x) {FALSE}
+
 
 PnetPriorWeight <- function (net) {
-  dgetFromString(NetworkUserField(net,"priorWeight"))
+  UseMethod("PnetPriorWeight")
 }
 
 "PnetPriorWeight<-" <- function (net,value) {
-  NetworkUserField(net,"priorWeight") <- dputToString(value)
+  UseMethod("PnetPriorWeight<-")
 }
+
+PnetPnodes <- function (net) {
+  UseMethod("PnetPnodes")
+}
+
+PnetBuildTables <- function (net) {
+  lapply(PnetPnodes(net),PnodeBuildTable)
+}
+
+
+
 
 
 ## A parameterized node has the following fields:
@@ -46,117 +45,77 @@ PnetPriorWeight <- function (net) {
 ## each row of the CPT.   Inherits from the net if not available.
 
 is.Pnode <- function (x) {
-  is.NeticaNode(x) && "pnodes" %in% NodeSets(x)
+  UseMethod("is.Pnode")
+}
+is.Pnode.default <- function(x) {FALSE}
+
+PnodeNet <- function (node) {
+  UseMethod("PnodeNet")
 }
 
 
 PnodeRules <- function (node) {
-  dgetFromString(NodeUserField(node,"rules"))
+  UseMethod("PnodeRules")
 }
 
 "PnodeRules<-" <- function (node,value) {
-  NodeUserField(node,"rules") <- dputToString(value)
+  UseMethod("PnodeRules<-")
 }
 
 PnodeLink <- function (node) {
-  dgetFromString(NodeUserField(node,"link"))
+  UseMethod("PnodeLink")
 }
 
 "PnodeLink<-" <- function (node,value) {
-  NodeUserField(node,"link") <- dputToString(value)
+  UseMethod("PnodeLink<-")
 }
 
 PnodeLnAlphas <- function (node) {
-  dgetFromString(NodeUserField(node,"lnAlphas"))
+  UseMethod("PnodeLnAlphas")
 }
 
 "PnodeLnAlphas<-" <- function (node,value) {
-  NodeUserField(node,"lnAlphas") <- dputToString(value)
+  UseMethod("PnodeLnAlphas<-")
 }
 
 PnodeBetas <- function (node) {
-  dgetFromString(NodeUserField(node,"betas"))
+  UseMethod("PnodeBetas")
 }
 
 "PnodeBetas<-" <- function (node,value) {
-  NodeUserField(node,"betas") <- dputToString(value)
+  UseMethod("PnodeBetas<-")
 }
 
-
 PnodeLinkScale <- function (node) {
-  dgetFromString(NodeUserField(node,"linkScale"))
+  UseMethod("PnodeLinkScale")
 }
 
 "PnodeLinkScale<-" <- function (node,value) {
-  NodeUserField(node,"linkScale") <- dputToString(value)
+  UseMethod("PnodeLinkScale<-")
 }
 
-PnodePriorWeight <- function (node) {
-  result <- dgetFromString(NodeUserField(node,"priorWeight"))
-  if (is.na(result))
-    return PnetPriorWeight(NodeNet(node))
+## No effective way to do container inheretence using the R UseMethod
+## (which rebinds the function call rather than generating a new
+## one). This function trys to fetch the prior weight for a node from
+## the node, and if it is not set, uses the default from the net.
+GetPriorWeight <- function (node) {
+  result <- PnodePriorWeight(node)
+  if (is.null(result))
+    return(PnetPriorWeight(PnodeNet(node)))
   result
 }
 
+PnodePriorWeight <- function (node) {
+  UseMethod("PnodePriorWeight")
+}
+
 "PnodePriorWeight<-" <- function (node,value) {
-  NodeUserField(node,"priorWeight") <- dgetFromString(value)
+  UseMethod("PnodePriorWeight<-")
 }
 
-
-### Build CPTs from parameters
-
-PnodeBuildTable <- function (node) {
-  node[] <- calcDPCTable(ParentStates(node),NodeStates(node),
-                         PnodeLnAlphas(node), PnodeBetas(node),
-                         PnodeRules(node),PnodeLink(node),
-                         PnodeLinkScale(node))
-  NodeExperience(node) <- PnodePriorWeight(node)
-  invisible(node)
-}
-
-PnetBuildTables <- function (net) {
-  lapply(NetworkNodesInSet(net,"pnodes"),PnodeBuildTable)
+PnodeParentTvals <- function (node) {
+  UseMethod("PnodeParentTvals")
 }
 
 
 
-calcPnetLLike <- function (net,cases){
-  llike <- 0
-  nextRec <- "FIRST"
-  onodes <- NetworkNodesInSet(net,"onodes")
-  pos <- 0
-  WithOpenCaseStream(cases,
-    while(!is.na(pos)) {
-      ReadFindings(onodes,cases,nextRec)
-      nextRec <- "NEXT"
-      pos <- getCaseStreamPos(cases)
-      w <- getCaseStreamLastFreq(cases)
-      if (w<0) w<-1
-      llike <- llike + w*log(FindingsProbability(net))
-      lapply(onodes,RetractNodeFinding)
-    })
-  llike
-}
-
-calcExpTables <- function (net, cases, Estepit=1, tol=sqrt(.Machine$double.eps)) {
-  pnodes <- NetworkNodesInSet(net,"pnodes")
-  LearnCPTs(cases,pnodes,"EM",Estepit,tol)
-}
-
-
-maxTableParams<- function (net, Mstepit=3, tol=sqrt(.Machine$double.eps)) {
-  lapply(NetworkNodesInSet(net,"pnodes"),
-         function (nd) {maxTabParam(nd,Mstepit,tol)})
-}
-
-maxTabParam <- function (node, Mstepit=3, tol=sqrt(.Machine$double.eps)) {
-  ## Get the posterior pseudo-counts by multiplying each row of the
-  ## CPT by its experience.
-  counts <- sweep(node[[]],1,NodeExperience(node),"*")
-  mapDPC(counts,ParentStates(node),NodeStates(node),
-         PnodeLnAlphas(node), PnodeBeta(node),
-         PnodeRules(node),PnodeLink(node),
-         PnodeLinkScale(node),
-         control=list(reltol=tol,maxits=Mstepit)
-         )
-}
