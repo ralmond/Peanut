@@ -1,0 +1,266 @@
+// ~->[DNET-1]->~
+
+// File created by an unlicensed user using Netica 5.04 on 05/10/2015 at 04:40:43 PM.
+
+bnet IRT10_2PL {
+autoupdate = FALSE;
+whenchanged = 1431290316;
+user U1 {
+	priorWeight = "10";
+	};
+
+node theta {
+	kind = NATURE;
+	discrete = TRUE;
+	chance = CHANCE;
+	states = (VH, High, Mid, Low, VL);
+	levels = (1.2815515655446, 0.524400512708041, 0, -0.524400512708041, -1.2815515655446);
+	parents = ();
+	probs = 
+		// VH           High         Mid          Low          VL           
+		  (0.2,         0.2,         0.2,         0.2,         0.2);
+	whenchanged = 1431290316;
+	};
+
+node item1 {
+	kind = NATURE;
+	discrete = TRUE;
+	chance = CHANCE;
+	states = (Correct, Incorrect);
+	levels = (1, 0);
+	parents = (theta);
+	probs = 
+		// Correct      Incorrect     // theta 
+		  (0.9390416,   0.06095839,   // VH    
+		   0.7997462,   0.2002538,    // High  
+		   0.6105753,   0.3894247,    // Mid   
+		   0.381014,    0.618986,     // Low   
+		   0.1376193,   0.8623807);   // VL    ;
+	numcases = 10;
+	whenchanged = 1431290316;
+	user U1 {
+		rules = "\"Compensatory\"";
+		link = "\"partialCredit\"";
+		lnAlphas = "0.0476387492090415";
+		betas = "-0.264547705008077";
+		};
+	};
+
+node item2 {
+	kind = NATURE;
+	discrete = TRUE;
+	chance = CHANCE;
+	states = (Correct, Incorrect);
+	levels = (1, 0);
+	parents = (theta);
+	probs = 
+		// Correct      Incorrect     // theta 
+		  (0.9764996,   0.02350046,   // VH    
+		   0.7055307,   0.2944693,    // High  
+		   0.2493041,   0.7506959,    // Mid   
+		   0.04400581,  0.9559942,    // Low   
+		   0.002647182, 0.9973528);   // VL    ;
+	numcases = 10;
+	whenchanged = 1431290316;
+	user U1 {
+		rules = "\"Compensatory\"";
+		link = "\"partialCredit\"";
+		lnAlphas = "0.795997940149361";
+		betas = "0.648427878533117";
+		};
+	};
+
+node item3 {
+	kind = NATURE;
+	discrete = TRUE;
+	chance = CHANCE;
+	states = (Correct, Incorrect);
+	levels = (1, 0);
+	parents = (theta);
+	probs = 
+		// Correct      Incorrect     // theta 
+		  (0.9913972,   0.00860278,   // VH    
+		   0.9082197,   0.09178032,   // High  
+		   0.6437789,   0.3562212,    // Mid   
+		   0.2481541,   0.7518459,    // Low   
+		   0.02756054,  0.9724395);   // VL    ;
+	numcases = 10;
+	whenchanged = 1431290316;
+	user U1 {
+		rules = "\"Compensatory\"";
+		link = "\"partialCredit\"";
+		lnAlphas = "0.645667166162376";
+		betas = "-0.348119682962827";
+		};
+	};
+
+node item4 {
+	kind = NATURE;
+	discrete = TRUE;
+	chance = CHANCE;
+	states = (Correct, Incorrect);
+	levels = (1, 0);
+	parents = (theta);
+	probs = 
+		// Correct      Incorrect     // theta 
+		  (0.9772255,   0.02277448,   // VH    
+		   0.9124117,   0.08758824,   // High  
+		   0.7962439,   0.2037561,    // Mid   
+		   0.5944806,   0.4055194,    // Low   
+		   0.262481,    0.737519);    // VL    ;
+	numcases = 10;
+	whenchanged = 1431290316;
+	user U1 {
+		rules = "\"Compensatory\"";
+		link = "\"partialCredit\"";
+		lnAlphas = "0.0951405901752131";
+		betas = "-0.8017541047264";
+		};
+	};
+
+node item5 {
+	kind = NATURE;
+	discrete = TRUE;
+	chance = CHANCE;
+	states = (Correct, Incorrect);
+	levels = (1, 0);
+	parents = (theta);
+	probs = 
+		// Correct      Incorrect     // theta 
+		  (0.5587343,   0.4412657,    // VH    
+		   0.2125512,   0.7874488,    // High  
+		   0.08470105,  0.9152989,    // Mid   
+		   0.03075008,  0.9692499,    // Low   
+		   0.006717679, 0.9932823);   // VL    ;
+	numcases = 10;
+	whenchanged = 1431290316;
+	user U1 {
+		rules = "\"Compensatory\"";
+		link = "\"partialCredit\"";
+		lnAlphas = "0.183003819393273";
+		betas = "1.40007220392219";
+		};
+	};
+
+node item6 {
+	kind = NATURE;
+	discrete = TRUE;
+	chance = CHANCE;
+	states = (Correct, Incorrect);
+	levels = (1, 0);
+	parents = (theta);
+	probs = 
+		// Correct      Incorrect     // theta 
+		  (0.7767686,   0.2232314,    // VH    
+		   0.3151467,   0.6848533,    // High  
+		   0.1018022,   0.8981978,    // Mid   
+		   0.02715795,  0.972842,     // Low   
+		   0.003678182, 0.9963218);   // VL    ;
+	numcases = 10;
+	whenchanged = 1431290316;
+	user U1 {
+		rules = "\"Compensatory\"";
+		link = "\"partialCredit\"";
+		lnAlphas = "0.452195207193981";
+		betas = "1.2807994096491";
+		};
+	};
+
+node item7 {
+	kind = NATURE;
+	discrete = TRUE;
+	chance = CHANCE;
+	states = (Correct, Incorrect);
+	levels = (1, 0);
+	parents = (theta);
+	probs = 
+		// Correct      Incorrect     // theta 
+		  (0.446476,    0.553524,     // VH    
+		   0.3057,      0.6943,       // High  
+		   0.224508,    0.775492,     // Mid   
+		   0.1599135,   0.8400865,    // Low   
+		   0.09412704,  0.9058729);   // VL    ;
+	numcases = 10;
+	whenchanged = 1431290316;
+	user U1 {
+		rules = "\"Compensatory\"";
+		link = "\"partialCredit\"";
+		lnAlphas = "-0.754331913375436";
+		betas = "0.7291685391767";
+		};
+	};
+
+node item8 {
+	kind = NATURE;
+	discrete = TRUE;
+	chance = CHANCE;
+	states = (Correct, Incorrect);
+	levels = (1, 0);
+	parents = (theta);
+	probs = 
+		// Correct      Incorrect     // theta 
+		  (0.9864965,   0.0135035,    // VH    
+		   0.919108,    0.08089196,   // High  
+		   0.7579404,   0.2420596,    // Mid   
+		   0.4632047,   0.5367953,    // Low   
+		   0.118327,    0.881673);    // VL    ;
+	numcases = 10;
+	whenchanged = 1431290316;
+	user U1 {
+		rules = "\"Compensatory\"";
+		link = "\"partialCredit\"";
+		lnAlphas = "0.368635945624921";
+		betas = "-0.671423984065027";
+		};
+	};
+
+node item9 {
+	kind = NATURE;
+	discrete = TRUE;
+	chance = CHANCE;
+	states = (Correct, Incorrect);
+	levels = (1, 0);
+	parents = (theta);
+	probs = 
+		// Correct      Incorrect     // theta 
+		  (0.8997503,   0.1002497,    // VH    
+		   0.819366,    0.180634,     // High  
+		   0.7387407,   0.2612593,    // Mid   
+		   0.6380265,   0.3619735,    // Low   
+		   0.4711356,   0.5288644);   // VL    ;
+	numcases = 10;
+	whenchanged = 1431290316;
+	user U1 {
+		rules = "\"Compensatory\"";
+		link = "\"partialCredit\"";
+		lnAlphas = "-0.634582528168393";
+		betas = "-0.611431494212144";
+		};
+	};
+
+node item10 {
+	kind = NATURE;
+	discrete = TRUE;
+	chance = CHANCE;
+	states = (Correct, Incorrect);
+	levels = (1, 0);
+	parents = (theta);
+	probs = 
+		// Correct      Incorrect     // theta 
+		  (0.4753444,   0.5246556,    // VH    
+		   0.207511,    0.7924889,    // High  
+		   0.09977665,  0.9002234,    // Mid   
+		   0.04481238,  0.9551876,    // Low   
+		   0.01337748,  0.9866225);   // VL    ;
+	numcases = 10;
+	whenchanged = 1431290316;
+	user U1 {
+		rules = "\"Compensatory\"";
+		link = "\"partialCredit\"";
+		lnAlphas = "-0.0362834000036211";
+		betas = "1.29394631299766";
+		};
+	};
+NodeSet pnodes {Nodes = (item1, item2, item3, item4, item5, item6, item7, item8, item9, item10);};
+NodeSet observables {Nodes = (item1, item2, item3, item4, item5, item6, item7, item8, item9, item10);};
+};
