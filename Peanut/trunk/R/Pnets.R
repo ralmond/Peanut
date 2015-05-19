@@ -26,7 +26,7 @@ PnetPnodes <- function (net) {
   UseMethod("PnetPnodes")
 }
 
-PnetBuildTables <- function (net) {
+BuildAllTables <- function (net) {
   lapply(PnetPnodes(net),PnodeBuildTable)
 }
 

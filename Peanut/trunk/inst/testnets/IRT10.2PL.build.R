@@ -55,7 +55,7 @@ for (j in 1:J) {
   PnodeLnAlphas(items[[j]]) <- baselna
   PnodeBetas(items[[j]]) <- baseb
 }
-PnetBuildTables(IRT10.2PL)
+BuildAllTables(IRT10.2PL)
 WriteNetworks(IRT10.2PL,"IRT10.2PL.base.dne")
 
 

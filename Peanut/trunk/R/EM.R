@@ -6,7 +6,7 @@ GEMfit <- function (net, cases, tol=sqrt(.Machine$double.eps), maxit=100,
   converged <- FALSE
   llike <- rep(NA,maxit+1)
   iter <- 1
-  PnetBuildTables(net)
+  BuildAllTables(net)
   llike[iter] <- calcPnetLLike(net,cases)
 
   while(!converged && iter <= maxit) {
@@ -18,7 +18,7 @@ GEMfit <- function (net, cases, tol=sqrt(.Machine$double.eps), maxit=100,
 
     ## Update parameters & convergence test
     iter <- iter + 1
-    PnetBuildTables(net)
+    BuildAllTables(net)
     llike[iter] <- calcPnetLLike(net,cases)
     converged <- (abs(llike[iter]-llike[iter-1]) < tol)
   }
