@@ -1,12 +1,12 @@
 Package: Peanut
-Version: 0.1-1
-Date: 2015/03/04
-Title: Parameterized Bayesian Networks
+Version: 0.1-2
+Date: 2015/05/19
+Title: Parameterized Bayesian Networks, Abstract Classes
 Author: Russell Almond
 Maintainer: Russell Almond <ralmond@fsu.edu>
-Depends: R (>= 3.0), RNetica (>= 0.4), CPTtools (>= 0.2), methods
-Description: This provides support of learning Netica networks
-parameterized using CPTtools
+Depends: R (>= 3.0), CPTtools (>= 0.2)
+Description: This provides support of learning conditional probability
+tables parameterized using CPTtools
 License: Artistic-2.0 
 URL: http://pluto.coe.fsu.edu/RNetica
 
