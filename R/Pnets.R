@@ -13,7 +13,6 @@ is.Pnet <- function (x) {
 }
 is.Pnet.default <- function (x) {FALSE}
 
-
 PnetPriorWeight <- function (net) {
   UseMethod("PnetPriorWeight")
 }
@@ -27,7 +26,7 @@ PnetPnodes <- function (net) {
 }
 
 BuildAllTables <- function (net) {
-  lapply(PnetPnodes(net),PnodeBuildTable)
+  lapply(PnetPnodes(net),BuildTable)
 }
 
 
@@ -53,7 +52,6 @@ PnodeNet <- function (node) {
   UseMethod("PnodeNet")
 }
 
-
 PnodeRules <- function (node) {
   UseMethod("PnodeRules")
 }
@@ -78,12 +76,37 @@ PnodeLnAlphas <- function (node) {
   UseMethod("PnodeLnAlphas<-")
 }
 
+PnodeAlphas <- function (node) {
+  UseMethod("PnodeAlphas")
+}
+
+"PnodeAlphas<-" <- function (node,value) {
+  UseMethod("PnodeAlphas<-")
+}
+
+PnodeAlphas.default <- funciton(node) {
+  exp(PnodeAlphas(node))
+}
+
+"PnodeAlphas<-.default" <- funciton(node,value) {
+  PnodeLnAlphas(node) <- log(value)
+  node
+}
+
 PnodeBetas <- function (node) {
   UseMethod("PnodeBetas")
 }
 
 "PnodeBetas<-" <- function (node,value) {
   UseMethod("PnodeBetas<-")
+}
+
+PnodeQ <- function (node) {
+  UseMethod("PnodeQ")
+}
+
+"PnodeQ<-" <- function (node,value) {
+  UseMethod("PnodeQ<-")
 }
 
 PnodeLinkScale <- function (node) {
