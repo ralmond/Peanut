@@ -11,7 +11,12 @@
 is.Pnet <- function (x) {
   UseMethod("is.Pnet")
 }
-is.Pnet.default <- function (x) {FALSE}
+is.Pnet.default <- function (x) {
+  "Pnet" %in% class(x)
+}
+as.Pnet <- function (x) {
+  UseMethod("as.Pnet")
+}
 
 PnetPriorWeight <- function (net) {
   UseMethod("PnetPriorWeight")
@@ -25,8 +30,24 @@ PnetPnodes <- function (net) {
   UseMethod("PnetPnodes")
 }
 
+"PnetPnodes<-" <- function (net, value) {
+  UseMethod("PnetPnodes<-")
+}
+
+Pnet <- function (net, priorWeight=10, pnodes=list()) {
+  UseMethod("Pnet")
+}
+Pnet.default <- function (net, priorWeight=10, pnodes=list()) {
+  if (!("Pnet" %in% class(net)))
+    class(net) <- c(class(net),"Pnet")
+  PnetPriorWeight(net) <- priorWeight
+  PnetPnodes(net) <- pnodes
+  net
+}
+
 BuildAllTables <- function (net) {
   lapply(PnetPnodes(net),BuildTable)
+  invisible(net)
 }
 
 
@@ -46,7 +67,12 @@ BuildAllTables <- function (net) {
 is.Pnode <- function (x) {
   UseMethod("is.Pnode")
 }
-is.Pnode.default <- function(x) {FALSE}
+is.Pnode.default <- function(x) {
+    "Pnode" %in% class(x)
+}
+as.Pnode <- function (x) {
+  UseMethod("as.Pnode")
+}
 
 PnodeNet <- function (node) {
   UseMethod("PnodeNet")
@@ -84,12 +110,22 @@ PnodeAlphas <- function (node) {
   UseMethod("PnodeAlphas<-")
 }
 
-PnodeAlphas.default <- funciton(node) {
-  exp(PnodeAlphas(node))
+PnodeAlphas.default <- function(node) {
+  result <- PnodeLnAlphas(node)
+  if (is.list(result)) {
+    return (lapply(result,exp))
+  } else {
+    return (exp(result))
+  }
 }
 
-"PnodeAlphas<-.default" <- funciton(node,value) {
-  PnodeLnAlphas(node) <- log(value)
+"PnodeAlphas<-.default" <- function(node,value) {
+  if (is.list(value)) {
+    value <- lapply(value,log)
+  } else {
+    value <- log(value)
+  }
+  PnodeLnAlphas(node) <- value
   node
 }
 
@@ -117,6 +153,13 @@ PnodeLinkScale <- function (node) {
   UseMethod("PnodeLinkScale<-")
 }
 
+Pnode <- function (node, lnAlphas, betas, rules="Compensatory",
+                   link="partialCredit",Q=TRUE,linkScale=NULL,
+                   priorWeight=NULL) {
+  UseMethod("Pnode")
+}
+
+
 ## No effective way to do container inheretence using the R UseMethod
 ## (which rebinds the function call rather than generating a new
 ## one). This function trys to fetch the prior weight for a node from
@@ -140,5 +183,7 @@ PnodeParentTvals <- function (node) {
   UseMethod("PnodeParentTvals")
 }
 
-
+BuildTable <- function (node) {
+  UseMethod("BuildTable")
+}
 
