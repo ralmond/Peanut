@@ -1,10 +1,12 @@
-import(methods)
+#import(methods)
 
 ## Pnet and Pnode interfaces
-export(is.Pnet, PnetPriorWeight, "PnetPriorWeight<-",
-       PnetPnodes, BuildAllTables,
-       is.Pnode, PnodeNet,
-       PnodeQ, "PnodeQ<-"
+export(is.Pnet, as.Pnet, Pnet,
+       PnetPriorWeight, "PnetPriorWeight<-",
+       PnetPnodes, "PnetPnodes<-",
+       BuildAllTables,
+       is.Pnode, as.Pnode, Pnode, PnodeNet,
+       PnodeQ, "PnodeQ<-",
        PnodePriorWeight, "PnodePriorWeight<-",
        PnodeRules, "PnodeRules<-",
        PnodeLink, "PnodeLink<-",
@@ -21,6 +23,7 @@ export(GEMfit, calcPnetLLike, calcExpTables,
 
 
 S3method(is.Pnet, default)
+S3method(Pnet, default)
 S3method(is.Pnode, default)
 S3method(PnodeAlphas, default)
 S3method("PnodeAlphas<-", default)

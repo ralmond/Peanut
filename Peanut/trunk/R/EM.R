@@ -24,7 +24,7 @@ GEMfit <- function (net, cases, tol=sqrt(.Machine$double.eps), maxit=100,
   }
 
   list(converged=converged,iter=iter,
-       llikes=llikes[1:iter])
+       llikes=llike[1:iter])
 }
 
 
@@ -49,16 +49,17 @@ calcExpTables <- function (net, cases, Estepit=1, tol=sqrt(.Machine$double.eps))
   UseMethod("calcExpTables")
 }
 
-maxAllTableParams <- function (net, Mstepit=3, tol=sqrt(.Machine$double.eps)) {
-  UseMethod("maxTableParams")
+maxAllTableParams <- function (net, Mstepit=5, tol=sqrt(.Machine$double.eps)) {
+  UseMethod("maxAllTableParams")
 }
 
-maxAllTableParams.default <- function (net, Mstepit=3,
+maxAllTableParams.default <- function (net, Mstepit=5,
                                        tol=sqrt(.Machine$double.eps)) {
   lapply(PnetPnodes(net),
          function (nd) {maxCPTParam(nd,Mstepit,tol)})
+  invisible(net)
 }
 
-maxCPTParam <- function (node, Mstepit=3, tol=sqrt(.Machine$double.eps)) {
+maxCPTParam <- function (node, Mstepit=5, tol=sqrt(.Machine$double.eps)) {
   UseMethod("maxCPTParam")
 }

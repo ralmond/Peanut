@@ -1,3 +1,10 @@
+2015-06-06  Russell G. Almond  <ralmond@Limu>
+
+	* R/Pnets.R (as.Pnet, Pnet, Pnet.default): Added constructors.
+	("PnetPnodes<-"): Added setter method.
+	(as.Pnode, Pnode): Added constructors
+
+
 2015-05-19  Russell G. Almond  <ralmond@Limu>
 
 	* DESCRIPTION (Depends): Split RNetica dependencies into PNetica package.
