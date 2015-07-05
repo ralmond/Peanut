@@ -55,6 +55,7 @@ Maintainer: \packageMaintainer{Peanut}
 
 }
 \keyword{ package }
+\keyword{ graphs }
 \seealso{
   \describe{
     \item{\code{\link[PNetica:PNetica-package]{PNetica}}}{An
