@@ -30,7 +30,7 @@ maxCPTParam(node, Mstepit = 5, tol = sqrt(.Machine$double.eps))
 }
 \details{
 
-    The \code{\link{GEMfit}} algorithm uses a generalized EM algorithm to
+  The \code{\link{GEMfit}} algorithm uses a generalized EM algorithm to
   fit the parameterized network to the given data.  This loops over the
   following steps:
   \describe{
@@ -122,8 +122,9 @@ maxCPTParam(node, Mstepit = 5, tol = sqrt(.Machine$double.eps))
 }
 \seealso{
 
-  \code{\link{Pnet}}, \code{\link{GEMfit}}, \code{\link{calcPnetLLike}},
-  \code{\link{calcExpTables}}, \code{\link[CPTtools]{mapDPC}}
+  \code{\link{Pnet}}, \code{\link{Pnode}}, \code{\link{GEMfit}},
+  \code{\link{calcPnetLLike}},  \code{\link{calcExpTables}},
+  \code{\link[CPTtools]{mapDPC}} 
 
   
 }

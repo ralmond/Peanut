@@ -7,7 +7,7 @@
   parital credit framework (see \code{\link[CPTtools]{calcDPCTable}}),
   each state of each parent variable is mapped onto a real value called
   the effective theta.  The function
-  \code{PnodeParent} returns a list of effective theta values for each
+  \code{PnodeParentTvals} returns a list of effective theta values for each
   parent variable. 
 
 }

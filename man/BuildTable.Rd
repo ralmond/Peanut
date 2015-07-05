@@ -36,6 +36,9 @@ BuildAllTables(net)
 \value{
 
   The \code{node} or \code{net} argument is returned invisibly.
+  As a side effect the conditional proability table and prior weight of
+  \code{node} (or a collection of nodes) is modified.
+
 }
 \references{
 

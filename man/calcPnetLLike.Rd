@@ -4,8 +4,10 @@
 \description{
 
   The function \code{calcPnetLLike} calculates the log likelihood for a
-  set of data contained in \code{cases} using the current version of the
-  parameters in \code{Pnet}.  
+  set of data contained in \code{cases} using the current values of the
+  conditional probability table in a \code{\link{Pnet}}.  If it is
+  called after a call to \code{\link{BuildAllTables}(net)} this will be
+  the current value of the parameters.
 
 }
 \usage{
