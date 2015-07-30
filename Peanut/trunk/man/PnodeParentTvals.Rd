@@ -4,7 +4,7 @@
 \description{
 
   In constructing a conditional probability table using the discrete
-  parital credit framework (see \code{\link[CPTtools]{calcDPCTable}}),
+  partial credit framework (see \code{\link[CPTtools]{calcDPCTable}}),
   each state of each parent variable is mapped onto a real value called
   the effective theta.  The function
   \code{PnodeParentTvals} returns a list of effective theta values for each
@@ -19,7 +19,7 @@ PnodeParentTvals(node)
 }
 \details{
 
-    Following the framework layed out in Almond (2015), the function
+    Following the framework laid out in Almond (2015), the function
   \code{\link[CPTtools]{calcDPCTable}} calculates a conditional
   probability table using the following steps:
   \enumerate{
@@ -44,7 +44,7 @@ PnodeParentTvals(node)
         PnodeBetas(node)[[s]])}.}
 
     \item{The resulting set of effective thetas are converted into
-      conditional probabilities using the link funciton.}
+      conditional probabilities using the link function.}
   }
 
   This function is responsible for the first step of this process.
@@ -57,7 +57,7 @@ PnodeParentTvals(node)
   Note that in item response theory, ability (theta) values are assumed
   to have a unit normal distribution in the population of interest.
   Therefore, appropriate tvals are quantiles of the normal
-  distribution.  In particular, they should correpsond to the marginal
+  distribution.  In particular, they should correspond to the marginal
   distribution of the parent variable.  The function
   \code{\link[CPTtools]{effectiveThetas}} produces equally spaced (wrt
   the normal measure) theta values (corresponding to a uniform
@@ -99,7 +99,7 @@ PnodeParentTvals(node)
   theta values for different parent variables in different contexts,
   therefor, the cleanest implementation is to associate the effective
   thetas with the parent variables and simply have
-  \code{PnodeParentTvals} fectch them on demand.  Thus the
+  \code{PnodeParentTvals} fetch them on demand.  Thus the
   implementation in \code{PNetica} is simply,
   \code{lapply(NodeParents(node), NodeLevels)}.
 

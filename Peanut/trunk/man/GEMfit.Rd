@@ -5,7 +5,7 @@
 
   A \code{\link{Pnet}} is a description of a parameterized Bayesian
   network, with each \code{\link{Pnode}} giving the parameterization for
-  its conditional probabilty table.  This function uses a generalized EM
+  its conditional probability table.  This function uses a generalized EM
   algorithm to find the values of the parameters for each \code{Pnode}
   which maximize the posterior probability of the data in \code{cases}.  
 
@@ -74,7 +74,7 @@ GEMfit(net, cases, tol = sqrt(.Machine$double.eps),
   calculate the expected tables of counts, the default value of 1 should
   be fine.  Although the algorithm should eventually converge for any
   value of \code{Mstepit}, different values may affect the convergence
-  rate, and analysts may need to experiement with application specific
+  rate, and analysts may need to experiment with application specific
   values of this parameter.
   
 }
@@ -83,8 +83,8 @@ GEMfit(net, cases, tol = sqrt(.Machine$double.eps),
   A list with three elements:
   \item{converged }{A logical flag indicating whether or not the
     algorithm reached convergence.}
-  \item{iter }{An integer scalare giving the number of iterations of the
-    outer EM loop taken by the alorithm (plus 1 for the starting point).}
+  \item{iter }{An integer scalar giving the number of iterations of the
+    outer EM loop taken by the algorithm (plus 1 for the starting point).}
   \item{llikes }{A numeric vector of length \code{iter} giving the
     values of the log-likelihood after each iteration.  (The first value
     is the initial log likelihood.)}
@@ -114,7 +114,7 @@ GEMfit(net, cases, tol = sqrt(.Machine$double.eps),
   implementations for this function to work.  See the 
   \code{\link[PNetica]{PNetica-package}} for an example.
 
-  These funcitons assume that the host Bayes net implementation (e.g.,
+  These functions assume that the host Bayes net implementation (e.g.,
   \code{\link[RNetica]{RNetica-package}}):  (1) \code{net} has an EM
   learning function, (2) the EM learning supports hyper-Dirichlet
   priors, (3) it is possible to recover the hyper-Dirichlet posteriors

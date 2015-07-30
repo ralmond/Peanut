@@ -5,7 +5,7 @@
 \description{
 
   In constructing a conditional probability table using the discrete
-  parital credit framework (see \code{\link[CPTtools]{calcDPCTable}}),
+  partial credit framework (see \code{\link[CPTtools]{calcDPCTable}}),
   the effective thetas for each parent variable are combined into a
   single effect theta using a combination rule.  The function
   \code{PnodeRules} accesses the combination function associated with a
@@ -25,7 +25,7 @@ PnodeRules(node) <- value
 }
 \details{
 
-  Following the framework layed out in Almond (2015), the function
+  Following the framework laid out in Almond (2015), the function
   \code{\link[CPTtools]{calcDPCTable}} calculates a conditional
   probability table using the following steps:
   \enumerate{
@@ -48,7 +48,7 @@ PnodeRules(node) <- value
         PnodeBetas(node)[[s]])}.}
 
     \item{The resulting set of effective thetas are converted into
-      conditional probabilities using the link funciton
+      conditional probabilities using the link function
       \code{\link{PnodeLink}(node)}.}
   }
       
@@ -61,7 +61,7 @@ PnodeRules(node) <- value
   \code{\link[CPTtools]{Disjunctive}}, 
   \code{\link[CPTtools]{OffsetConjunctive}}, and
   \code{\link[CPTtools]{OffsetDisjunctive}}.  Note that the first three
-  choices expect that there will be mulitple alphas, one for each
+  choices expect that there will be multiple alphas, one for each
   parent, and the latter two expect that there will be multiple betas,
   one for each beta.  The value of \code{\link{PnodeAlphas}} and
   \code{\link{PnodeBetas}} should be set to match.
@@ -151,7 +151,7 @@ stopifnot(
 )
 
 ## Use different rules for different levels
-## Compensatory for 2nd transition, conjuctive for 1st
+## Compensatory for 2nd transition, conjunctive for 1st
 ## Note:  Position is important, names are just for documentation. 
 PnodeRules(partial3) <- list(FullCredit="Compensatory",
                              PartialCredit="Conjunctive")

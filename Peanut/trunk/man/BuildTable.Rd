@@ -36,7 +36,7 @@ BuildAllTables(net)
 \value{
 
   The \code{node} or \code{net} argument is returned invisibly.
-  As a side effect the conditional proability table and prior weight of
+  As a side effect the conditional probability table and prior weight of
   \code{node} (or a collection of nodes) is modified.
 
 }
@@ -51,7 +51,7 @@ BuildAllTables(net)
 \note{
 
   The function \code{BuildTable} is an abstract generic function, and it
-  needs specific implementions.  See the
+  needs a specific implementation.  See the
   \code{\link[PNetica]{PNetica-package}} for an example.
 
 }
@@ -81,7 +81,7 @@ BuildTable.NeticaNode <- function (node) {
   invisible(node)
 }
 
-## This is the implemenation of BuildAllTables
+## This is the implementation of BuildAllTables
 BuildAllTables <- function (net) {
   lapply(PnetPnodes(net),BuildTable)
   invisible(net)

@@ -39,7 +39,7 @@ Pnode (node, lnAlphas, betas, rules="Compensatory",
   \item{link}{The name of the link function or the link function
     itself.  See \code{\link{PnodeLink}} for a description of the link
     function.}
-  \item{Q}{A logical matrix or the constant \code{TRUE} (indicaticating
+  \item{Q}{A logical matrix or the constant \code{TRUE} (indicating
     that the Q-matrix should be a matrix of \code{TRUE}s).  See
     \code{\link{PnodeQ}} for a description of this parameter.}
   \item{linkScale}{A numeric vector of link scale parameters or
@@ -71,7 +71,7 @@ Pnode (node, lnAlphas, betas, rules="Compensatory",
   object which contains the nodes.
 
   The function \code{\link{PnodeQ}} gets or sets a Q-matrix describing
-  which paraent variables are relevant for which state transitions.  The
+  which parent variables are relevant for which state transitions.  The
   default value is \code{TRUE} which indicates that all parent variables
   are relevant.
   
@@ -90,7 +90,7 @@ Pnode (node, lnAlphas, betas, rules="Compensatory",
   over the log of the slope parameter.
 
   The function \code{\link{PnodeBetas}} gets or sets the difficulty
-  (negative intercept) parameter asscoated with the combination rule.
+  (negative intercept) parameter associated with the combination rule.
   
   The function \code{\link{PnodeLink}} gets or sets the link function
   used to translate between the output of the combination rule and a row
@@ -102,7 +102,7 @@ Pnode (node, lnAlphas, betas, rules="Compensatory",
   \bold{Generic Functions.} The importance of the \code{Pnode} object is
   that it supports the \code{\link{GEMfit}} method which adjust the
   parameters of the \code{Pnode} objects to fit a set of case data.  In
-  order to be compatable with \code{GEMfit}, the \code{Pnode} object
+  order to be compatible with \code{GEMfit}, the \code{Pnode} object
   must support three methods:  \code{\link{PnodeParentTvals}},
   \code{\link{BuildTable}}, and  \code{\link{maxCPTParam}}.
 

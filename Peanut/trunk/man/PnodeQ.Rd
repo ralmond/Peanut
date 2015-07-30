@@ -1,7 +1,7 @@
 \name{PnodeQ}
 \alias{PnodeQ}
 \alias{PnodeQ<-}
-\title{Accesses a statewise Q-matrix associated with a Pnode}
+\title{Accesses a state-wise Q-matrix associated with a Pnode}
 \description{
 
   The function \code{\link[CPTtools]{calcDPCTable}} has an argument
@@ -24,7 +24,7 @@ PnodeQ(node) <- value
 }
 \details{
 
-  Consdier a \code{\link[CPTtools]{partialCredit}} model, that is a
+  Consider a \code{\link[CPTtools]{partialCredit}} model, that is a
   \code{\link{Pnode}} for which the value of \code{\link{PnodeLink}} is
   \code{"partialCredit"}.  This model is represented as a series of
   transitions between the states \eqn{s+1} and \eqn{s} (in
