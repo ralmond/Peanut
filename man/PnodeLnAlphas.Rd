@@ -9,7 +9,7 @@
 \description{
 
   In constructing a conditional probability table using the discrete
-  parital credit framework (see \code{\link[CPTtools]{calcDPCTable}}),
+  partial credit framework (see \code{\link[CPTtools]{calcDPCTable}}),
   the effective thetas for each parent variable are combined into a
   single effect theta using a combination rule.  The expression
   \code{PnodeAlphas(node)} accesses the slope parameters associated with
@@ -39,7 +39,7 @@ PnodeAlphas(node) <- value
 }
 \details{
 
-  Following the framework layed out in Almond (2015), the function
+  Following the framework laid out in Almond (2015), the function
   \code{\link[CPTtools]{calcDPCTable}} calculates a conditional
   probability table using the following steps:
   \enumerate{
@@ -62,7 +62,7 @@ PnodeAlphas(node) <- value
         PnodeBetas(node)[[s]])}.}
 
     \item{The resulting set of effective thetas are converted into
-      conditional probabilities using the link funciton
+      conditional probabilities using the link function
       \code{\link{PnodeLink}(node)}.}
   }
       
@@ -77,7 +77,7 @@ PnodeAlphas(node) <- value
   Then the effective theta for that row is:
   \deqn{Z(theta_{i}) =
     (alpha_1theta_{i,1}+\ldots+alpha_Jtheta_{J,1})/C - beta ,}
-  where \eqn{C=\sqrt(J)} is a variance stablization constant and
+  where \eqn{C=\sqrt(J)} is a variance stabilization constant and
   \eqn{beta} is a value derived from \code{\link{PnodeBetas}}.  The
   functions \code{\link[CPTtools]{Conjunctive}} and
   \code{\link[CPTtools]{Disjunctive}} are similar replacing the sum with
@@ -136,7 +136,7 @@ PnodeAlphas(node) <- value
   considered the primary function and a default method for
   \code{PnodeAlphas(node)} which simply takes exponents (or logs in the
   setter) is provided.  Note that a sensible range for the slope
-  paramters is usually between 1/2 and 2, with 1 (0 on the log scale) as
+  parameters is usually between 1/2 and 2, with 1 (0 on the log scale) as
   a sensible first pass value.
 
 }

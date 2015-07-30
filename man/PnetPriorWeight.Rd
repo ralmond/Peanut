@@ -10,7 +10,7 @@
   The EM learning algorithm \code{\link{GEMfit}} uses the built-in EM
   learning of the Bayes net to build expected count tables for each
   \code{\link{Pnode}}.  The expected count tables are a weighted average
-  of the case data and the prior from the paramterized table.  This
+  of the case data and the prior from the parameterized table.  This
   gives the weight, in number of cases, given to the prior.
   
 }

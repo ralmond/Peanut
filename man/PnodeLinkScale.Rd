@@ -5,7 +5,7 @@
 \description{
 
   In constructing a conditional probability table using the discrete
-  parital credit framework (see \code{\link[CPTtools]{calcDPCTable}}),
+  partial credit framework (see \code{\link[CPTtools]{calcDPCTable}}),
   the effective thetas for each row of the table is converted into a
   vector of probabilities using the link function.  The function
   \code{PnodeLink} accesses the scale parameter of the link function
@@ -25,7 +25,7 @@ PnodeLinkScale(node) <- value
 \details{
 
   The link function used in constructing the conditional probability
-  table is controled by the value of \code{\link{PnodeLink}(node)}.  One
+  table is controlled by the value of \code{\link{PnodeLink}(node)}.  One
   of the arguments to the link function is a scale parameter, the
   expression \code{PnodeLinkScale(node)} provides the link scale
   parameter associated with the node.
@@ -42,7 +42,7 @@ PnodeLinkScale(node) <- value
 }
 \value{
 
-  The value of the link scale paramter, or \code{NULL} if it is not
+  The value of the link scale parameter, or \code{NULL} if it is not
   needed.
   
 }

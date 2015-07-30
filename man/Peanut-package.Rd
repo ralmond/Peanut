@@ -20,10 +20,10 @@ conditional probability tables for Bayesian networks in the
 particular, it defines a \code{\link{Pnode}} (parameterized node) object
 which stores all of the arguments necessary to use to the
 \code{\link[CPTtools]{calcDPCTable}} function to build the conditional
-proability table for the node.
+probability table for the node.
 
 The \code{\link{Pnet}} object is a Bayesian network containing a number
-of \code{\link{Pnode}}s.  It supports two key opperations,
+of \code{\link{Pnode}}s.  It supports two key operations,
 \code{\link{BuildAllTables}} which sets the values of the conditional
 probabilities based on current parameters and \code{\link{GEMfit}} which
 adjusts the parameters to match a set of cases.
@@ -31,7 +31,7 @@ adjusts the parameters to match a set of cases.
 Like the \code{\link[DBI:DBI-package]{DBI}} package, this class consists
 mostly of generic functions which need to be implement for specific
 Bayes net implementations.  The package
-\code{\link[PNetica:PNetica-package]{PNetica}} provides an implemeantion
+\code{\link[PNetica:PNetica-package]{PNetica}} provides an implementation
 of the \code{Peanut} generic functions using the \code{\link[RNetica]{RNetica}}
 package.  All of the Netica-dependent code is isolated in the
 \code{PNetica} package, to make it easier to create other implementations.
@@ -59,10 +59,10 @@ Maintainer: \packageMaintainer{Peanut}
 \seealso{
   \describe{
     \item{\code{\link[PNetica:PNetica-package]{PNetica}}}{An
-      implemenation of the Peanut object model using
+      implementation of the Peanut object model using
       \code{\link[RNetica:RNetica-package]{RNetica}}.} 
     \item{\code{\link[CPTtools:CPTtools-package]{CPTtools}}}{A
-      collection of implemenation independent Bayes net utilities.}
+      collection of implementation independent Bayes net utilities.}
     }
 }
 \examples{

@@ -26,9 +26,9 @@ Pnet(net, priorWeight=10, pnodes=list())
     of network, e.g., a \code{\link[RNetica]{NeticaBN}} object.}
   \item{priorWeight}{A numeric vector providing the default prior weight
     for nodes.}
-  \item{pnodes}{A list of objects which can be coericed into
+  \item{pnodes}{A list of objects which can be coerced into
     \code{node} objects.  Note that the function does not do the
-    coersion.}
+    coercion.}
 }
 \details{
 
@@ -41,7 +41,7 @@ Pnet(net, priorWeight=10, pnodes=list())
   the string \code{"Pnet"} in the class list.
 
   A \code{Pnet} object has two \dQuote{"fields"} (implemented through
-  the accessor methods).  The funciton \code{PnetPnodes} returns a list
+  the accessor methods).  The function \code{PnetPnodes} returns a list
   of parameterized nodes or \code{\link{Pnode}}s associate with the
   network.  The function \code{\link{PnetPriorWeight}} gets (or sets)
   the default weight to be used for each node.  
@@ -53,7 +53,7 @@ Pnet(net, priorWeight=10, pnodes=list())
   The importance of the \code{Pnet} object is that it supports the
   \code{\link{GEMfit}} method which adjust the parameters of the
   \code{Pnode} objects to fit a set of case data.  In order to be
-  compatable with \code{GEMfit}, the \code{Pnet} object must support
+  compatible with \code{GEMfit}, the \code{Pnet} object must support
   four methods:  \code{\link{BuildAllTables}},
   \code{\link{calcPnetLLike}}, \code{\link{calcExpTables}}, and
   \code{\link{maxAllTableParams}}.
@@ -72,7 +72,7 @@ Pnet(net, priorWeight=10, pnodes=list())
   The generic function \code{\link{calcExpTables}} calculates expected
   cross-tabs for all CPT for the \code{Pnode}s given a set of case
   data.  The easiest way to do this is to run the EM algorithm
-  for an unconstrained hyperDirichlet model for one or two cycles.
+  for an unconstrained hyper-Dirichlet model for one or two cycles.
   There is no default for this as it is implementation dependent.
 
   The generic function \code{\link{maxAllTableParams}} calculates the

@@ -5,7 +5,7 @@
 \description{
 
   In constructing a conditional probability table using the discrete
-  parital credit framework (see \code{\link[CPTtools]{calcDPCTable}}),
+  partial credit framework (see \code{\link[CPTtools]{calcDPCTable}}),
   the effective thetas for each parent variable are combined into a
   single effect theta using a combination rule.  The expression
   \code{PnodeAlphas(node)} accesses the intercept parameters associated with
@@ -28,7 +28,7 @@ PnodeBetas(node) <- value
 }
 \details{
 
-  Following the framework layed out in Almond (2015), the function
+  Following the framework laid out in Almond (2015), the function
   \code{\link[CPTtools]{calcDPCTable}} calculates a conditional
   probability table using the following steps:
   \enumerate{
@@ -51,7 +51,7 @@ PnodeBetas(node) <- value
         PnodeBetas(node)[[s]])}.}
 
     \item{The resulting set of effective thetas are converted into
-      conditional probabilities using the link funciton
+      conditional probabilities using the link function
       \code{\link{PnodeLink}(node)}.}
   }
       
@@ -66,7 +66,7 @@ PnodeBetas(node) <- value
   Then the effective theta for that row is:
   \deqn{Z(theta_{i}) =
     (alpha_1theta_{i,1}+\ldots+alpha_Jtheta_{J,1})/C - beta ,}
-  where \eqn{C=\sqrt(J)} is a variance stablization constant and
+  where \eqn{C=\sqrt(J)} is a variance stabilization constant and
   \eqn{alpha}s are derived from \code{\link{PnodeAlphas}}.  The
   functions \code{\link[CPTtools]{Conjunctive}} and
   \code{\link[CPTtools]{Disjunctive}} are similar replacing the sum with
@@ -95,7 +95,7 @@ PnodeBetas(node) <- value
   When \code{node} has more than two states, there is a a different
   combination function for each transition.  (Note that
   \code{\link[CPTtools]{calcDPCTable}} assumes that the states are
-  ordered from higest to lowest, and the transition functions 
+  ordered from highest to lowest, and the transition functions 
   represent transition to the corresponding state, in order.)  There are
   always one fewer transitions than there states.  The meaning of the
   transition functions is determined by the the value of

@@ -60,7 +60,7 @@ maxCPTParam(node, Mstepit = 5, tol = sqrt(.Machine$double.eps))
   After the hyper-Dirichlet EM algorithm is run by
   \code{\link{calcExpTables}}, a hyper-Dirichlet prior should be
   available for each conditional probability table.  As the parameter of
-  the Dirchlet distribution is a vector of pseudo-counts, the output of
+  the Dirichlet distribution is a vector of pseudo-counts, the output of
   this algorithm should be a table of pseudo counts.  Often this is
   stored as the updated conditional probability table and a vector of
   row weights indicating the strength of information for each row.
@@ -69,7 +69,7 @@ maxCPTParam(node, Mstepit = 5, tol = sqrt(.Machine$double.eps))
                   \link[RNetica]{NodeExperience}(item1),"*")}
 
   The function \code{maxCPTParm} is essentially a wrapper which extracts
-  the table of pseudo-counts from the netwok and then calls
+  the table of pseudo-counts from the network and then calls
   \code{\link[CPTtools]{mapDPC}} to maximize the parameters, updating
   the parameters of \code{node} to the result.
 
@@ -79,8 +79,8 @@ maxCPTParam(node, Mstepit = 5, tol = sqrt(.Machine$double.eps))
   algorithm, the M-step does not need to be run to convergence, a couple
   of iterations are sufficient.  The value of \code{Mstepit} may
   influence the speed of convergence, so the optimal value may vary by
-  applicatoin.  The tolerance is largely
-  irrelvant (if \code{Mstepit} is small) as the outer EM algorithm does
+  application.  The tolerance is largely
+  irrelevant (if \code{Mstepit} is small) as the outer EM algorithm does
   the tolerance test. 
 
                 
@@ -113,7 +113,7 @@ maxCPTParam(node, Mstepit = 5, tol = sqrt(.Machine$double.eps))
   through calls to \code{maxCPTParam} for each node in
   \code{\link{PnetPnodes}(net)}.  
 
-  This funciton assumes that the host Bayes net implementation (e.g.,
+  This function assumes that the host Bayes net implementation (e.g.,
   \code{\link[RNetica]{RNetica-package}}):  (1) \code{net} has an EM
   learning function, (2) the EM learning supports hyper-Dirichlet
   priors, (3) it is possible to recover the hyper-Dirichlet posteriors

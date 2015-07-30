@@ -5,7 +5,7 @@
 \description{
 
   In constructing a conditional probability table using the discrete
-  parital credit framework (see \code{\link[CPTtools]{calcDPCTable}}),
+  partial credit framework (see \code{\link[CPTtools]{calcDPCTable}}),
   the effective thetas for each row of the table is converted into a
   vector of probabilities using the link function.  The function
   \code{PnodeLink} accesses the link function associated with a
@@ -26,7 +26,7 @@ PnodeLink(node) <- value
 }
 \details{
 
-  Following the framework layed out in Almond (2015), the function
+  Following the framework laid out in Almond (2015), the function
   \code{\link[CPTtools]{calcDPCTable}} calculates a conditional
   probability table using the following steps:
   \enumerate{
@@ -49,7 +49,7 @@ PnodeLink(node) <- value
         PnodeBetas(node)[[s]])}.}
 
     \item{The resulting set of effective thetas are converted into
-      conditional probabilities using the link funciton.}
+      conditional probabilities using the link function.}
   }
 
   A link function is a function of three arguments.  The first is a

@@ -8,7 +8,7 @@
   Each \code{\link{Pnet}} object maintains a list of \code{\link{Pnode}}
   objects which it is intended to set.  The function \code{PnetPnodes}
   accesses this list.  The function \code{PnodeNet} returns a
-  backpointer to the \code{Pnet} from the \code{Pnode}.
+  back pointer to the \code{Pnet} from the \code{Pnode}.
   
 }
 \usage{
@@ -30,11 +30,11 @@ PnodeNet(node)
   iterate to do their function.
 
   The function \code{PnodeNet} returns the network object associated
-  with the \code{node} (this assumes that the implementatoin has
-  backpointers).  Note that \code{node} may not be in the result of
+  with the \code{node} (this assumes that the implementation has
+  back pointers).  Note that \code{node} may not be in the result of
   \code{PnetPnodes} (if for example, the conditional probability table
   of \code{node} is to remain fixed during a call to
-  \code{\link{GEMfit}}).  This funciton is used by
+  \code{\link{GEMfit}}).  This function is used by
   \code{\link{GetPriorWeight}} to get the default prior weight if
   \code{node} does not have that value set locally.
 }

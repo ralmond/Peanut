@@ -67,9 +67,9 @@ calcExpTables(net, cases, Estepit = 1, tol = sqrt(.Machine$double.eps))
   internal EM algorithm of the Bayes net.  Note that the outer EM
   algorithm assumes that the expected table counts given the current
   values of the parameters, so the default value of one is sufficient.
-  (It is possible that a higher value will spead up convergence, the
+  (It is possible that a higher value will speed up convergence, the
   parameter is left open for experimentation.)  The tolerance is largely
-  irrelvant as the outer EM algorithm does the tolerance test.
+  irrelevant as the outer EM algorithm does the tolerance test.
 
 }
 \value{
@@ -94,7 +94,7 @@ calcExpTables(net, cases, Estepit = 1, tol = sqrt(.Machine$double.eps))
   and it needs specific implementations.  See the 
   \code{\link[PNetica]{PNetica-package}} for an example.
 
-  This funciton assumes that the host Bayes net implementation (e.g.,
+  This function assumes that the host Bayes net implementation (e.g.,
   \code{\link[RNetica]{RNetica-package}}):  (1) \code{net} has an EM
   learning function, (2) the EM learning supports hyper-Dirichlet
   priors, (3) it is possible to recover the hyper-Dirichlet posteriors
