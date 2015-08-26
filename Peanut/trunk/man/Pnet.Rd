@@ -34,11 +34,11 @@ Pnet(net, priorWeight=10, pnodes=list())
 
   The \code{Pnet} class is basically a protocol which any Bayesian
   network net object can follow to work with the tools in the Peanut
-  package.  This is really an abstract class (in java terms, an
-  interface rather than a class) which exploits the rather
-  loose S3 object system.  In particular, a \code{Pnet} is any object
-  for which \code{is.Pnet} returns true.  The default method looks for
-  the string \code{"Pnet"} in the class list.
+  package.  This is really an abstract class (in the java programming
+  language, \code{Pnet} would be an interface rather than a class) which
+  exploits the rather loose S3 object system.  In particular, a
+  \code{Pnet} is any object for which \code{is.Pnet} returns true.  The
+  default method looks for the string \code{"Pnet"} in the class list.
 
   A \code{Pnet} object has two \dQuote{"fields"} (implemented through
   the accessor methods).  The function \code{PnetPnodes} returns a list

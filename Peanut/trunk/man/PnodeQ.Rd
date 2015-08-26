@@ -29,7 +29,7 @@ PnodeQ(node) <- value
   \code{"partialCredit"}.  This model is represented as a series of
   transitions between the states \eqn{s+1} and \eqn{s} (in
   \code{\link[CPTtools]{calcDPCTable}} states are ordered from high to
-  low. The log odds of this transition is expressed with a function
+  low). The log odds of this transition is expressed with a function
   \eqn{Z_{s}(eTheta)} where \eqn{Z_{s}()} is the value of
   \code{\link{PnodeRules}(node)} and \eqn{eTheta} is the result of the
   call \code{\link{PnodeParentTvals}(node)}.

@@ -46,9 +46,10 @@ PnodeBetas(node) <- value
 
     \item{For each state of the \code{node} except the last, the
       corresponding rule is applied to the effective thetas to get a
-      single effective theta for each row of the table.  Essentially:
-      \code{do.call(rules[[s]],list(eThetas[,Q[s,]]),PnodeAlphas(node)[[s]],
-        PnodeBetas(node)[[s]])}.}
+      single effective theta for each row of the table.  This step is
+      essentially calls the expression:
+      \code{do.call(rules[[s]],} \code{list(eThetas[,Q[s,]]),} 
+      \code{PnodeAlphas(node)[[s]],} \code{PnodeBetas(node)[[s]])}.}
 
     \item{The resulting set of effective thetas are converted into
       conditional probabilities using the link function
@@ -60,9 +61,9 @@ PnodeBetas(node) <- value
   general signature of a combination function described in
   \code{\link[CPTtools]{Compensatory}}.  The compensatory function is a
   useful model for explaining the roles of the slope parameters,
-  \eqn{beta}.  Let $theta_{i,j}$ be the effective theta value for the
+  \eqn{beta}.  Let \eqn{theta_{i,j}} be the effective theta value for the
   \eqn{j}th parent variable on the \eqn{i}th row of the effective theta
-  table, and let $beta_{j}$ be the corresponding slope parameter.
+  table, and let \eqn{beta_{j}} be the corresponding slope parameter.
   Then the effective theta for that row is:
   \deqn{Z(theta_{i}) =
     (alpha_1theta_{i,1}+\ldots+alpha_Jtheta_{J,1})/C - beta ,}

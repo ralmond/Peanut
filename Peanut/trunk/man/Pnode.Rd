@@ -7,7 +7,7 @@
 
   A node in a parameterized Bayesian network.  Note that this is a
   \dQuote{mixin} class, it is meant be added to another Bayesian network
-  node class to indicate that it parameterized using the discrete
+  node class to indicate that it is parameterized using the discrete
   partial credit framework.
 }
 \usage{
@@ -18,8 +18,8 @@ Pnode (node, lnAlphas, betas, rules="Compensatory",
        priorWeight=NULL) 
 }
 \arguments{
-  \item{x}{A object to test to see if it a parameterized node, or to
-    coerce to a parameterized node.}
+  \item{x}{A object to test to see if it is a parameterized node, or to
+    coerce it to a parameterized node.}
   \item{node}{An object that will become the base of the parameterized
     node.  This should already be a parameterized node, e.g., a
     \code{\link[RNetica]{NeticaNode}} object.}
@@ -28,7 +28,7 @@ Pnode (node, lnAlphas, betas, rules="Compensatory",
     description of this parameter.  If missing, the constructor will try
     to create a pattern of zero values appropriate to the \code{rules}
     argument and the number of parent variables.}
-  \item{betas}{A numeric vector of list of numeric vectors giving the
+  \item{betas}{A numeric vector or list of numeric vectors giving the
     intercept parameters.  See \code{\link{PnodeBetas}} for a
     description of this parameter.  If missing, the constructor will try
     to create a pattern of zero values appropriate to the \code{rules}
@@ -56,11 +56,11 @@ Pnode (node, lnAlphas, betas, rules="Compensatory",
 
   The \code{Pnode} class is basically a protocol which any Bayesian
   network node object can follow to work with the tools in the Peanut
-  package.  This is really an abstract class (in java terms, an
-  interface rather than a class) which exploits the rather
-  loose S3 object system.  In particular, a \code{Pnode} is any object
-  for which \code{is.Pnode} returns true.  The default method looks for
-  the string \code{"Pnode"} in the class list.
+  package.  This is really an abstract class (in the java language,
+  \code{Pnode} would be an interface rather than a class) which exploits
+  the rather loose S3 object system.  In particular, a \code{Pnode} is
+  any object for which \code{is.Pnode} returns true.  The default method
+  looks for the string \code{"Pnode"} in the class list.
 
   \bold{Fields.} A \code{Pnode} object has eight \dQuote{fields}
   (implemented through the accessor methods), which all \code{Pnode}
