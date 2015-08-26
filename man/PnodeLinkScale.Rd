@@ -73,11 +73,13 @@ PnodeLinkScale(node) <- value
 }
 
 \seealso{
-       \code{\link{Pnode}}, \code{\link{PnodeQ}}, \code{\link{PnodeRules}}
+       \code{\link{Pnode}}, \code{\link{PnodeQ}},
+       \code{\link{PnodeRules}}, 
        \code{\link{PnodeLinkScale}}, \code{\link{PnodeLnAlphas}}, 
-       \code{\link{PnodeBetas}}, \code{\link{BuildTable}},
-       \code{\link{PnodeParentTvals}}, \code{\link{maxCPTParam}}
-       \code{\link[CPTtools]{calcDPCTable}}, \code{\link[CPTtools]{mapDPC}}
+       \code{\link{PnodeBetas}}, \code{\link{BuildTable}}, 
+       \code{\link{PnodeParentTvals}}, \code{\link{maxCPTParam}}, 
+       \code{\link[CPTtools]{calcDPCTable}},
+       \code{\link[CPTtools]{mapDPC}}, 
        \code{\link[CPTtools]{Compensatory}},
        \code{\link[CPTtools]{OffsetConjunctive}}
 }

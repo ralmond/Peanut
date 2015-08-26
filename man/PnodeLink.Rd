@@ -44,9 +44,10 @@ PnodeLink(node) <- value
 
     \item{For each state of the \code{node} except the last, the
       corresponding rule is applied to the effective thetas to get a
-      single effective theta for each row of the table.  Essentially:
-      \code{do.call(rules[[s]],list(eThetas[,Q[s,]]),PnodeAlphas(node)[[s]],
-        PnodeBetas(node)[[s]])}.}
+      single effective theta for each row of the table.  This step is
+      essentially calls the expression:
+      \code{do.call(rules[[s]],} \code{list(eThetas[,Q[s,]]),} 
+      \code{PnodeAlphas(node)[[s]],} \code{PnodeBetas(node)[[s]])}.}
 
     \item{The resulting set of effective thetas are converted into
       conditional probabilities using the link function.}
@@ -65,7 +66,7 @@ PnodeLink(node) <- value
   and \code{\link[CPTtools]{gradedResponse}}.  Note that the function
   \code{gradedResponse} assumes that the effective thetas in each row
   are in increasing order.  This puts certain restrictions on the
-  parameter values.  Generally, the can only be guaranteed if each state
+  parameter values.  Generally, this can only be guaranteed if each state
   of the variable uses the same combination rules (see
   \code{\link{PnodeRules}(node)}), slope parameters (see
   \code{\link{PnodeAlphas}(node)}) and Q-matrix (see

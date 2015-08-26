@@ -50,11 +50,11 @@ GEMfit(net, cases, tol = sqrt(.Machine$double.eps),
       function \code{\link{calcPnetLLike}} calculates the log likelihood.}
   }
 
-  Note that although this is not a generic function, the four main
-  component functions:  \code{\link{calcExpTables}},
+  Note that although \code{GEMfit} is not a generic function, the four
+  main component functions, \code{\link{calcExpTables}},
   \code{\link{maxAllTableParams}}, \code{\link{BuildAllTables}}, and
-  \code{\link{calcPnetLLike}}.   In particular, the \code{cases}
-  argument is passed to \code{\link{calcExpTables}} and
+  \code{\link{calcPnetLLike}}, are generic functions.  In particular,
+  the \code{cases} argument is passed to \code{\link{calcExpTables}} and
   \code{\link{calcPnetLLike}} and must be whatever the host Bayes net
   package regards as a collection of cases.  In
   \code{\link[PNetica]{PNetica-package}} the \code{cases} argument

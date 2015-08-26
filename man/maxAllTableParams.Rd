@@ -5,7 +5,7 @@
 \title{Find optimal parameters of Pnet or Pnode to match expected tables}
 \description{
 
-  These function assumes that an expected count contingency table can be
+  These functions assume that an expected count contingency table can be
   built from the network.  They then try to find the set of parameters
   maximizes the probability of the expected contingency table with
   repeated calls to \code{\link[CPTtools]{mapDPC}}.  The
@@ -74,7 +74,7 @@ maxCPTParam(node, Mstepit = 5, tol = sqrt(.Machine$double.eps))
   the parameters of \code{node} to the result.
 
   The parameters \code{Mstepit} and \code{tol} are passed to
-  \code{\link[CPTtools]{mapDPC}} to control the gradient decent
+  \code{\link[CPTtools]{mapDPC}} to control the gradient descent
   algorithm used for maximization.  Note that for a generalized EM
   algorithm, the M-step does not need to be run to convergence, a couple
   of iterations are sufficient.  The value of \code{Mstepit} may
@@ -106,7 +106,7 @@ maxCPTParam(node, Mstepit = 5, tol = sqrt(.Machine$double.eps))
 \author{Russell Almond}
 \note{
 
-  The function \code{maxCPTParam} is an abstract generic functions, 
+  The function \code{maxCPTParam} is an abstract generic function, 
   and it needs specific implementations.  See the 
   \code{\link[PNetica]{PNetica-package}} for an example.  A default
   implementation is provides for \code{maxAllTableParams} which loops

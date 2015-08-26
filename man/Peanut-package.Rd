@@ -14,7 +14,7 @@ The DESCRIPTION file:
 \packageDESCRIPTION{Peanut}
 
 Peanut (a corruption of Parameterized network or \code{\link{Pnet}}) is
-an object oriented layer on top of the tools for construction
+an object oriented layer on top of the tools for constructing
 conditional probability tables for Bayesian networks in the
 \code{\link[CPTtools:CPTtools-package]{CPTtools}} package.  In
 particular, it defines a \code{\link{Pnode}} (parameterized node) object

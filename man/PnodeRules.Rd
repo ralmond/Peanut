@@ -19,7 +19,7 @@ PnodeRules(node) <- value
 \arguments{
   \item{node}{A \code{\link{Pnode}} object.}
   \item{value}{The name of a combination function, the combination
-    function or a list of names/combination functions (see details).  If
+    function or a list of names or combination functions (see details).  If
     a list, it should have length one less than the number of states in
     \code{node}.}
 }
@@ -43,9 +43,10 @@ PnodeRules(node) <- value
 
     \item{For each state of the \code{node} except the last, the
       corresponding rule is applied to the effective thetas to get a
-      single effective theta for each row of the table.  Essentially:
-      \code{do.call(rules[[s]],list(eThetas[,Q[s,]]),PnodeAlphas(node)[[s]],
-        PnodeBetas(node)[[s]])}.}
+      single effective theta for each row of the table.  This step is
+      essentially calls the expression:
+      \code{do.call(rules[[s]],} \code{list(eThetas[,Q[s,]]),}
+      \code{PnodeAlphas(node)[[s]],} \code{PnodeBetas(node)[[s]])}.}
 
     \item{The resulting set of effective thetas are converted into
       conditional probabilities using the link function
@@ -114,9 +115,10 @@ PnodeRules(node) <- value
 \seealso{
        \code{\link{Pnode}}, \code{\link{PnodeQ}}, 
        \code{\link{PnodeLink}}, \code{\link{PnodeLnAlphas}}, 
-       \code{\link{PnodeBetas}}, \code{\link{BuildTable}},
-       \code{\link{PnodeParentTvals}}, \code{\link{maxCPTParam}}
-       \code{\link[CPTtools]{calcDPCTable}}, \code{\link[CPTtools]{mapDPC}}
+       \code{\link{PnodeBetas}}, \code{\link{BuildTable}}, 
+       \code{\link{PnodeParentTvals}}, \code{\link{maxCPTParam}}, 
+       \code{\link[CPTtools]{calcDPCTable}},
+       \code{\link[CPTtools]{mapDPC}}, 
        \code{\link[CPTtools]{Compensatory}},
        \code{\link[CPTtools]{OffsetConjunctive}}
 

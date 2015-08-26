@@ -39,9 +39,10 @@ PnodeParentTvals(node)
 
     \item{For each state of the \code{node} except the last, the
       corresponding rule is applied to the effective thetas to get a
-      single effective theta for each row of the table.  Essentially:
-      \code{do.call(rules[[s]],list(eThetas[,Q[s,]]),PnodeAlphas(node)[[s]],
-        PnodeBetas(node)[[s]])}.}
+      single effective theta for each row of the table.  This step is
+      essentially calls the expression:
+      \code{do.call(rules[[s]],} \code{list(eThetas[,Q[s,]]),} 
+      \code{PnodeAlphas(node)[[s]],} \code{PnodeBetas(node)[[s]])}.}
 
     \item{The resulting set of effective thetas are converted into
       conditional probabilities using the link function.}
@@ -56,7 +57,7 @@ PnodeParentTvals(node)
 
   Note that in item response theory, ability (theta) values are assumed
   to have a unit normal distribution in the population of interest.
-  Therefore, appropriate tvals are quantiles of the normal
+  Therefore, appropriate theta values are quantiles of the normal
   distribution.  In particular, they should correspond to the marginal
   distribution of the parent variable.  The function
   \code{\link[CPTtools]{effectiveThetas}} produces equally spaced (wrt
