@@ -187,3 +187,15 @@ BuildTable <- function (node) {
   UseMethod("BuildTable")
 }
 
+#####
+## Offset Mechinism
+
+defaultAlphas <- function (node, rule) {
+  if (isOffsetRule(rule)[1]) return(0)
+  rep(0, PnodeNumParents(node))
+}
+
+defaultBetas <- function (node, rule) {
+  if (!isOffsetRule(rule)[1]) return(0)
+  rep(0, PnodeNumParents(node))
+}

@@ -12,10 +12,16 @@ export(is.Pnet, as.Pnet, Pnet,
        PnodeLink, "PnodeLink<-",
        PnodeLnAlphas, "PnodeLnAlphas<-",
        PnodeAlphas, "PnodeAlphas<-",
+       defaultAlphas, defaultBetas,
        PnodeBetas, "PnodeBetas<-",
        PnodeLinkScale, "PnodeLinkScale<-",
        BuildTable,GetPriorWeight,PnodeParentTvals
   )
+
+## BN generics.
+export(PnodeName,PnodeStates,PnodeNumStates,
+       PnodeParents,PnodeParentNames,PnodeNumParents)
+
 
 ## EM algorithm
 export(GEMfit, calcPnetLLike, calcExpTables,
