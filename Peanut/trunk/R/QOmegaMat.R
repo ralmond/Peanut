@@ -1,10 +1,4 @@
 
-### List of rules which should be considered offset functions
-OffsetRules <- c("OffsetConjunctive","OffsetDisjunctive")
-getOffsetRules() { OffsetRules}
-setOffsetRules(newval) {
-  assignInNamesspace("OffsetRules",newval,"Peanut")
-}
 
 
 ## This is clipboard inheritance from RNetica, but as Pnets is not
@@ -26,14 +20,14 @@ dgetFromString <- function (str) {
 
 ### Function to build a blank Q-matrix from a Bayes net.
 Pnet2Qmat <- function (pnet,obs,prof) {
-  statecounts <- sapply(obs,NodeNumStates)
-  obsnames <- sapply(obs,NodeName)
-  profnames <- sapply(prof,NodeName)
+  statecounts <- sapply(obs,PnodeNumStates)
+  obsnames <- sapply(obs,PnodeName)
+  profnames <- sapply(prof,PnodeName)
 
   ## Lay out node name row with proper repetition structure
   rowcounts <- statecounts-1
-  Node <- rep(names(statescounts),each=rowcounts)
-  nrow <- length(nodenames)
+  Node <- rep(names(statecounts),rowcounts)
+  nrow <- length(obsnames)
 
   ## Now lay out blank structure of rest of Qmat
   NStates <- integer(nrow)
@@ -46,24 +40,27 @@ Pnet2Qmat <- function (pnet,obs,prof) {
   A <- matrix(NA,nrow,length(profnames))
   colnames(A) <- profnames
   B <- numeric(nrow)
-  PriorWeight <- numeric(nrow)
+  PriorWeight <- character(nrow)
 
   ## Now loop over vars, processing each one.
   irow <- 1
   for (nd in obs) {
     ## first row
-    NStates[irow] <- nstate <- NodeNumStates(nd)
-    States[irow:(irow+nstate-2)] <- NodeStates(nd)[1:(nstate-1)]
+    NStates[irow] <- nstate <- PnodeNumStates(nd)
+    States[irow:(irow+nstate-2)] <- PnodeStates(nd)[1:(nstate-1)]
     Link[irow] <- as.character(PnodeLink(nd))
-    LinkScale[irow] <- as.character(PnodeLinkScale(nd))
+    if (!is.null(PnodeLinkScale(nd))) {
+      LinkScale[irow] <- as.character(PnodeLinkScale(nd))
+    }
     ## Q -- if not supplied, fill in first row according to parents.
     ## If supplied, reproduce matrix.
     if (is.null(PnodeQ(nd))) {
-      Q[irow,] <- profname %in% NodeParentNames(nd)
+      Q[irow,] <- as.numeric(profnames %in% PnodeParentNames(nd))
     } else {
       Q[irow:(irow+nstate-2),] <- PnodeQ(nd)
     }
-    if (length(PnodeRules(nd)) == 1 || class(PnodeRules(nd))==function) {
+    if (length(PnodeRules(nd)) == 1 ||
+        class(PnodeRules(nd))=="function") {
       Rules[irow] <- dputToString(PnodeRules(nd))
     } else {
       Rules[irow:(irow+nstate-2)] <- sapply(PnodeRules(nd),dputToString)
@@ -71,7 +68,8 @@ Pnet2Qmat <- function (pnet,obs,prof) {
     ### HERE
     ## A  -- LnAlpha or Beta if Rule is OffsetXXX
     ## B -- Beta or LnAlpha if Rule is OffsetXXX
-    if (length(PnodeRules(nd)) ==1 || class(PnodeRules(nd))) {
+    if (length(PnodeRules(nd)) ==1 ||
+        class(PnodeRules(nd))== "function") {
       if (PnodeRules(nd) %in% getOffsetRules()) {
         a <- PnodeLnAlphas(nd)
         b <- PnodeBetas(nd)
@@ -116,7 +114,7 @@ Pnet2Qmat <- function (pnet,obs,prof) {
     for (i in 1:length(a)) {
       aa <- a[i]
       if (is.null(names(aa))) {
-        names(aa) <- ParentNames(nd)
+        names(aa) <- PnodeParentNames(nd)
       }
       A[irow+i-1,names(aa)] <- aa
     }
@@ -128,6 +126,10 @@ Pnet2Qmat <- function (pnet,obs,prof) {
     B[irow:(irow+length(b)-1)] <- b
 
     ## Weights
+    wt <- PnodePriorWeight(nd)
+    if (!is.null(wt)) {
+      PriorWeight[irow] <- dputToString(wt)
+    }
 
     ## Next node
     irow <- irow + nstate-1

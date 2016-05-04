@@ -1,3 +1,8 @@
+2016-05-04  Almond  <ralmond@macox.com>
+
+	* R/BNgenerics.R: Created a list of basic BN functions I needed to
+	be able to write code in Peanut instead of Pnetica.
+
 2015-06-06  Russell G. Almond  <ralmond@Limu>
 
 	* R/Pnets.R (as.Pnet, Pnet, Pnet.default): Added constructors.
