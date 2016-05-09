@@ -42,7 +42,7 @@ PnodeParentNames(node)
 
   Note that setter methods are not supported, thus although
   \code{NodeName(nd) <- newname} is valid in
-  \code{\link[RNetica}{RNetica.package}}, \code{PnodeName(nd) <-
+  \code{\link[RNetica]{RNetica.package}}, \code{PnodeName(nd) <-
   newname} will return an error.
 
 }
