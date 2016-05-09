@@ -27,19 +27,19 @@ Pnet2Qmat <- function (pnet,obs,prof) {
   ## Lay out node name row with proper repetition structure
   rowcounts <- statecounts-1
   Node <- rep(names(statecounts),rowcounts)
-  nrow <- length(obsnames)
+  nrow <- length(Node)
 
   ## Now lay out blank structure of rest of Qmat
-  NStates <- integer(nrow)
+  NStates <- rep(NA_integer_,nrow)
   States <- character(nrow)
   Link <- character(nrow)
   LinkScale <- numeric(nrow)
-  Q <- matrix(NA,nrow,length(profnames))
+  Q <- matrix(NA_real_,nrow,length(profnames))
   colnames(Q) <- profnames
   Rules <- character(nrow)
-  A <- matrix(NA,nrow,length(profnames))
+  A <- matrix(NA_real_,nrow,length(profnames))
   colnames(A) <- profnames
-  B <- numeric(nrow)
+  B <- rep(NA_real_,nrow)
   PriorWeight <- character(nrow)
 
   ## Now loop over vars, processing each one.
@@ -112,7 +112,7 @@ Pnet2Qmat <- function (pnet,obs,prof) {
     ## Easier to just handle list case
     if (!is.list(a)) a <- list(a)
     for (i in 1:length(a)) {
-      aa <- a[i]
+      aa <- a[[i]]
       if (is.null(names(aa))) {
         names(aa) <- PnodeParentNames(nd)
       }
@@ -135,6 +135,10 @@ Pnet2Qmat <- function (pnet,obs,prof) {
     irow <- irow + nstate-1
   }
   ## Finally, put this togehter into a data frame
-  result <- data.frame(Node,States,Link,LinkScale,Q,Rules,A,B,PriorWeight)
+  ## Fix colnames(A) so they are different from colnames(Q)
+  colnames(A) <- paste("A",colnames(A),sep=".")
+  result <- data.frame(Node,NStates,States,Link,LinkScale,Q,Rules,
+                       A,B,PriorWeight)
   class(result) <- c("Qmat",class(result))
+  result
 }
