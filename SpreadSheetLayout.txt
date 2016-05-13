@@ -1,3 +1,5 @@
+Q Spreadsheet
+
 Node
 States
 Link
@@ -7,3 +9,14 @@ Rules X States
 LnAlphas X States X Prof
 Betas X States
 Weight X States
+
+Omega Matrix
+
+Node
+States
+Link -- Dirichlet or Normal
+Omega X Prof -- correlations or residual s.e.
+Intercept
+Weight
+Tvals
+
