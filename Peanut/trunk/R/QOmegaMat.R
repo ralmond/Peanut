@@ -142,3 +142,51 @@ Pnet2Qmat <- function (pnet,obs,prof) {
   class(result) <- c("Qmat",class(result))
   result
 }
+
+Pnet2Omega <- function(net,prof) {
+  p <- length(prof)
+  statecounts <- sapply(prof,PnodeNumStates)
+  profnames <- sapply(prof,PnodeName)
+
+  ## Find a natural order so the Q matrix is lower triangular.
+  Omega <- diag(p)
+  rownames(Omega) <- profnames
+  colnames(Omega) <- colnames
+
+  for (nd in prof) {
+    Omega[PnodeName(nd), PnodeParentNames(prof)] <- 1
+  }
+  ord <- topsort(Omega)
+  Omega <- Omega[ord,ord]
+
+
+}
+
+## Takes an incidence matrix and produces a sorted ordering so that the parent
+## value is always higher in the ordering than a child.
+topsort <- function (Omega) {
+  if (nrow(Omega) != ncol(Omega)) {
+    stop("Matrix must be square.")
+  }
+  ord <- numeric()
+  cols <- 1:ncol(Omega)
+  if (!is.null(colnames(Omega))) {
+    names(cols) <- colnames(Omega)
+  }
+  while (nrow(Omega) > 0) {
+    rsum <- apply(Omega,1,sum)
+    priors <- which(rsum==1)
+    print("Omega so far:")
+    print(Omega)
+    if (length(priors) == 0) {
+      stop("Graph is cyclic.")
+    }
+    ord <- c(ord,cols[priors])
+    cols <- cols[-priors,drop=FALSE]
+    Omega <- Omega[-priors,-priors,drop=FALSE]
+  }
+  ord
+}
+  
+  
+  
