@@ -158,7 +158,37 @@ Pnet2Omega <- function(net,prof) {
   }
   ord <- topsort(Omega)
   Omega <- Omega[ord,ord]
+  profnames <- rownames(Omega)
 
+  ## Now set up the Rows and columns.
+  Rules <- character(p)
+  Link <- character(p)
+  Intercept <- numeric(p)
+  AOmega <- Omega
+  PriorWeight <- character(p)
+
+  ## Loop throught the nodes, filling in fields
+  for (nd in prof) {
+    pname <- PnodeName(nd)
+    Rules[pname] <- as.character(PnodeRules(nd))
+    Link[pname] <- as.character(PnodeLink(nd))
+    Intercept[pname] <- as.numeric(PnodeBetas(nd))
+    if (!is.null(PnodeLinkScale)) {
+      AOmega[pname,pname] <-as.numeric(PnodeLinkScale(nd))
+    }
+    parnames <- PnodeParentNames(nd)
+    AOmega[pname,parnames] <- as.numeric(PnodeAlphas(nd))
+    wt <- PnodePriorWeight(nd)
+    if (!is.null(wt)) {
+      PriorWeight[pname] <- dputToString(wt)
+    }
+
+  }
+  
+  colnames(AOmega) <- paste("A",colnames(AOmega),sep=".")
+  result <- data.frame(Node=profnames,Omega,Link,Rules,AOmega,PriorWeight)
+  class(result) <- c("OmegMat",class(result))
+  result
 
 }
 
