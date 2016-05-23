@@ -183,6 +183,11 @@ PnodeParentTvals <- function (node) {
   UseMethod("PnodeParentTvals")
 }
 
+PnodeParentTvals.default <- function (node) {
+  effectiveThetas(PnodeNumStates(node))
+}
+
+
 BuildTable <- function (node) {
   UseMethod("BuildTable")
 }

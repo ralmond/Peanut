@@ -19,7 +19,9 @@ dgetFromString <- function (str) {
 
 
 ### Function to build a blank Q-matrix from a Bayes net.
-Pnet2Qmat <- function (pnet,obs,prof) {
+Pnet2Qmat <- function (pnet,obs,prof,defaultRule="Compensatory",
+                       defaultLink="partialCredit",defaultLnAlpha=0,
+                       defaultBeta=NULL,defaultLinkScale=NULL) {
   statecounts <- sapply(obs,PnodeNumStates)
   obsnames <- sapply(obs,PnodeName)
   profnames <- sapply(prof,PnodeName)
@@ -143,7 +145,9 @@ Pnet2Qmat <- function (pnet,obs,prof) {
   result
 }
 
-Pnet2Omega <- function(net,prof) {
+Pnet2Omega <- function(net,prof, defaultRule="Compensatory",
+                       defaultLink="normalLink",defaultAlpha=1,
+                       defaultBeta=0,defaultLinkScale=1) {
   p <- length(prof)
   statecounts <- sapply(prof,PnodeNumStates)
   profnames <- sapply(prof,PnodeName)
@@ -151,40 +155,48 @@ Pnet2Omega <- function(net,prof) {
   ## Find a natural order so the Q matrix is lower triangular.
   Omega <- diag(p)
   rownames(Omega) <- profnames
-  colnames(Omega) <- colnames
+  colnames(Omega) <- profnames
 
   for (nd in prof) {
-    Omega[PnodeName(nd), PnodeParentNames(prof)] <- 1
+    Omega[PnodeName(nd), PnodeParentNames(nd)] <- 1
   }
   ord <- topsort(Omega)
   Omega <- Omega[ord,ord]
   profnames <- rownames(Omega)
 
   ## Now set up the Rows and columns.
-  Rules <- character(p)
-  Link <- character(p)
-  Intercept <- numeric(p)
+  Rules <- rep(defaultRule,p)
+  Link <- rep(defaultLink,p)
+  Intercept <- rep(defaultBeta,p)
   AOmega <- Omega
+  diag(AOmega) <- defaultLinkScale
   PriorWeight <- character(p)
 
   ## Loop throught the nodes, filling in fields
   for (nd in prof) {
     pname <- PnodeName(nd)
-    Rules[pname] <- as.character(PnodeRules(nd))
-    Link[pname] <- as.character(PnodeLink(nd))
-    Intercept[pname] <- as.numeric(PnodeBetas(nd))
+    if (!is.null(PnodeRules(nd)))
+      Rules[pname] <- as.character(PnodeRules(nd))
+    if (!is.null(PnodeLink(nd)))
+      Link[pname] <- as.character(PnodeLink(nd))
+    if (!is.null(PnodeBetas(nd)))
+      Intercept[pname] <- as.numeric(PnodeBetas(nd))
     if (!is.null(PnodeLinkScale)) {
       AOmega[pname,pname] <-as.numeric(PnodeLinkScale(nd))
     }
     parnames <- PnodeParentNames(nd)
-    AOmega[pname,parnames] <- as.numeric(PnodeAlphas(nd))
+    if (is.null(PnodeAlphas(nd))) {
+      AOmega[pname,parnames] <- defaultAlpha
+    } else {
+      AOmega[pname,parnames] <- as.numeric(PnodeAlphas(nd))
+    }
     wt <- PnodePriorWeight(nd)
     if (!is.null(wt)) {
       PriorWeight[pname] <- dputToString(wt)
     }
 
   }
-  
+
   colnames(AOmega) <- paste("A",colnames(AOmega),sep=".")
   result <- data.frame(Node=profnames,Omega,Link,Rules,AOmega,PriorWeight)
   class(result) <- c("OmegMat",class(result))
@@ -194,7 +206,7 @@ Pnet2Omega <- function(net,prof) {
 
 ## Takes an incidence matrix and produces a sorted ordering so that the parent
 ## value is always higher in the ordering than a child.
-topsort <- function (Omega) {
+topsort <- function (Omega,noisy=FALSE) {
   if (nrow(Omega) != ncol(Omega)) {
     stop("Matrix must be square.")
   }
@@ -206,8 +218,10 @@ topsort <- function (Omega) {
   while (nrow(Omega) > 0) {
     rsum <- apply(Omega,1,sum)
     priors <- which(rsum==1)
-    print("Omega so far:")
-    print(Omega)
+    if (noisy) {
+      print("Omega so far:")
+      print(Omega)
+    }
     if (length(priors) == 0) {
       stop("Graph is cyclic.")
     }
@@ -217,6 +231,6 @@ topsort <- function (Omega) {
   }
   ord
 }
-  
-  
-  
+
+
+

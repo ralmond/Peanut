@@ -1,3 +1,8 @@
+2016-05-17  Russell G. Almond  <ralmond@Limu>
+
+	* R/QOmegaMat.R (Pnet2Qmat, Pnet2Omega):  Translation of Bayes net
+	to spreadsheet
+
 2016-05-04  Almond  <ralmond@macox.com>
 
 	* R/BNgenerics.R: Created a list of basic BN functions I needed to
