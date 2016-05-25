@@ -18,5 +18,5 @@ Link -- Dirichlet or Normal
 Omega X Prof -- correlations or residual s.e.
 Intercept
 Weight
-Tvals
+#Tvals
 

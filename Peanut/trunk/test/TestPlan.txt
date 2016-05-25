@@ -1,0 +1,33 @@
+Things we need to test:
+
+1-parent, 2-parent, 3-parent
+
+Need more prof variables than parents, and several different orderings
+of parents.
+
+Links:
+
+gradedResponse:
+
+2-level & 3-level
+Compensatory, Conjunctive, Disjunctive
+OffsetConjunctive, OffsetDisjunctive
+3-level OffsetConjunctive with different intercepts
+
+partialCredit:
+
+2-level & 3-level
+Compensatory, Conjunctive, Disjunctive
+OffsetConjunctive, OffsetDisjunctive
+3-level OffsetConjunctive with different intercepts
+3-level OffsetConjunctive with different intercepts and slopes
+3-level Conjuctive with different slopes
+3-level Conjuctive with different slopes and intercepts
+
+normalLink
+Compensatory
+2-level, 3-level, 4-level
+different link scale for each parent state
+
+prior weights
+different prior weights for each level.

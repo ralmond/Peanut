@@ -112,6 +112,8 @@ PnodeAlphas <- function (node) {
 
 PnodeAlphas.default <- function(node) {
   result <- PnodeLnAlphas(node)
+  if(is.null(result))
+    return (NULL)
   if (is.list(result)) {
     return (lapply(result,exp))
   } else {
