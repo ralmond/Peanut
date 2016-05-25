@@ -50,9 +50,15 @@ Pnet2Qmat <- function (pnet,obs,prof,defaultRule="Compensatory",
     ## first row
     NStates[irow] <- nstate <- PnodeNumStates(nd)
     States[irow:(irow+nstate-2)] <- PnodeStates(nd)[1:(nstate-1)]
-    Link[irow] <- as.character(PnodeLink(nd))
+    if (is.null(PnodeLink(nd))) {
+      Link[irow] <- defaultLink
+    } else {
+      Link[irow] <- as.character(PnodeLink(nd))
+    }
     if (!is.null(PnodeLinkScale(nd))) {
       LinkScale[irow] <- as.character(PnodeLinkScale(nd))
+    } else if (!is.null(defaultLinkScale)) {
+      LinkScale[irow] <- as.character(defaultLinkScale)
     }
     ## Q -- if not supplied, fill in first row according to parents.
     ## If supplied, reproduce matrix.
@@ -61,29 +67,48 @@ Pnet2Qmat <- function (pnet,obs,prof,defaultRule="Compensatory",
     } else {
       Q[irow:(irow+nstate-2),] <- PnodeQ(nd)
     }
-    if (length(PnodeRules(nd)) == 1 ||
-        class(PnodeRules(nd))=="function") {
-      Rules[irow] <- dputToString(PnodeRules(nd))
-    } else {
-      Rules[irow:(irow+nstate-2)] <- sapply(PnodeRules(nd),dputToString)
+    rules <- PnodeRules(nd)
+    if (is.null(PnodeRules(nd))) {
+      rules <- defaultRule
     }
-    ### HERE
+    if (length(rules) == 1 ||
+        class(rules)=="function") {
+      Rules[irow] <- dputToString(rules)
+    } else {
+      Rules[irow:(irow+nstate-2)] <- sapply(rules,dputToString)
+    }
+    ## Get ln(alpha) or default ln(alpha) value
+    alpha <- PnodeLnAlphas(nd)
+    if (is.null(alpha)) {
+      alpha <- defaultLnAlpha
+    }
+    if (is.null(alpha)) {
+      ## Make up based on number of states
+      alpha <- as.list(effectiveTheta(nstate-1))
+    }
+    beta <- PnodeBetas(nd)
+    if (is.null(beta)) {
+      beta <- defaultBeta
+    }
+    if (is.null(beta)) {
+      ## Make up based on number of states
+      beta <- as.list(effectiveTheta(nstate-1))
+    }
     ## A  -- LnAlpha or Beta if Rule is OffsetXXX
     ## B -- Beta or LnAlpha if Rule is OffsetXXX
-    if (length(PnodeRules(nd)) ==1 ||
-        class(PnodeRules(nd))== "function") {
-      if (PnodeRules(nd) %in% getOffsetRules()) {
-        a <- PnodeLnAlphas(nd)
-        b <- PnodeBetas(nd)
+
+    if (length(rules) ==1 ||
+        class(rules)== "function") {
+      if (rules %in% getOffsetRules()) {
+        b <- alpha
+        a <- beta
       } else {
-        a <- PnodeLnAlphas(nd)
-        b <- PnodeBetas(nd)
+        a <- alpha
+        b <- beta
       }
     } else {
       ## Different rule for each row of table, may need different A's
       ## and B's
-      alpha <- PnodeLnAlphas(nd)
-      beta <- PnodeBetas(nd)
       if (!is.list(alpha)) {
         alpha <- list(alpha)
         if (nstate>2) {
@@ -102,7 +127,7 @@ Pnet2Qmat <- function (pnet,obs,prof,defaultRule="Compensatory",
       }
       a <- alpha; b <- beta
       i <- 1
-      for (rule in PnodeRules(nd)) {
+      for (rule in rules) {
         if (rule %in% OffsetRules) {
           a[[i]] <- beta[[i]]
           b[[i]] <- alpha[[i]]
@@ -181,7 +206,7 @@ Pnet2Omega <- function(net,prof, defaultRule="Compensatory",
       Link[pname] <- as.character(PnodeLink(nd))
     if (!is.null(PnodeBetas(nd)))
       Intercept[pname] <- as.numeric(PnodeBetas(nd))
-    if (!is.null(PnodeLinkScale)) {
+    if (!is.null(PnodeLinkScale(nd))) {
       AOmega[pname,pname] <-as.numeric(PnodeLinkScale(nd))
     }
     parnames <- PnodeParentNames(nd)
