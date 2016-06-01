@@ -47,117 +47,122 @@ Pnet2Qmat <- function (pnet,obs,prof,defaultRule="Compensatory",
   ## Now loop over vars, processing each one.
   irow <- 1
   for (nd in obs) {
-    ## first row
-    NStates[irow] <- nstate <- PnodeNumStates(nd)
-    States[irow:(irow+nstate-2)] <- PnodeStates(nd)[1:(nstate-1)]
-    if (is.null(PnodeLink(nd))) {
-      Link[irow] <- defaultLink
-    } else {
-      Link[irow] <- as.character(PnodeLink(nd))
-    }
-    if (!is.null(PnodeLinkScale(nd))) {
-      LinkScale[irow] <- as.character(PnodeLinkScale(nd))
-    } else if (!is.null(defaultLinkScale)) {
-      LinkScale[irow] <- as.character(defaultLinkScale)
-    }
-    ## Q -- if not supplied, fill in first row according to parents.
-    ## If supplied, reproduce matrix.
-    if (is.null(PnodeQ(nd))) {
-      Q[irow,] <- as.numeric(profnames %in% PnodeParentNames(nd))
-    } else {
-      Q[irow:(irow+nstate-2),] <- PnodeQ(nd)
-    }
-    rules <- PnodeRules(nd)
-    if (is.null(PnodeRules(nd))) {
-      rules <- defaultRule
-    }
-    if (length(rules) == 1 ||
-        class(rules)=="function") {
-      Rules[irow] <- dputToString(rules)
-    } else {
-      Rules[irow:(irow+nstate-2)] <- sapply(rules,dputToString)
-    }
-    ## Get ln(alpha) or default ln(alpha) value
-    alpha <- PnodeLnAlphas(nd)
-    if (is.null(alpha)) {
-      alpha <- defaultLnAlpha
-    }
-    if (is.null(alpha)) {
-      ## Make up based on number of states
-      alpha <- as.list(effectiveTheta(nstate-1))
-    }
-    beta <- PnodeBetas(nd)
-    if (is.null(beta)) {
-      beta <- defaultBeta
-    }
-    if (is.null(beta)) {
-      ## Make up based on number of states
-      beta <- as.list(effectiveTheta(nstate-1))
-    }
-    ## A  -- LnAlpha or Beta if Rule is OffsetXXX
-    ## B -- Beta or LnAlpha if Rule is OffsetXXX
-
-    if (length(rules) ==1 ||
-        class(rules)== "function") {
-      if (rules %in% getOffsetRules()) {
-        b <- alpha
-        a <- beta
+    tryCatch({
+      ## first row
+      NStates[irow] <- nstate <- PnodeNumStates(nd)
+      States[irow:(irow+nstate-2)] <- PnodeStates(nd)[1:(nstate-1)]
+      if (is.null(PnodeLink(nd))) {
+        Link[irow] <- defaultLink
       } else {
-        a <- alpha
-        b <- beta
+        Link[irow] <- as.character(PnodeLink(nd))
       }
-    } else {
-      ## Different rule for each row of table, may need different A's
-      ## and B's
-      if (!is.list(alpha)) {
-        alpha <- list(alpha)
-        if (nstate>2) {
-          for (i in 2:(nstate-1)) {
-            alpha[[i]] <- alpha[[1]]
+      if (!is.null(PnodeLinkScale(nd))) {
+        LinkScale[irow] <- as.character(PnodeLinkScale(nd))
+      } else if (!is.null(defaultLinkScale)) {
+        LinkScale[irow] <- as.character(defaultLinkScale)
+      }
+      ## Q -- if not supplied, fill in first row according to parents.
+      ## If supplied, reproduce matrix.
+      if (is.null(PnodeQ(nd))) {
+        Q[irow,] <- as.numeric(profnames %in% PnodeParentNames(nd))
+      } else {
+        Q[irow:(irow+nstate-2),] <- PnodeQ(nd)
+      }
+      rules <- PnodeRules(nd)
+      if (is.null(PnodeRules(nd))) {
+        rules <- defaultRule
+      }
+      if (length(rules) == 1 ||
+          class(rules)=="function") {
+        Rules[irow] <- dputToString(rules)
+      } else {
+        Rules[irow:(irow+nstate-2)] <- sapply(rules,dputToString)
+      }
+      ## Get ln(alpha) or default ln(alpha) value
+      alpha <- PnodeLnAlphas(nd)
+      if (is.null(alpha)) {
+        alpha <- defaultLnAlpha
+      }
+      beta <- PnodeBetas(nd)
+      if (is.null(beta)) {
+        beta <- defaultBeta
+      }
+      if (is.null(beta)) {
+        ## Make up based on number of states
+        beta <- as.list(effectiveThetas(nstate-1))
+      }
+      ## A  -- LnAlpha or Beta if Rule is OffsetXXX
+      ## B -- Beta or LnAlpha if Rule is OffsetXXX
+
+      if (length(rules) ==1 ||
+          class(rules)== "function") {
+        if (rules %in% getOffsetRules()) {
+          b <- alpha
+          a <- beta
+        } else {
+          a <- alpha
+          b <- beta
+        }
+      } else {
+        ## Different rule for each row of table, may need different A's
+        ## and B's
+        if (!is.list(alpha)) {
+          alpha <- list(alpha)
+          if (nstate>2) {
+            for (i in 2:(nstate-1)) {
+              alpha[[i]] <- alpha[[1]]
+            }
           }
         }
-      }
-      if (!is.list(beta)) {
-        beta <- list(beta)
-        if (nstate>2) {
-          for (i in 2:(nstate-1)) {
-            beta[[i]] <- beta[[1]]
+        if (!is.list(beta)) {
+          beta <- list(beta)
+          if (nstate>2) {
+            for (i in 2:(nstate-1)) {
+              beta[[i]] <- beta[[1]]
+            }
           }
         }
-      }
-      a <- alpha; b <- beta
-      i <- 1
-      for (rule in rules) {
-        if (rule %in% OffsetRules) {
-          a[[i]] <- beta[[i]]
-          b[[i]] <- alpha[[i]]
+        a <- alpha; b <- beta
+        i <- 1
+        for (rule in rules) {
+          if (rule %in% OffsetRules) {
+            a[[i]] <- beta[[i]]
+            b[[i]] <- alpha[[i]]
+          }
+          i <- i+1
         }
-        i <- i+1
       }
-    }
-    ## Now write out a
-    ## Easier to just handle list case
-    if (!is.list(a)) a <- list(a)
-    for (i in 1:length(a)) {
-      aa <- a[[i]]
-      if (is.null(names(aa))) {
-        names(aa) <- PnodeParentNames(nd)
+      ## Now write out a
+      ## Easier to just handle list case
+      if (!is.list(a)) a <- list(a)
+      for (i in 1:length(a)) {
+        aa <- a[[i]]
+        if (is.null(names(aa))) {
+          names(aa) <- PnodeParentNames(nd)
+        }
+        A[irow+i-1,names(aa)] <- aa
       }
-      A[irow+i-1,names(aa)] <- aa
-    }
-    ## For b, easier to coerce to vector.
-    b <- as.numeric(b)
-    if (length(b) > nstate-1) {
-      stop("Too much b:", b)
-    }
-    B[irow:(irow+length(b)-1)] <- b
+      ## For b, easier to coerce to vector.
+      b <- as.numeric(b)
+      if (length(b) > nstate-1) {
+        stop("Too much b:", b)
+      }
+      B[irow:(irow+length(b)-1)] <- b
 
-    ## Weights
-    wt <- PnodePriorWeight(nd)
-    if (!is.null(wt)) {
-      PriorWeight[irow] <- dputToString(wt)
-    }
-
+      ## Weights
+      wt <- PnodePriorWeight(nd)
+      if (!is.null(wt)) {
+        PriorWeight[irow] <- dputToString(wt)
+      }
+    },
+    error = function (e) {
+      ## Resignal error with context information about the node.
+      ee <- simpleError(
+          paste("While processing node ",PnodeName(nd),":",
+                conditionMessage(e)),
+          conditionCall(e))
+      signalCondition(ee)
+    })
     ## Next node
     irow <- irow + nstate-1
   }
