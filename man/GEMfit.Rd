@@ -12,7 +12,8 @@
 }
 \usage{
 GEMfit(net, cases, tol = sqrt(.Machine$double.eps),
-       maxit = 100, Estepit = 1, Mstepit = 3)
+       maxit = 100, Estepit = 1, Mstepit = 3,
+       trace=FALSE, debugNo=maxit+1)
 }
 \arguments{
   \item{net}{A \code{\link{Pnet}} object}
@@ -28,6 +29,12 @@ GEMfit(net, cases, tol = sqrt(.Machine$double.eps),
     the E-step.} 
   \item{Mstepit}{An integer scalar giving the number of steps that
     should be taken by \code{\link[CPTtools]{mapDPC}} during the M-step.}
+  \item{trace}{A logical value which indicates whether or not cycle by
+    cycle information should be sent to standard output.}
+  \item{debugNo}{An integer scalar.  Node-by-node status updates will
+    start when this iteration is reached.  Default value provides no
+    debugging information.}
+
 }
 \details{
 
@@ -76,6 +83,16 @@ GEMfit(net, cases, tol = sqrt(.Machine$double.eps),
   value of \code{Mstepit}, different values may affect the convergence
   rate, and analysts may need to experiment with application specific
   values of this parameter.
+
+  The arguments \code{trace} and \code{debugNo} are used to provide
+  extra debugging information.  Setting \code{trace} to \code{TRUE}
+  means that a message is printed after tables are built but before they
+  are updated.  Setting \code{debugNo} to a certain integer, will begin
+  node-by-node messages for both \code{\link{BuildAllTables}} and
+  \code{\link{maxAllTableParams}}.  In particular, setting it to 1 is
+  useful for debugging problems that occur at initialization.  If the
+  problem turns up at a later cycle, the \code{trace} option can be used
+  to figure out when the error occurs.
   
 }
 \value{
