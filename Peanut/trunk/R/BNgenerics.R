@@ -20,3 +20,6 @@ PnodeParentNames <- function (node)
 
 PnodeNumParents <- function (node)
   UseMethod("PnodeNumParents")
+
+PnetFindNode <- function(net, name)
+  UseMethod("PnetFindNode")

@@ -15,8 +15,8 @@
 
 }
 \usage{
-maxAllTableParams(net, Mstepit = 5, tol = sqrt(.Machine$double.eps))
-\method{maxAllTableParams}{default}(net, Mstepit = 5, tol = sqrt(.Machine$double.eps))
+maxAllTableParams(net, Mstepit = 5, tol = sqrt(.Machine$double.eps), debug=TRUE)
+\method{maxAllTableParams}{default}(net, Mstepit = 5, tol = sqrt(.Machine$double.eps), debug=TRUE)
 maxCPTParam(node, Mstepit = 5, tol = sqrt(.Machine$double.eps)) 
 }
 \arguments{
@@ -27,6 +27,8 @@ maxCPTParam(node, Mstepit = 5, tol = sqrt(.Machine$double.eps))
     to convergence.} 
   \item{tol}{A numeric scalar giving the stopping tolerance for the
     maximizer.}
+  \item{debug}{A logical scalar.  If true, information about which node
+    is being worked on is printed.}
 }
 \details{
 

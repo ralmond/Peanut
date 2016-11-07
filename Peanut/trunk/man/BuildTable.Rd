@@ -14,13 +14,15 @@
 }
 \usage{
 BuildTable(node)
-BuildAllTables(net)
+BuildAllTables(net, debug=FALSE)
 }
 \arguments{
   \item{node}{A \code{\link{Pnode}} object whose table is to be built.}
   \item{net}{A \code{\link{Pnet}} object for whom the tables are needed
     to be built.}
-
+  \item{debug}{A logical scalar.  If true the names of the nodes are
+    printed as each one is built to help determine where errors are
+    occuring.}
 }
 \details{
 

@@ -5,9 +5,11 @@
 ## supposed to depend on RNetica, this seems the easiest way to do this.
 dputToString <- function (obj) {
   con <- textConnection(NULL,open="w")
-  tryCatch({dput(obj,con);
-           textConnectionValue(con)},
-           finally=close(con))
+  result <- tryCatch({dput(obj,con);
+    textConnectionValue(con)},
+    finally=close(con))
+  ## R is helpfully adding newlines which we don't want.
+  paste(result,collapse="")
 }
 
 dgetFromString <- function (str) {
@@ -21,7 +23,8 @@ dgetFromString <- function (str) {
 ### Function to build a blank Q-matrix from a Bayes net.
 Pnet2Qmat <- function (pnet,obs,prof,defaultRule="Compensatory",
                        defaultLink="partialCredit",defaultLnAlpha=0,
-                       defaultBeta=NULL,defaultLinkScale=NULL) {
+                       defaultBeta=NULL,defaultLinkScale=NULL,
+                       debug=FALSE) {
   statecounts <- sapply(obs,PnodeNumStates)
   obsnames <- sapply(obs,PnodeName)
   profnames <- sapply(prof,PnodeName)
@@ -132,13 +135,26 @@ Pnet2Qmat <- function (pnet,obs,prof,defaultRule="Compensatory",
           i <- i+1
         }
       }
+      if(debug) {
+        print(nd)
+        cat("Rules:",PnodeRules(nd),"\n")
+        cat("a=",a,"\n")
+        cat("b=",b,"\n")
+      }
       ## Now write out a
       ## Easier to just handle list case
       if (!is.list(a)) a <- list(a)
       for (i in 1:length(a)) {
         aa <- a[[i]]
         if (is.null(names(aa))) {
+          if (length(aa) != PnodeNumParents(nd)) {
+            aa <- rep_len(aa,PnodeNumParents(nd))
+          }
           names(aa) <- PnodeParentNames(nd)
+        }
+        if (debug) {
+          print("a[[i]]")
+          print(aa)
         }
         A[irow+i-1,names(aa)] <- aa
       }
@@ -161,7 +177,7 @@ Pnet2Qmat <- function (pnet,obs,prof,defaultRule="Compensatory",
           paste("While processing node ",PnodeName(nd),":",
                 conditionMessage(e)),
           conditionCall(e))
-      signalCondition(ee)
+      stop(ee)
     })
     ## Next node
     irow <- irow + nstate-1
@@ -170,14 +186,16 @@ Pnet2Qmat <- function (pnet,obs,prof,defaultRule="Compensatory",
   ## Fix colnames(A) so they are different from colnames(Q)
   colnames(A) <- paste("A",colnames(A),sep=".")
   result <- data.frame(Node,NStates,States,Link,LinkScale,Q,Rules,
-                       A,B,PriorWeight)
+                       A,B,PriorWeight,
+                       stringsAsFactors=FALSE)
   class(result) <- c("Qmat",class(result))
   result
 }
 
 Pnet2Omega <- function(net,prof, defaultRule="Compensatory",
                        defaultLink="normalLink",defaultAlpha=1,
-                       defaultBeta=0,defaultLinkScale=1) {
+                       defaultBeta=0,defaultLinkScale=1,
+                       debug=FALSE) {
   p <- length(prof)
   statecounts <- sapply(prof,PnodeNumStates)
   profnames <- sapply(prof,PnodeName)
@@ -190,21 +208,31 @@ Pnet2Omega <- function(net,prof, defaultRule="Compensatory",
   for (nd in prof) {
     Omega[PnodeName(nd), PnodeParentNames(nd)] <- 1
   }
-  ord <- topsort(Omega)
+  ord <- topsort(Omega,noisy=debug)
   Omega <- Omega[ord,ord]
   profnames <- rownames(Omega)
 
   ## Now set up the Rows and columns.
+  Nstates <- numeric(p)
+  names(Nstates) <- profnames
+  States <- character(p)
+  names(States) <- profnames
   Rules <- rep(defaultRule,p)
+  names(Rules) <- profnames
   Link <- rep(defaultLink,p)
+  names(Link) <- profnames
   Intercept <- rep(defaultBeta,p)
+  names(Intercept) <- profnames
   AOmega <- Omega
   diag(AOmega) <- defaultLinkScale
   PriorWeight <- character(p)
+  names(PriorWeight) <- profnames
 
   ## Loop throught the nodes, filling in fields
   for (nd in prof) {
     pname <- PnodeName(nd)
+    Nstates[pname] <- PnodeNumStates(nd)
+    States[pname] <- dputToString(PnodeStates(nd))
     if (!is.null(PnodeRules(nd)))
       Rules[pname] <- as.character(PnodeRules(nd))
     if (!is.null(PnodeLink(nd)))
@@ -228,7 +256,9 @@ Pnet2Omega <- function(net,prof, defaultRule="Compensatory",
   }
 
   colnames(AOmega) <- paste("A",colnames(AOmega),sep=".")
-  result <- data.frame(Node=profnames,Omega,Link,Rules,AOmega,PriorWeight)
+  result <- data.frame(Node=profnames,Nstates,States,Omega,
+                       Link,Rules,AOmega,Intercept,PriorWeight,
+                       stringsAsFactors=FALSE)
   class(result) <- c("OmegMat",class(result))
   result
 
@@ -262,5 +292,44 @@ topsort <- function (Omega,noisy=FALSE) {
   ord
 }
 
+### These columns should be in any Omega matrix.
+Omega.reqcol <- c("Node","Nstates","States","Link",
+          "Rules","Intercept","PriorWeight")
+
+## Override controls behavior when OmegaMat and pn don't agree.
+## Default  value of FALSE generates an error.
+## A value of true issues a warning and changes the network to agree
+## with the matrix.
+Omega2Pnet <- function(OmegaMat,pn,defaultRule="Compensatory",
+                       defaultLink="normalLink",defaultAlpha=1,
+                       defaultBeta=0,defaultLinkScale=1,
+                       debug=FALSE,override=FALSE) {
+  if (!is.Pnet(pn)) {
+    stop("Blank network must be provided.")
+  }
+  if (!all(Omega.reqcol %in% names(OmegaMat))) {
+    stop("Badly formed Omega matrix.")
+  }
+  ## First parse the structural part of the matrix
+  nodenames <- OmegaMat$Node
+  Nstates <- OmegaMat$Nstates
+  names(Nstates) <- nodenames
+  States <- OmegaMat$States
+  names(States) <- nodenames
+  p <- nrow(OmegaMat)
+
+  ## Container for list of proficiency variables
+  profs <- list()
+  for (ndn in nodenames) {
+  }
 
 
+
+}
+
+Qmat2Pnet <- function (QQ, pnet,prof,defaultRule="Compensatory",
+                       defaultLink="partialCredit",defaultLnAlpha=0,
+                       defaultBeta=NULL,defaultLinkScale=NULL,
+                       debug=FALSE,override=FALSE) {
+
+}

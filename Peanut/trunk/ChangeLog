@@ -1,3 +1,12 @@
+2016-11-05  Russell G. Almond  <ralmond@Limu>
+
+	* R/EM.R (GEMfit): Added tracing features.
+	* R/Pnets.R (BuildAllTables,maxAllTableParams): Added debug switch.
+
+2016-06-02  Russell G. Almond  <ralmond@Limu>
+
+	* R/BNgenerics.R (PnetFindNode): Added a find node function
+
 2016-05-22  Russell G. Almond  <ralmond@Limu>
 
 	* R/QOmegaMat.R (Pnet2Qmat,Pnet2Omega): Added defaults.

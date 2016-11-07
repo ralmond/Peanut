@@ -28,7 +28,8 @@ S3method(PnodeParentTvals, default)
 
 ## BN generics.
 export(PnodeName,PnodeStates,PnodeNumStates,
-       PnodeParents,PnodeParentNames,PnodeNumParents)
+       PnodeParents,PnodeParentNames,PnodeNumParents,
+       PnetFindNode)
 
 
 ## EM algorithm
@@ -39,6 +40,6 @@ S3method("maxAllTableParams", default)
 
 
 ## Q and Omega matrixes
-export(Pnet2Omega,Pnet2Qmat,topsort)
+export(Pnet2Omega,Pnet2Qmat,topsort,Omega2Pnet,Qmat2Pnet)
 
 

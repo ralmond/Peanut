@@ -45,8 +45,12 @@ Pnet.default <- function (net, priorWeight=10, pnodes=list()) {
   net
 }
 
-BuildAllTables <- function (net) {
-  lapply(PnetPnodes(net),BuildTable)
+BuildAllTables <- function (net, debug=FALSE) {
+  lapply(PnetPnodes(net),
+         function (node) {
+           if (debug) cat("Building",node,"\n")
+           BuildTable
+           })
   invisible(net)
 }
 
