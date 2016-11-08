@@ -49,7 +49,7 @@ BuildAllTables <- function (net, debug=FALSE) {
   lapply(PnetPnodes(net),
          function (node) {
            if (debug) cat("Building",node,"\n")
-           BuildTable(net)
+           BuildTable(node)
            })
   invisible(net)
 }
