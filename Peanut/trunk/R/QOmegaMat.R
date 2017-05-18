@@ -31,7 +31,7 @@ Pnet2Qmat <- function (pnet,obs,prof,defaultRule="Compensatory",
 
   ## Lay out node name row with proper repetition structure
   rowcounts <- statecounts-1
-  Node <- rep(names(statecounts),rowcounts)
+  Node <- rep(obsnames,rowcounts)
   nrow <- length(Node)
 
   ## Now lay out blank structure of rest of Qmat
@@ -39,8 +39,8 @@ Pnet2Qmat <- function (pnet,obs,prof,defaultRule="Compensatory",
   States <- character(nrow)
   Link <- character(nrow)
   LinkScale <- numeric(nrow)
-  Q <- matrix(NA_real_,nrow,length(profnames))
-  colnames(Q) <- profnames
+  QQ <- matrix(NA_real_,nrow,length(profnames))
+  colnames(QQ) <- profnames
   Rules <- character(nrow)
   A <- matrix(NA_real_,nrow,length(profnames))
   colnames(A) <- profnames
@@ -64,12 +64,14 @@ Pnet2Qmat <- function (pnet,obs,prof,defaultRule="Compensatory",
       } else if (!is.null(defaultLinkScale)) {
         LinkScale[irow] <- as.character(defaultLinkScale)
       }
-      ## Q -- if not supplied, fill in first row according to parents.
+      ## QQ -- if not supplied, fill in first row according to parents.
       ## If supplied, reproduce matrix.
+      ## First fill in non-parents with 0s
+      QQ[irow:(irow+nstate-2),] <-
+        as.numeric(profnames %in% PnodeParentNames(nd))
       if (is.null(PnodeQ(nd))) {
-        Q[irow,] <- as.numeric(profnames %in% PnodeParentNames(nd))
-      } else {
-        Q[irow:(irow+nstate-2),] <- PnodeQ(nd)
+        QQ[irow:(irow+nstate-2),match(ParentNames(nd),profnames)] <-
+          PnodeQ(nd)
       }
       rules <- PnodeRules(nd)
       if (is.null(PnodeRules(nd))) {
@@ -128,7 +130,7 @@ Pnet2Qmat <- function (pnet,obs,prof,defaultRule="Compensatory",
         a <- alpha; b <- beta
         i <- 1
         for (rule in rules) {
-          if (rule %in% OffsetRules) {
+          if (rule %in% getOffsetRules()) {
             a[[i]] <- beta[[i]]
             b[[i]] <- alpha[[i]]
           }
@@ -183,9 +185,9 @@ Pnet2Qmat <- function (pnet,obs,prof,defaultRule="Compensatory",
     irow <- irow + nstate-1
   }
   ## Finally, put this togehter into a data frame
-  ## Fix colnames(A) so they are different from colnames(Q)
+  ## Fix colnames(A) so they are different from colnames(QQ)
   colnames(A) <- paste("A",colnames(A),sep=".")
-  result <- data.frame(Node,NStates,States,Link,LinkScale,Q,Rules,
+  result <- data.frame(Node,NStates,States,Link,LinkScale,QQ,Rules,
                        A,B,PriorWeight,
                        stringsAsFactors=FALSE)
   class(result) <- c("Qmat",class(result))
