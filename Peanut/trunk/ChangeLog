@@ -1,3 +1,7 @@
+2017-05-18  Russell G. Almond  <ralmond@Limu>
+
+	* R/QOmegaMat.R (Pnet2Qmat): Debugged Q-matrix size problems.
+
 2016-11-05  Russell G. Almond  <ralmond@Limu>
 
 	* R/EM.R (GEMfit): Added tracing features.
