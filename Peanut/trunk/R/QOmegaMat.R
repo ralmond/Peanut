@@ -24,7 +24,7 @@ dgetFromString <- function (str) {
 Pnet2Qmat <- function (pnet,obs,prof,defaultRule="Compensatory",
                        defaultLink="partialCredit",defaultLnAlpha=0,
                        defaultBeta=NULL,defaultLinkScale=NULL,
-                       debug=FALSE) {
+                       debug=TRUE) {
   statecounts <- sapply(obs,PnodeNumStates)
   obsnames <- sapply(obs,PnodeName)
   profnames <- sapply(prof,PnodeName)
@@ -50,6 +50,7 @@ Pnet2Qmat <- function (pnet,obs,prof,defaultRule="Compensatory",
   ## Now loop over vars, processing each one.
   irow <- 1
   for (nd in obs) {
+    if (debug) cat("Processing node ",nd,".\n")
     tryCatch({
       ## first row
       NStates[irow] <- nstate <- PnodeNumStates(nd)
@@ -67,11 +68,16 @@ Pnet2Qmat <- function (pnet,obs,prof,defaultRule="Compensatory",
       ## QQ -- if not supplied, fill in first row according to parents.
       ## If supplied, reproduce matrix.
       ## First fill in non-parents with 0s
-      QQ[irow:(irow+nstate-2),] <-
-        as.numeric(profnames %in% PnodeParentNames(nd))
-      if (is.null(PnodeQ(nd))) {
+      QQ[irow:(irow+nstate-2),] <- 0
+      QQ[irow:(irow+nstate-2),profnames %in% PnodeParentNames(nd)] <- 1
+      if (!is.null(PnodeQ(nd))) {
         QQ[irow:(irow+nstate-2),match(ParentNames(nd),profnames)] <-
           PnodeQ(nd)
+      }
+      if (debug) {
+        cat("Q matrix:\n")
+        print(QQ[irow:(irow+nstate-2),])
+        cat("\n")
       }
       rules <- PnodeRules(nd)
       if (is.null(PnodeRules(nd))) {
@@ -139,9 +145,9 @@ Pnet2Qmat <- function (pnet,obs,prof,defaultRule="Compensatory",
       }
       if(debug) {
         print(nd)
-        cat("Rules:",PnodeRules(nd),"\n")
-        cat("a=",a,"\n")
-        cat("b=",b,"\n")
+        cat("Rules:",toString(PnodeRules(nd)),"\n")
+        cat("a=",toString(a),"\n")
+        cat("b=",toString(b),"\n")
       }
       ## Now write out a
       ## Easier to just handle list case
@@ -166,6 +172,13 @@ Pnet2Qmat <- function (pnet,obs,prof,defaultRule="Compensatory",
         stop("Too much b:", b)
       }
       B[irow:(irow+length(b)-1)] <- b
+      if (debug) {
+        cat("A matrix:\n")
+        print(A[irow:(irow+nstate-2),])
+        cat("B vector:\n")
+        print(B[irow:(irow+nstate-2)])
+        cat("\n")
+      }
 
       ## Weights
       wt <- PnodePriorWeight(nd)
@@ -208,6 +221,9 @@ Pnet2Omega <- function(net,prof, defaultRule="Compensatory",
   colnames(Omega) <- profnames
 
   for (nd in prof) {
+    if (!all(PnodeParentNames(nd) %in% profnames)) {
+      stop("Some of the parents of node ",nd," are not in the list.")
+    }
     Omega[PnodeName(nd), PnodeParentNames(nd)] <- 1
   }
   ord <- topsort(Omega,noisy=debug)
