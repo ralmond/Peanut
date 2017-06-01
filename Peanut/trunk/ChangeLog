@@ -1,5 +1,7 @@
 2017-06-01  Russell G. Almond  <ralmond@Limu>
 
+	* R/Pnets.R (BuildAllTables): Fixed missing argument error.
+
 	* R/QOmegaMat.R (Pnet2Omega): Added check for missing parents.
 
 2017-05-18  Russell G. Almond  <ralmond@Limu>
