@@ -54,7 +54,25 @@ BuildAllTables <- function (net, debug=FALSE) {
   invisible(net)
 }
 
+### To fit hub and spoke model.
 
+### This takes a list of nodes from different networks, and makes copies in the given net.
+PnetMakeStubNode <- function (net,node) {
+  UseMethod("PnetMakeStubNode")
+}
+
+### This takes nodes copied from the hub network and removes them leaving only references.
+PnetRemoveStubNodes <- function (net,nodes) {
+  UseMethod("PnetRemoveStubNodes")
+}
+
+PnetAdjoin <- function (hub, spoke) {
+  UseMethod("PnetAdjoin")
+}
+
+PnetDetach <- function (motif, spoke) {
+  UseMethod("PnetDetach")
+}
 
 
 

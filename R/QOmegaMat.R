@@ -1,4 +1,11 @@
 
+### Takes a character vector and puts it into a
+### character scalar of quoted strings separated by commans.
+statecat <- function (states)
+  paste("\"",NodeStates(phys),"\"",collapse=",",sep="")
+
+statesplit <- function (statestring)
+  strsplit(sub("^\"","",sub("\"$","",statestring)),"\",\"")[[1]]
 
 
 ## This is clipboard inheritance from RNetica, but as Pnets is not
@@ -18,11 +25,13 @@ dgetFromString <- function (str) {
 }
 
 
+### Create table of Node meta-information
+
 
 
 ### Function to build a blank Q-matrix from a Bayes net.
 Pnet2Qmat <- function (pnet,obs,prof,defaultRule="Compensatory",
-                       defaultLink="partialCredit",defaultLnAlpha=0,
+                       defaultLink="partialCredit",defaultAlpha=1,
                        defaultBeta=NULL,defaultLinkScale=NULL,
                        debug=TRUE) {
   statecounts <- sapply(obs,PnodeNumStates)
@@ -90,9 +99,9 @@ Pnet2Qmat <- function (pnet,obs,prof,defaultRule="Compensatory",
         Rules[irow:(irow+nstate-2)] <- sapply(rules,dputToString)
       }
       ## Get ln(alpha) or default ln(alpha) value
-      alpha <- PnodeLnAlphas(nd)
+      alpha <- PnodeAlphas(nd)
       if (is.null(alpha)) {
-        alpha <- defaultLnAlpha
+        alpha <- defaultAlpha
       }
       beta <- PnodeBetas(nd)
       if (is.null(beta)) {
@@ -207,6 +216,25 @@ Pnet2Qmat <- function (pnet,obs,prof,defaultRule="Compensatory",
   result
 }
 
+
+Qmat.reqcol <- c("Node","Nstates","States","Link","LinkScale"
+          "Rules","B","PriorWeight")
+
+
+Qmat2Pnet <- function (QQ, nethouse,nodehouse,prof,defaultRule="Compensatory",
+                       defaultLink="partialCredit",defaultAlpha=1,
+                       defaultBeta=NULL,defaultLinkScale=NULL,
+                       debug=FALSE,override=FALSE) {
+
+  ### HERE ###
+}
+
+
+
+
+### Omega matrix for proficiencies.
+
+
 Pnet2Omega <- function(net,prof, defaultRule="Compensatory",
                        defaultLink="normalLink",defaultAlpha=1,
                        defaultBeta=0,defaultLinkScale=1,
@@ -250,7 +278,7 @@ Pnet2Omega <- function(net,prof, defaultRule="Compensatory",
   for (nd in prof) {
     pname <- PnodeName(nd)
     Nstates[pname] <- PnodeNumStates(nd)
-    States[pname] <- dputToString(PnodeStates(nd))
+    States[pname] <- statecat(PnodeStates(nd))
     if (!is.null(PnodeRules(nd)))
       Rules[pname] <- as.character(PnodeRules(nd))
     if (!is.null(PnodeLink(nd)))
@@ -318,12 +346,16 @@ Omega.reqcol <- c("Node","Nstates","States","Link",
 ## Default  value of FALSE generates an error.
 ## A value of true issues a warning and changes the network to agree
 ## with the matrix.
-Omega2Pnet <- function(OmegaMat,pn,defaultRule="Compensatory",
+Omega2Pnet <- function(OmegaMat,pn,nodewarehouse,defaultRule="Compensatory",
                        defaultLink="normalLink",defaultAlpha=1,
                        defaultBeta=0,defaultLinkScale=1,
+                       defaultWeight=NULL,
                        debug=FALSE,override=FALSE) {
   if (!is.Pnet(pn)) {
     stop("Blank network must be provided.")
+  }
+  if (!is(nodewarehouse,"PnodeWarehouse")) {
+    stop("Node warehouse must be supplied.")
   }
   if (!all(Omega.reqcol %in% names(OmegaMat))) {
     stop("Badly formed Omega matrix.")
@@ -335,19 +367,109 @@ Omega2Pnet <- function(OmegaMat,pn,defaultRule="Compensatory",
   States <- OmegaMat$States
   names(States) <- nodenames
   p <- nrow(OmegaMat)
+  rownames(OmegaMat) <- nodenames
+
 
   ## Container for list of proficiency variables
-  profs <- list()
+  if (debug) {
+    cat("\nBuilding nodes.\n")
+  }
+  nodes <- vector("list",length(nodenames))
+  names(nodes) <- nodenames
   for (ndn in nodenames) {
+    if (debug) cat("Building node: ",ndn,"\n")
+    node <- nodewarehouse$supply(c(PnetName(pn),ndn))
+    ## Check state match
+    statesEqual <- all.equal(PnodeStates(node),statesplit(States[ndn]))
+    if (statesEqual != TRUE) {
+      cat("States of node and Omega matrix not equal for node ",ndn,"\n")
+      cat(statesEqual,"\n")
+      if (override) {
+        warning("Correcting net to match matrix.  This may damage meta-data.")
+        PnodeStates(node) <- statesplit(States[ndn])
+      } else {
+        stop("Network and Omega matrix do not agree.  See console for details.")
+      }
+    }
+    nodes[[ndn]] <- node
   }
 
+  ### Next build structure.
+  if (debug) {
+    cat("\n Processing links.\n")
+  }
+  QQ <- OmegaMat[nodenames,nodenames]
 
+  for (ndn in nodenames) {
+    if (debug) cat("Building links for node: ",ndn,"\n")
+    node <- nodes[[ndn]]
+    parnames <- setdiff(nodesnames(QQ[ndn,]==1),ndn)
+    exparnames <- PnodeParentNames(node)
+    if (!setequal(parnames,exparnames)) {
+      cat("While processing links for node: ",ndn,"\n")
+      cat("Node has parents: ", exparnames,"\n")
+      cat("But Omega matrix has parents: ", parnames,"\n")
+      if (override) {
+        warning("Changing net to match Omega matrix.")
+      } else {
+        stop("Graphical structure does not match Omega matrix.  See console.")
+      }
+    }
+    # Change order to match matrix. Even if nominally a match.
+    PnodeParents(node) <- nodes[parnames]
+  }
+
+  ### Next build structure.
+  if (debug) {
+    cat("\n Processing CPTs.\n")
+  }
+  AOmega <- OmegaMat[nodenames,paste("A",nodenames,sep=".")]
+  colnames(AA) <- nodenames
+  links <- OmegaMat$Link
+  names(links) <- nodenames
+  rules <- OmegaMat$Rules
+  names(rules) <- nodenames
+  intercepts <- OmegaMat$Intercept
+  names(intercepts) <- nodenames
+  weights <- OmegaMat$PriorWeight
+  names(weights) <- nodenames
+
+  for (ndn in nodenames) {
+    if (debug) cat("Building links for node: ",ndn,"\n")
+    node <- nodes[[ndn]]
+    parnames <- setdiff(nodesnames(QQ[ndn,]==1),ndn)
+    if (is.na(rules[ndn]) || nchar(rules[ndn]) == 0L) {
+      PnodeRules(node) <- defaultRule
+    } else {
+      PnodeRules(node) <- rules[ndn]
+    }
+    if (is.na(rules[ndn]) || nchar(links[ndn]) == 0L) {
+      PnodeLink(node) <- defaultLink
+    } else {
+      PnodeLink(node) <- links[ndn]
+    }
+    if (is.na(intercept[ndn])) {
+      PnodeBetas(node) <- defaultBeta
+    } else {
+      PnodeBetas(node) <- intercept[ndn]
+    }
+    if (is.na(AOmega[ndn,ndn])) {
+      PnodeLinkScale(node) <- defaultLinkScale
+    } else {
+      PnodeLinkScale(node) <- AOmega[ndn,ndn]
+    }
+    parnames <- PnodeParentNames(nd)
+    alphas <- AOmega[pname,parnames]
+    alphas[is.na(alphas)] <- defaultAlphas
+    names(alphas) <- parnames
+    PnodeAlphas(node) <- alphas
+
+    if (!is.na(weights[ndn]) && nchar(weights[ndn]) > 0L) {
+    PnodePriorWeight(node) <- dgetFromString(weights)
+    }
+
+  }
+  pn
 
 }
 
-Qmat2Pnet <- function (QQ, pnet,prof,defaultRule="Compensatory",
-                       defaultLink="partialCredit",defaultLnAlpha=0,
-                       defaultBeta=NULL,defaultLinkScale=NULL,
-                       debug=FALSE,override=FALSE) {
-
-}

@@ -1,3 +1,12 @@
+2017-06-09  Russell G. Almond  <ralmond@Limu>
+
+	* R/Factories.R: Warehouse debugged and documented.
+
+2017-06-06  Russell G. Almond  <ralmond@Limu>
+
+	* R/Factories.R: Created the Warehouse paradigm and warehouses for
+	Pnets and Pnodes.  Also Pnet and Pnode manifest functions.
+
 2017-06-01  Russell G. Almond  <ralmond@Limu>
 
 	* R/Pnets.R (BuildAllTables): Fixed missing argument error.
