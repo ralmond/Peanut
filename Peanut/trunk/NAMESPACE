@@ -27,16 +27,36 @@ S3method(PnodeParentTvals, default)
 
 
 ## BN generics.
-export(PnodeName,PnodeStates,PnodeNumStates,
-       PnodeParents,PnodeParentNames,PnodeNumParents,
+export(PnodeName, "PnodeName<-",
+       PnodeTitle, "PnodeTitle<-",
+       PnodeDescription, "PnodeDescription<-",
+       PnodeLabels, "PnodeLabels<-",
+       PnodeStates, "PnodeStates<-", PnodeNumStates,
+       PnodeStateTitles, "PnodeStateTitles<-",
+       PnodeStateDescriptions, "PnodeStateDescriptions<-",
+       PnodeStateValues, "PnodeStateValues<-",
+       PnodeParents, "PnodeParents<-", PnodeParentNames, PnodeNumParents,
+       PnetName, "PnetName<-",
+       PnetTitle, "PnetTitle<-",
+       PnetHub, "PnetHub<-",
+       PnetPathname, "PnetPathname<-",
+       PnetDescription, "PnetDescription<-",
        PnetFindNode)
+
+## Factories
+
+export(Warehouse,PnetWarehouse,PnodeWarehouse)
+exportClasses(Warehouse,PnetWarehouse,PnodeWarehouse)
+export(Make,Free,Save,Reload,Delete,MakePnode) # Pnet
+S3method("Free", default)
+export(BuildNetManifest,BuildNodeManifest)
+
 
 
 ## EM algorithm
 export(GEMfit, calcPnetLLike, calcExpTables,
        maxAllTableParams,maxCPTParam)
 S3method("maxAllTableParams", default)
-
 
 
 ## Q and Omega matrixes

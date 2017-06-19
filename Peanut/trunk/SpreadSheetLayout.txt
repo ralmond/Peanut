@@ -20,3 +20,27 @@ Intercept
 Weight
 #Tvals
 
+Node Manifest
+
+Model -- string
+ModelHub -- string or ""
+NodeName -- ID string
+NodeTitle -- string
+Nstates -- Integer
+Description -- String
+NodeLabels -- Comma Separated List
+
+BY State
+StateName -- ID String
+StateTitle -- string
+StateDescription -- string
+StateValue -- Numeric
+
+
+Model Manifest
+
+Name
+Title
+Hub --- "" for CM, name of CM for EM
+Pathname
+Description
