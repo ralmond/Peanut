@@ -35,27 +35,32 @@ GEMfit <- function (net, cases, tol=sqrt(.Machine$double.eps), maxit=100,
 
 PnodeBuildTable <- function (node) {
   UseMethod("PnodeBuildTable")
-  ## node[] <- calcDPCTable(ParentStates(node),NodeStates(node),
+}
+setGeneric("PnodeBuildTable")
+  ## node[] <- calcDPCTable(PnodeParentStates(node),PnodeStates(node),
   ##                        PnodeLnAlphas(node), PnodeBetas(node),
   ##                        PnodeRules(node),PnodeLink(node),
   ##                        PnodeLinkScale(node),PnodeParentTvals(node))
   ## NodeExperience(node) <- GetPriorWeight(node)
   ## invisible(node)
-}
+
 
 
 calcPnetLLike <- function (net,cases){
   UseMethod("calcPnetLLike")
 }
+setGeneric("calcPnetLLike")
 
 calcExpTables <- function (net, cases, Estepit=1, tol=sqrt(.Machine$double.eps)) {
   UseMethod("calcExpTables")
 }
+setGeneric("calcExpTables")
 
 maxAllTableParams <- function (net, Mstepit=5, tol=sqrt(.Machine$double.eps),
                                debug=FALSE) {
   UseMethod("maxAllTableParams")
 }
+setGeneric("maxAllTableParams")
 
 maxAllTableParams.default <- function (net, Mstepit=5,
                                        tol=sqrt(.Machine$double.eps),
@@ -71,3 +76,4 @@ maxAllTableParams.default <- function (net, Mstepit=5,
 maxCPTParam <- function (node, Mstepit=5, tol=sqrt(.Machine$double.eps)) {
   UseMethod("maxCPTParam")
 }
+setGeneric("maxCPTParam")
