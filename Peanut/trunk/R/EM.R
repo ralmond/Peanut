@@ -62,7 +62,7 @@ maxAllTableParams.default <- function (net, Mstepit=5,
                                        debug=FALSE) {
   lapply(PnetPnodes(net),
          function (nd) {
-           if (debug) cat("Updating params for",nd,"\n")
+           if (debug) cat("Updating params for",PnodeName(nd),"\n")
            maxCPTParam(nd,Mstepit,tol)
          })
   invisible(net)
