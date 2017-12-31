@@ -11,32 +11,40 @@
 is.Pnet <- function (x) {
   UseMethod("is.Pnet")
 }
+setGeneric("is.Pnet")
 is.Pnet.default <- function (x) {
   "Pnet" %in% class(x)
 }
 as.Pnet <- function (x) {
   UseMethod("as.Pnet")
 }
+setGeneric("as.Pnet")
 
 PnetPriorWeight <- function (net) {
   UseMethod("PnetPriorWeight")
 }
+setGeneric("PnetPriorWeight")
 
 "PnetPriorWeight<-" <- function (net,value) {
   UseMethod("PnetPriorWeight<-")
 }
+setGeneric("PnetPriorWeight<-")
 
 PnetPnodes <- function (net) {
   UseMethod("PnetPnodes")
 }
+setGeneric("PnetPnodes")
 
 "PnetPnodes<-" <- function (net, value) {
   UseMethod("PnetPnodes<-")
 }
+setGeneric("PnetPnodes<-")
 
 Pnet <- function (net, priorWeight=10, pnodes=list()) {
   UseMethod("Pnet")
 }
+setGeneric("Pnet")
+
 Pnet.default <- function (net, priorWeight=10, pnodes=list()) {
   if (!("Pnet" %in% class(net)))
     class(net) <- c(class(net),"Pnet")
@@ -45,7 +53,11 @@ Pnet.default <- function (net, priorWeight=10, pnodes=list()) {
   net
 }
 
-BuildAllTables <- function (net, debug=FALSE) {
+BuildAllTables <- function (net, debug=FALSE)
+  UseMethod("BuildAllTables")
+setGeneric("BuildAllTables")
+
+BuildAllTables.default <- function (net, debug=FALSE) {
   lapply(PnetPnodes(net),
          function (node) {
            if (debug) cat("Building",PnodeName(node),"\n")
@@ -60,19 +72,23 @@ BuildAllTables <- function (net, debug=FALSE) {
 PnetMakeStubNode <- function (net,node) {
   UseMethod("PnetMakeStubNode")
 }
+setGeneric("PnetMakeStubNode")
 
 ### This takes nodes copied from the hub network and removes them leaving only references.
 PnetRemoveStubNodes <- function (net,nodes) {
   UseMethod("PnetRemoveStubNodes")
 }
+setGeneric("PnetRemoveStubNodes")
 
 PnetAdjoin <- function (hub, spoke) {
   UseMethod("PnetAdjoin")
 }
+setGeneric("PnetAdjoin")
 
 PnetDetach <- function (motif, spoke) {
   UseMethod("PnetDetach")
 }
+setGeneric("PnetDetach")
 
 
 
@@ -89,48 +105,59 @@ PnetDetach <- function (motif, spoke) {
 is.Pnode <- function (x) {
   UseMethod("is.Pnode")
 }
+setGeneric("is.Pnode")
 is.Pnode.default <- function(x) {
     "Pnode" %in% class(x)
 }
 as.Pnode <- function (x) {
   UseMethod("as.Pnode")
 }
+setGeneric("as.Pnode")
 
 PnodeNet <- function (node) {
   UseMethod("PnodeNet")
 }
+setGeneric("PnodeNet")
 
 PnodeRules <- function (node) {
   UseMethod("PnodeRules")
 }
+setGeneric("PnodeRules")
 
 "PnodeRules<-" <- function (node,value) {
   UseMethod("PnodeRules<-")
 }
+setGeneric("PnodeRules<-")
 
 PnodeLink <- function (node) {
   UseMethod("PnodeLink")
 }
+setGeneric("PnodeLink")
 
 "PnodeLink<-" <- function (node,value) {
   UseMethod("PnodeLink<-")
 }
+setGeneric("PnodeLink<-")
 
 PnodeLnAlphas <- function (node) {
   UseMethod("PnodeLnAlphas")
 }
+setGeneric("PnodeLnAlphas")
 
 "PnodeLnAlphas<-" <- function (node,value) {
   UseMethod("PnodeLnAlphas<-")
 }
+setGeneric("PnodeLnAlphas<-")
 
 PnodeAlphas <- function (node) {
   UseMethod("PnodeAlphas")
 }
+setGeneric("PnodeAlphas")
 
 "PnodeAlphas<-" <- function (node,value) {
   UseMethod("PnodeAlphas<-")
 }
+setGeneric("PnodeAlphas<-")
 
 PnodeAlphas.default <- function(node) {
   result <- PnodeLnAlphas(node)
@@ -156,32 +183,39 @@ PnodeAlphas.default <- function(node) {
 PnodeBetas <- function (node) {
   UseMethod("PnodeBetas")
 }
+setGeneric("PnodeBetas")
 
 "PnodeBetas<-" <- function (node,value) {
   UseMethod("PnodeBetas<-")
 }
+setGeneric("PnodeBetas<-")
 
 PnodeQ <- function (node) {
   UseMethod("PnodeQ")
 }
+setGeneric("PnodeQ")
 
 "PnodeQ<-" <- function (node,value) {
   UseMethod("PnodeQ<-")
 }
+setGeneric("PnodeQ<-")
 
 PnodeLinkScale <- function (node) {
   UseMethod("PnodeLinkScale")
 }
+setGeneric("PnodeLinkScale")
 
 "PnodeLinkScale<-" <- function (node,value) {
   UseMethod("PnodeLinkScale<-")
 }
+setGeneric("PnodeLinkScale<-")
 
 Pnode <- function (node, lnAlphas, betas, rules="Compensatory",
                    link="partialCredit",Q=TRUE,linkScale=NULL,
                    priorWeight=NULL) {
   UseMethod("Pnode")
 }
+setGeneric("Pnode")
 
 
 ## No effective way to do container inheretence using the R UseMethod
@@ -198,14 +232,17 @@ GetPriorWeight <- function (node) {
 PnodePriorWeight <- function (node) {
   UseMethod("PnodePriorWeight")
 }
+setGeneric("PnodePriorWeight")
 
 "PnodePriorWeight<-" <- function (node,value) {
   UseMethod("PnodePriorWeight<-")
 }
+setGeneric("PnodePriorWeight<-")
 
 PnodeParentTvals <- function (node) {
   UseMethod("PnodeParentTvals")
 }
+setGeneric("PnodeParentTvals")
 
 PnodeParentTvals.default <- function (node) {
   effectiveThetas(PnodeNumStates(node))
@@ -215,6 +252,7 @@ PnodeParentTvals.default <- function (node) {
 BuildTable <- function (node) {
   UseMethod("BuildTable")
 }
+setGeneric("BuildTable")
 
 #####
 ## Offset Mechinism

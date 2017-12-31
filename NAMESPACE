@@ -17,6 +17,21 @@ export(is.Pnet, as.Pnet, Pnet,
        PnodeLinkScale, "PnodeLinkScale<-",
        BuildTable,GetPriorWeight,PnodeParentTvals
   )
+exportMethods(is.Pnet, as.Pnet, Pnet,
+       PnetPriorWeight, "PnetPriorWeight<-",
+       PnetPnodes, "PnetPnodes<-",
+       BuildAllTables,
+       is.Pnode, as.Pnode, Pnode, PnodeNet,
+       PnodeQ, "PnodeQ<-",
+       PnodePriorWeight, "PnodePriorWeight<-",
+       PnodeRules, "PnodeRules<-",
+       PnodeLink, "PnodeLink<-",
+       PnodeLnAlphas, "PnodeLnAlphas<-",
+       PnodeAlphas, "PnodeAlphas<-",
+       PnodeBetas, "PnodeBetas<-",
+       PnodeLinkScale, "PnodeLinkScale<-",
+       BuildTable,PnodeParentTvals
+  )
 
 S3method(is.Pnet, default)
 S3method(Pnet, default)
@@ -42,19 +57,32 @@ export(PnodeName, "PnodeName<-",
        PnetPathname, "PnetPathname<-",
        PnetDescription, "PnetDescription<-",
        PnetFindNode)
+exportMethods(PnodeName, "PnodeName<-",
+       PnodeTitle, "PnodeTitle<-",
+       PnodeDescription, "PnodeDescription<-",
+       PnodeLabels, "PnodeLabels<-",
+       PnodeStates, "PnodeStates<-", PnodeNumStates,
+       PnodeStateTitles, "PnodeStateTitles<-",
+       PnodeStateDescriptions, "PnodeStateDescriptions<-",
+       PnodeStateValues, "PnodeStateValues<-",
+       PnodeParents, "PnodeParents<-", PnodeParentNames, PnodeNumParents,
+       PnetName, "PnetName<-",
+       PnetTitle, "PnetTitle<-",
+       PnetHub, "PnetHub<-",
+       PnetPathname, "PnetPathname<-",
+       PnetDescription, "PnetDescription<-",
+       PnetFindNode)
 
-## Factories
+## Manifests
 
-export(Warehouse,PnetWarehouse,PnodeWarehouse)
-exportClasses(Warehouse,PnetWarehouse,PnodeWarehouse)
-export(Make,Free,Save,Reload,Delete,MakePnode) # Pnet
-S3method("Free", default)
 export(BuildNetManifest,BuildNodeManifest)
 
 
 
 ## EM algorithm
 export(GEMfit, calcPnetLLike, calcExpTables,
+       maxAllTableParams,maxCPTParam)
+exportMethods(calcPnetLLike, calcExpTables,
        maxAllTableParams,maxCPTParam)
 S3method("maxAllTableParams", default)
 
