@@ -2,7 +2,7 @@
 ### Takes a character vector and puts it into a
 ### character scalar of quoted strings separated by commans.
 statecat <- function (states)
-  paste("\"",NodeStates(phys),"\"",collapse=",",sep="")
+  paste("\"",states,"\"",collapse=",",sep="")
 
 statesplit <- function (statestring)
   strsplit(sub("^\"","",sub("\"$","",statestring)),"\",\"")[[1]]
@@ -59,7 +59,7 @@ Pnet2Qmat <- function (pnet,obs,prof,defaultRule="Compensatory",
   ## Now loop over vars, processing each one.
   irow <- 1
   for (nd in obs) {
-    if (debug) cat("Processing node ",nd,".\n")
+    if (debug) cat("Processing node ",PnodeName(nd),".\n")
     tryCatch({
       ## first row
       NStates[irow] <- nstate <- PnodeNumStates(nd)
@@ -217,7 +217,7 @@ Pnet2Qmat <- function (pnet,obs,prof,defaultRule="Compensatory",
 }
 
 
-Qmat.reqcol <- c("Node","Nstates","States","Link","LinkScale"
+Qmat.reqcol <- c("Node","Nstates","States","Link","LinkScale",
           "Rules","B","PriorWeight")
 
 

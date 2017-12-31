@@ -68,7 +68,7 @@ Warehouse$methods(
               length(name)==1 && grepl(packsep,name,fixed=TRUE)
             },
             isAvailable = function(name) {
-              nrow(manifestData(name) > 0L
+              nrow(manifestData(name)) > 0L
             },
             fetch = function(name) {
               inventory[[packname(name)]]
@@ -130,7 +130,8 @@ BuildNetManifest <- function (Pnetlist) {
     Pathname <-c(Pathname,PnetPathname(net))
     Description <- c(Description,PnetDescription(net))
   }
-  result <- data.frame(Name,Title,Hub,Pathname,Description)
+  result <- data.frame(Name,Title,Hub,Pathname,Description,
+                       stringsAsFactors=FALSE)
   rownames(result) <- Name
   ## Seems there is a bug in the class checking mechanism,
   ## Easiest to just leave it as a data.frame
