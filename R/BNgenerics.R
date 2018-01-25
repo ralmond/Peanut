@@ -81,7 +81,7 @@ PnodeParents <- function (node)
   UseMethod("PnodeParents")
 setGeneric("PnodeParents")
 
-"PnodeParents<-" <- function (node)
+"PnodeParents<-" <- function (node,value)
   UseMethod("PnodeParents<-")
 setGeneric("PnodeParents<-")
 

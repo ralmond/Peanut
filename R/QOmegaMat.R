@@ -354,7 +354,7 @@ Omega2Pnet <- function(OmegaMat,pn,nodewarehouse,defaultRule="Compensatory",
   if (!is.Pnet(pn)) {
     stop("Blank network must be provided.")
   }
-  if (!is(nodewarehouse,"PnodeWarehouse")) {
+  if (!is.PnodeWarehouse(nodewarehouse)) {
     stop("Node warehouse must be supplied.")
   }
   if (!all(Omega.reqcol %in% names(OmegaMat))) {
@@ -378,7 +378,7 @@ Omega2Pnet <- function(OmegaMat,pn,nodewarehouse,defaultRule="Compensatory",
   names(nodes) <- nodenames
   for (ndn in nodenames) {
     if (debug) cat("Building node: ",ndn,"\n")
-    node <- nodewarehouse$supply(c(PnetName(pn),ndn))
+    node <- WarehouseSupply(nodewarehouse,c(PnetName(pn),ndn))
     ## Check state match
     statesEqual <- all.equal(PnodeStates(node),statesplit(States[ndn]))
     if (statesEqual != TRUE) {
