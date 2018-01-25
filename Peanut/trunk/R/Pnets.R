@@ -150,12 +150,29 @@ setGeneric("PnodeLnAlphas")
 setGeneric("PnodeLnAlphas<-")
 
 PnodeAlphas <- function (node) {
-  UseMethod("PnodeAlphas")
+  result <- PnodeLnAlphas(node)
+  if(is.null(result))
+    return (NULL)
+  if (is.list(result)) {
+    return (lapply(result,exp))
+  } else {
+    return (exp(result))
+  }
+  ## This doesn't seem to be working, can't tell why.
+  ##  UseMethod("PnodeAlphas")
 }
 setGeneric("PnodeAlphas")
 
 "PnodeAlphas<-" <- function (node,value) {
-  UseMethod("PnodeAlphas<-")
+  if (is.list(value)) {
+    value <- lapply(value,log)
+  } else {
+    value <- log(value)
+  }
+  PnodeLnAlphas(node) <- value
+  node
+  ## This doesn't seem to be working, can't tell why.
+  ## UseMethod("PnodeAlphas<-")
 }
 setGeneric("PnodeAlphas<-")
 

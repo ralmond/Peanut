@@ -56,7 +56,9 @@ export(PnodeName, "PnodeName<-",
        PnetHub, "PnetHub<-",
        PnetPathname, "PnetPathname<-",
        PnetDescription, "PnetDescription<-",
-       PnetFindNode)
+       PnetFindNode,
+       PnetMakeStubNode, PnetRemoveStubNodes,PnetAdjoin,
+       PnetDetach)
 exportMethods(PnodeName, "PnodeName<-",
        PnodeTitle, "PnodeTitle<-",
        PnodeDescription, "PnodeDescription<-",
@@ -76,6 +78,17 @@ exportMethods(PnodeName, "PnodeName<-",
 ## Manifests
 
 export(BuildNetManifest,BuildNodeManifest)
+
+## Warehouses
+export(ClearWarehouse,WarehouseManifest,"WarehouseManifest<-",
+       WarehouseData,WarehouseSupply,WarehouseFetch,
+       WarehouseMake,WarehouseFree,
+       is.PnodeWarehouse,is.PnetWarehouse)
+exportMethods(ClearWarehouse,
+              WarehouseManifest,"WarehouseManifest<-",
+       WarehouseData,WarehouseFetch,
+       WarehouseMake,WarehouseFree,
+       is.PnodeWarehouse,is.PnetWarehouse)
 
 
 
