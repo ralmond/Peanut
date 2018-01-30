@@ -30,40 +30,45 @@ dgetFromString <- function (str) {
 
 
 ### Function to build a blank Q-matrix from a Bayes net.
-Pnet2Qmat <- function (pnet,obs,prof,defaultRule="Compensatory",
+Pnet2Qmat <- function (obs,prof,defaultRule="Compensatory",
                        defaultLink="partialCredit",defaultAlpha=1,
                        defaultBeta=NULL,defaultLinkScale=NULL,
                        debug=TRUE) {
   statecounts <- sapply(obs,PnodeNumStates)
   obsnames <- sapply(obs,PnodeName)
+  modnames <- sapply(obs,function(nd) PnetName(PnodeNet(nd)))
   profnames <- sapply(prof,PnodeName)
 
   ## Lay out node name row with proper repetition structure
   rowcounts <- statecounts-1
   Node <- rep(obsnames,rowcounts)
+  Model <- rep(modnames,rowcounts)
   nrow <- length(Node)
 
   ## Now lay out blank structure of rest of Qmat
   NStates <- rep(NA_integer_,nrow)
-  States <- character(nrow)
+  State <- character(nrow)
   Link <- character(nrow)
   LinkScale <- numeric(nrow)
-  QQ <- matrix(NA_real_,nrow,length(profnames))
+  QQ <- matrix(NA_integer_,nrow,length(profnames))
   colnames(QQ) <- profnames
   Rules <- character(nrow)
-  A <- matrix(NA_real_,nrow,length(profnames))
-  colnames(A) <- profnames
+  AA <- matrix(NA_real_,nrow,length(profnames))
+  colnames(AA) <- profnames
+  A <- rep(NA_real_,nrow)
+  BB <- matrix(NA_real_,nrow,length(profnames))
+  colnames(BB) <- profnames
   B <- rep(NA_real_,nrow)
   PriorWeight <- character(nrow)
 
   ## Now loop over vars, processing each one.
   irow <- 1
   for (nd in obs) {
-    if (debug) cat("Processing node ",PnodeName(nd),".\n")
     tryCatch({
+      if (debug) cat("Processing node ",PnodeName(nd),".\n")
       ## first row
       NStates[irow] <- nstate <- PnodeNumStates(nd)
-      States[irow:(irow+nstate-2)] <- PnodeStates(nd)[1:(nstate-1)]
+      State[irow:(irow+nstate-2)] <- PnodeStates(nd)[1:(nstate-1)]
       if (is.null(PnodeLink(nd))) {
         Link[irow] <- defaultLink
       } else {
@@ -83,9 +88,13 @@ Pnet2Qmat <- function (pnet,obs,prof,defaultRule="Compensatory",
         QQ[irow:(irow+nstate-2),match(ParentNames(nd),profnames)] <-
           PnodeQ(nd)
       }
+      QQQ <-QQ[irow:(irow+nstate-2),
+               match(ParentNames(nd),profnames),
+               drop=FALSE] == 1        # as.logical drops dims!
       if (debug) {
         cat("Q matrix:\n")
         print(QQ[irow:(irow+nstate-2),])
+        print(QQQ)
         cat("\n")
       }
       rules <- PnodeRules(nd)
@@ -103,6 +112,14 @@ Pnet2Qmat <- function (pnet,obs,prof,defaultRule="Compensatory",
       if (is.null(alpha)) {
         alpha <- defaultAlpha
       }
+      if (!is.list(alpha)) {            #Replicate to length nstate-1
+        alpha <- list(alpha)
+        if (nstate>2) {
+          for (i in 2:(nstate-1)) {
+            alpha[[i]] <- alpha[[1]]
+          }
+        }
+      }
       beta <- PnodeBetas(nd)
       if (is.null(beta)) {
         beta <- defaultBeta
@@ -111,84 +128,72 @@ Pnet2Qmat <- function (pnet,obs,prof,defaultRule="Compensatory",
         ## Make up based on number of states
         beta <- as.list(effectiveThetas(nstate-1))
       }
-      ## A  -- LnAlpha or Beta if Rule is OffsetXXX
-      ## B -- Beta or LnAlpha if Rule is OffsetXXX
-
-      if (length(rules) ==1 ||
-          class(rules)== "function") {
-        if (rules %in% getOffsetRules()) {
-          b <- alpha
-          a <- beta
+      if (!is.list(beta)) {             #Replicate to length nstate-1
+        beta <- list(beta)
+        if (nstate>2) {
+          for (i in 2:(nstate-1)) {
+            beta[[i]] <- beta[[1]]
+          }
+        }
+      }
+      ## AA -- Alphas for non-offset rule
+      ## A  -- Alpha if Rule is OffsetXXX
+      ## B -- Beta if Rule is not OffsetXXX
+      ## BB -- Betas if Rule is OffsetXXX
+      if (length(rules) ==1 || class(rules)== "function") {
+        ## Replicate out to length nstate-1
+        rules <- list(rules)
+        if (nstate>2) {
+          for (i in 2:(nstate-1)) {
+            rules[[i]] <- rules[[1]]
+          }
+        }
+      }
+      for (i in 1:(nstate-1)) {
+        pnames <- PnodeParentNames(nd)[QQQ[i,]]
+        if(debug) {
+          cat("Rules[[",i,"]]:",toString(rules[[i]]),"\n")
+          cat("Parents[[",i,"]]:",pnames,"\n")
+        }
+        if (rules[[i]] %in% getOffsetRules()) {
+          ## Use BB and A
+          a <- alpha[[i]]
+          bb <- beta[[i]]
+          if (is.null(names(bb))) {
+            if (length(bb) != length(pnames))
+              bb <- rep_len(bb,length(pnames))
+            names(bb) <- pnames
+          }
+          if (debug) {
+            cat("BB[[",i,"]] =",bb," A[",i,"] = ",a,"\n")
+          }
+          BB[irow+i-1,names(bb)] <- bb
+          A[irow+i-1] <- a
         } else {
-          a <- alpha
-          b <- beta
-        }
-      } else {
-        ## Different rule for each row of table, may need different A's
-        ## and B's
-        if (!is.list(alpha)) {
-          alpha <- list(alpha)
-          if (nstate>2) {
-            for (i in 2:(nstate-1)) {
-              alpha[[i]] <- alpha[[1]]
-            }
+          ## Use AA and B
+          aa <- alpha[[i]]
+          b <- beta[[i]]
+          if (is.null(names(aa))) {
+            if (length(aa) != length(pnames))
+              aa <- rep_len(aa,length(pnames))
+            names(aa) <- pnames
           }
-        }
-        if (!is.list(beta)) {
-          beta <- list(beta)
-          if (nstate>2) {
-            for (i in 2:(nstate-1)) {
-              beta[[i]] <- beta[[1]]
-            }
+          if (debug) {
+            cat("AA[[",i,"]] =",aa," B[",i,"] = ",b,"\n")
           }
+          AA[irow+i-1,names(aa)] <- aa
+          B[irow+i-1] <- b
         }
-        a <- alpha; b <- beta
-        i <- 1
-        for (rule in rules) {
-          if (rule %in% getOffsetRules()) {
-            a[[i]] <- beta[[i]]
-            b[[i]] <- alpha[[i]]
-          }
-          i <- i+1
-        }
-      }
-      if(debug) {
-        print(nd)
-        cat("Rules:",toString(PnodeRules(nd)),"\n")
-        cat("a=",toString(a),"\n")
-        cat("b=",toString(b),"\n")
-      }
-      ## Now write out a
-      ## Easier to just handle list case
-      if (!is.list(a)) a <- list(a)
-      for (i in 1:length(a)) {
-        aa <- a[[i]]
-        if (is.null(names(aa))) {
-          if (length(aa) != PnodeNumParents(nd)) {
-            aa <- rep_len(aa,PnodeNumParents(nd))
-          }
-          names(aa) <- PnodeParentNames(nd)
-        }
-        if (debug) {
-          print("a[[i]]")
-          print(aa)
-        }
-        A[irow+i-1,names(aa)] <- aa
-      }
-      ## For b, easier to coerce to vector.
-      b <- as.numeric(b)
-      if (length(b) > nstate-1) {
-        stop("Too much b:", b)
-      }
-      B[irow:(irow+length(b)-1)] <- b
+      }                                 #Next state
       if (debug) {
-        cat("A matrix:\n")
-        print(A[irow:(irow+nstate-2),])
-        cat("B vector:\n")
-        print(B[irow:(irow+nstate-2)])
+        cat("AA & A matrix:\n")
+        print(cbind(AA[irow:(irow+nstate-2),,drop=FALSE],
+                    A[irow:(irow+nstate-2)]))
+        cat("BB & B matrix:\n")
+        print(cbind(BB[irow:(irow+nstate-2),,drop=FALSE],
+                    B[irow:(irow+nstate-2)]))
         cat("\n")
       }
-
       ## Weights
       wt <- PnodePriorWeight(nd)
       if (!is.null(wt)) {
@@ -208,17 +213,18 @@ Pnet2Qmat <- function (pnet,obs,prof,defaultRule="Compensatory",
   }
   ## Finally, put this togehter into a data frame
   ## Fix colnames(A) so they are different from colnames(QQ)
-  colnames(A) <- paste("A",colnames(A),sep=".")
-  result <- data.frame(Node,NStates,States,Link,LinkScale,QQ,Rules,
-                       A,B,PriorWeight,
+  colnames(AA) <- paste("A",colnames(AA),sep=".")
+  colnames(BB) <- paste("B",colnames(BB),sep=".")
+  result <- data.frame(Model,Node,NStates,State,Link,LinkScale,QQ,Rules,
+                       AA,A,BB,B,PriorWeight,
                        stringsAsFactors=FALSE)
   class(result) <- c("Qmat",class(result))
   result
 }
 
 
-Qmat.reqcol <- c("Node","Nstates","States","Link","LinkScale",
-          "Rules","B","PriorWeight")
+Qmat.reqcol <- c("Node","Nstates","State","Link","LinkScale",
+          "Rules","A","B","PriorWeight")
 
 
 Qmat2Pnet <- function (QQ, nethouse,nodehouse,prof,defaultRule="Compensatory",
@@ -259,10 +265,6 @@ Pnet2Omega <- function(net,prof, defaultRule="Compensatory",
   profnames <- rownames(Omega)
 
   ## Now set up the Rows and columns.
-  Nstates <- numeric(p)
-  names(Nstates) <- profnames
-  States <- character(p)
-  names(States) <- profnames
   Rules <- rep(defaultRule,p)
   names(Rules) <- profnames
   Link <- rep(defaultLink,p)
@@ -277,8 +279,6 @@ Pnet2Omega <- function(net,prof, defaultRule="Compensatory",
   ## Loop throught the nodes, filling in fields
   for (nd in prof) {
     pname <- PnodeName(nd)
-    Nstates[pname] <- PnodeNumStates(nd)
-    States[pname] <- statecat(PnodeStates(nd))
     if (!is.null(PnodeRules(nd)))
       Rules[pname] <- as.character(PnodeRules(nd))
     if (!is.null(PnodeLink(nd)))
@@ -302,7 +302,7 @@ Pnet2Omega <- function(net,prof, defaultRule="Compensatory",
   }
 
   colnames(AOmega) <- paste("A",colnames(AOmega),sep=".")
-  result <- data.frame(Node=profnames,Nstates,States,Omega,
+  result <- data.frame(Node=profnames,Omega,
                        Link,Rules,AOmega,Intercept,PriorWeight,
                        stringsAsFactors=FALSE)
   class(result) <- c("OmegMat",class(result))
@@ -339,14 +339,14 @@ topsort <- function (Omega,noisy=FALSE) {
 }
 
 ### These columns should be in any Omega matrix.
-Omega.reqcol <- c("Node","Nstates","States","Link",
-          "Rules","Intercept","PriorWeight")
+Omega.reqcol <- c("Node","Link","Rules","Intercept","PriorWeight")
 
 ## Override controls behavior when OmegaMat and pn don't agree.
 ## Default  value of FALSE generates an error.
 ## A value of true issues a warning and changes the network to agree
 ## with the matrix.
-Omega2Pnet <- function(OmegaMat,pn,nodewarehouse,defaultRule="Compensatory",
+Omega2Pnet <- function(OmegaMat,pn,nodewarehouse,
+                       defaultRule="Compensatory",
                        defaultLink="normalLink",defaultAlpha=1,
                        defaultBeta=0,defaultLinkScale=1,
                        defaultWeight=NULL,
@@ -360,50 +360,46 @@ Omega2Pnet <- function(OmegaMat,pn,nodewarehouse,defaultRule="Compensatory",
   if (!all(Omega.reqcol %in% names(OmegaMat))) {
     stop("Badly formed Omega matrix.")
   }
-  ## First parse the structural part of the matrix
+  ## First parse the Matrix
   nodenames <- OmegaMat$Node
-  Nstates <- OmegaMat$Nstates
-  names(Nstates) <- nodenames
-  States <- OmegaMat$States
-  names(States) <- nodenames
-  p <- nrow(OmegaMat)
-  rownames(OmegaMat) <- nodenames
+  QQ <- OmegaMat[,nodenames]
+  if (ncol(QQ) != length(nodenames)) {
+    stop("There are not columns corresponding to every variable.")
+  }
+  AA <- OmegaMat[,paste("A",nodenames,sep=".")]
+  if (ncol(AA) != length(nodenames)) {
+    stop("There are not A columns corresponding to every variable.")
+  }
+  colnames(AA) <- nodenames
+  intercepts <- OmegaMat$Intercept
+  names(intercepts) <- nodenames
+  weights <- OmegaMat$PriorWeight
+  names(weights) <- nodenames
+  links <- OmegaMat$Link
+  names(links) <- nodenames
+  rules <- OmegaMat$Rules
+  names(rules) <- nodenames
 
-
-  ## Container for list of proficiency variables
+  ## Buidling List of Nodes
   if (debug) {
-    cat("\nBuilding nodes.\n")
+    cat("\n Building list of nodes.\n")
   }
   nodes <- vector("list",length(nodenames))
   names(nodes) <- nodenames
+  netname <- PnetName(pn)
   for (ndn in nodenames) {
-    if (debug) cat("Building node: ",ndn,"\n")
-    node <- WarehouseSupply(nodewarehouse,c(PnetName(pn),ndn))
-    ## Check state match
-    statesEqual <- all.equal(PnodeStates(node),statesplit(States[ndn]))
-    if (statesEqual != TRUE) {
-      cat("States of node and Omega matrix not equal for node ",ndn,"\n")
-      cat(statesEqual,"\n")
-      if (override) {
-        warning("Correcting net to match matrix.  This may damage meta-data.")
-        PnodeStates(node) <- statesplit(States[ndn])
-      } else {
-        stop("Network and Omega matrix do not agree.  See console for details.")
-      }
-    }
-    nodes[[ndn]] <- node
+    nodes[[ndn]] <- WarehouseSupply(nodewarehouse,c(netname,ndn))
   }
 
-  ### Next build structure.
+  ## Next build structure.
   if (debug) {
     cat("\n Processing links.\n")
   }
-  QQ <- OmegaMat[nodenames,nodenames]
 
   for (ndn in nodenames) {
     if (debug) cat("Building links for node: ",ndn,"\n")
     node <- nodes[[ndn]]
-    parnames <- setdiff(nodesnames(QQ[ndn,]==1),ndn)
+    parnames <- setdiff(nodenames[QQ[ndn,]==1],ndn)
     exparnames <- PnodeParentNames(node)
     if (!setequal(parnames,exparnames)) {
       cat("While processing links for node: ",ndn,"\n")
@@ -423,21 +419,11 @@ Omega2Pnet <- function(OmegaMat,pn,nodewarehouse,defaultRule="Compensatory",
   if (debug) {
     cat("\n Processing CPTs.\n")
   }
-  AOmega <- OmegaMat[nodenames,paste("A",nodenames,sep=".")]
-  colnames(AA) <- nodenames
-  links <- OmegaMat$Link
-  names(links) <- nodenames
-  rules <- OmegaMat$Rules
-  names(rules) <- nodenames
-  intercepts <- OmegaMat$Intercept
-  names(intercepts) <- nodenames
-  weights <- OmegaMat$PriorWeight
-  names(weights) <- nodenames
 
   for (ndn in nodenames) {
     if (debug) cat("Building links for node: ",ndn,"\n")
     node <- nodes[[ndn]]
-    parnames <- setdiff(nodesnames(QQ[ndn,]==1),ndn)
+    parnames <- setdiff(nodenames[QQ[ndn,]==1],ndn)
     if (is.na(rules[ndn]) || nchar(rules[ndn]) == 0L) {
       PnodeRules(node) <- defaultRule
     } else {
@@ -448,19 +434,19 @@ Omega2Pnet <- function(OmegaMat,pn,nodewarehouse,defaultRule="Compensatory",
     } else {
       PnodeLink(node) <- links[ndn]
     }
-    if (is.na(intercept[ndn])) {
+    if (is.na(intercepts[ndn])) {
       PnodeBetas(node) <- defaultBeta
     } else {
-      PnodeBetas(node) <- intercept[ndn]
+      PnodeBetas(node) <- intercepts[ndn]
     }
-    if (is.na(AOmega[ndn,ndn])) {
+    if (is.na(AA[ndn,ndn])) {
       PnodeLinkScale(node) <- defaultLinkScale
     } else {
-      PnodeLinkScale(node) <- AOmega[ndn,ndn]
+      PnodeLinkScale(node) <- AA[ndn,ndn]
     }
-    parnames <- PnodeParentNames(nd)
-    alphas <- AOmega[pname,parnames]
-    alphas[is.na(alphas)] <- defaultAlphas
+    parnames <- PnodeParentNames(node)
+    alphas <- AA[ndn,parnames]
+    alphas[is.na(alphas)] <- defaultAlpha
     names(alphas) <- parnames
     PnodeAlphas(node) <- alphas
 
