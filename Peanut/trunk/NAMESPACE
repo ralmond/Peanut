@@ -57,7 +57,7 @@ export(PnodeName, "PnodeName<-",
        PnetPathname, "PnetPathname<-",
        PnetDescription, "PnetDescription<-",
        PnetFindNode,
-       PnetMakeStubNode, PnetRemoveStubNodes,PnetAdjoin,
+       PnetMakeStubNodes, PnetRemoveStubNodes,PnetAdjoin,
        PnetDetach)
 exportMethods(PnodeName, "PnodeName<-",
        PnodeTitle, "PnodeTitle<-",
@@ -73,6 +73,8 @@ exportMethods(PnodeName, "PnodeName<-",
        PnetHub, "PnetHub<-",
        PnetPathname, "PnetPathname<-",
        PnetDescription, "PnetDescription<-",
+       PnetMakeStubNodes, PnetRemoveStubNodes,
+       PnetAdjoin, PnetDetach,
        PnetFindNode)
 
 ## Manifests
