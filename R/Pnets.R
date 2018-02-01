@@ -69,10 +69,10 @@ BuildAllTables.default <- function (net, debug=FALSE) {
 ### To fit hub and spoke model.
 
 ### This takes a list of nodes from different networks, and makes copies in the given net.
-PnetMakeStubNode <- function (net,node) {
-  UseMethod("PnetMakeStubNode")
+PnetMakeStubNodes <- function (net,nodes) {
+  UseMethod("PnetMakeStubNodes")
 }
-setGeneric("PnetMakeStubNode")
+setGeneric("PnetMakeStubNodes")
 
 ### This takes nodes copied from the hub network and removes them leaving only references.
 PnetRemoveStubNodes <- function (net,nodes) {

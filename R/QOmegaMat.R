@@ -223,7 +223,7 @@ Pnet2Qmat <- function (obs,prof,defaultRule="Compensatory",
 }
 
 
-Qmat.reqcol <- c("Node","Nstates","State","Link","LinkScale",
+Qmat.reqcol <- c("Model","Node","NStates","State","Link","LinkScale",
           "Rules","A","B","PriorWeight")
 
 
@@ -232,10 +232,10 @@ Qmat2Pnet <- function (Qmat, nethouse,nodehouse,defaultRule="Compensatory",
                        defaultBeta=NULL,defaultLinkScale=NULL,
                        debug=FALSE,override=FALSE) {
 
-  if (!is.PnodeWarehouse(nodewarehouse)) {
+  if (!is.PnodeWarehouse(nodehouse)) {
     stop("Node warehouse must be supplied.")
   }
-  if (!is.PnetWarehouse(netwarehouse)) {
+  if (!is.PnetWarehouse(nethouse)) {
     stop("Net warehouse must be supplied.")
   }
 
@@ -275,13 +275,13 @@ Qmat2Pnet <- function (Qmat, nethouse,nodehouse,defaultRule="Compensatory",
       if (debug) {
         cat("Processing node ",nodename,"\n")
       }
-      node <- WarehouseSupply(nodehouse,nodename)
+      node <- WarehouseSupply(nodehouse,c(netname,nodename))
       if (is.null(node)) {
         stop("Could not find/create node ",nodename, "in model",netname)
       }
       tryCatch({
         Qrows <- Qmat[Qmat$Model==netname & Qmat$Node==nodename,,drop=FALSE]
-        nstates <- nrows(Qrows)
+        nstates <- nrow(Qrows)
         if (nstates != Qrows[1,"NStates"] - 1L) {
           stop("Expected ",nstates != Qrows[1,"NStates"] - 1L,"got",nstates)
         }
@@ -290,8 +290,12 @@ Qmat2Pnet <- function (Qmat, nethouse,nodehouse,defaultRule="Compensatory",
         parnames <- names(which(apply(Qrows[,profnames,drop=FALSE]==1,2,all)))
         exparnames <- PnodeParentNames(node)
         if (!setequal(parnames,exparnames)) {
+          if (debug) {
+            cat("Node has parents: ", exparnames,"\n")
+            cat("But Q matrix has parents: ", parnames,"\n")
+          }
           if (length(exparnames) > 0L) {
-            cat("While processing links for node: ",node," in network",
+            cat("While processing links for node: ",nodename," in network",
                 netname,"\n")
             cat("Node has parents: ", exparnames,"\n")
             cat("But Q matrix has parents: ", parnames,"\n")
@@ -300,18 +304,18 @@ Qmat2Pnet <- function (Qmat, nethouse,nodehouse,defaultRule="Compensatory",
             } else {
               stop("Graphical structure does not match Q matrix.  See console.")
             }
-            pars <- list()
-            for (pname in setdiff(parnames,expars)) {
-              pars[[pname]] <- WarehouseSupply(nodehouse,c(hubname,pname))
-            }
-            stubs <- PnetMakeStubNode(net,pars)
-            PnodeParents(node) <- c(PnodeParents(node),stubs)
           }
+          pars <- list()
+          for (pname in setdiff(parnames,exparnames)) {
+            pars[[pname]] <- WarehouseSupply(nodehouse,c(hubname,pname))
+          }
+          stubs <- PnetMakeStubNodes(net,pars)
+          PnodeParents(node) <- c(PnodeParents(node),stubs)
         }
         ## Change order to match node. Even if nominally a match.
         parnames <- PnodeParentNames(node)
         if (debug) {
-          cat("Parents: ",paste(parnames,collapse=", "),".\n")
+          cat("Final parents: ",paste(parnames,collapse=", "),".\n")
         }
         ## Extract Parameters
         ## "Link","LinkScale",
@@ -324,7 +328,7 @@ Qmat2Pnet <- function (Qmat, nethouse,nodehouse,defaultRule="Compensatory",
           PnodeLinkScale(node) <- lsc
         }
         if (debug) {
-          cat ("Link: ",ll,"(",lsc,"\n")
+          cat ("Link: ",ll,"(",lsc,"). \n")
         }
 
         ## "Rules",
