@@ -49,7 +49,7 @@ Pnet2Qmat <- function (obs,prof,defaultRule="Compensatory",
   NStates <- rep(NA_integer_,nrow)
   State <- character(nrow)
   Link <- character(nrow)
-  LinkScale <- numeric(nrow)
+  LinkScale <- rep(NA_real_,nrow)
   QQ <- matrix(NA_integer_,nrow,length(profnames))
   colnames(QQ) <- profnames
   Rules <- character(nrow)
@@ -227,12 +227,254 @@ Qmat.reqcol <- c("Node","Nstates","State","Link","LinkScale",
           "Rules","A","B","PriorWeight")
 
 
-Qmat2Pnet <- function (QQ, nethouse,nodehouse,prof,defaultRule="Compensatory",
+Qmat2Pnet <- function (Qmat, nethouse,nodehouse,defaultRule="Compensatory",
                        defaultLink="partialCredit",defaultAlpha=1,
                        defaultBeta=NULL,defaultLinkScale=NULL,
                        debug=FALSE,override=FALSE) {
 
-  ### HERE ###
+  if (!is.PnodeWarehouse(nodewarehouse)) {
+    stop("Node warehouse must be supplied.")
+  }
+  if (!is.PnetWarehouse(netwarehouse)) {
+    stop("Net warehouse must be supplied.")
+  }
+
+  if (!all(Qmat.reqcol %in% names(Qmat))) {
+    stop("Badly formed Q matrix.")
+  }
+
+  ## Figure out names of proficiency variables.
+  Anames <- names(Qmat)[grep("A\\..*",names(Qmat))]
+  profnames <- sapply(strsplit(Anames,".",fixed=TRUE), function(x) x[2])
+
+  if (!all(profnames %in% names(Qmat))) {
+    stop("Expected columns for proficiency variables:",profnames)
+  }
+  if (!all(paste("B",profnames,sep=".") %in% names(Qmat))) {
+    stop("Expected B columns for proficiency variables:",profnames)
+  }
+
+  netnames <- unique(Qmat$Model)
+  for (netname in netnames) {
+    if (debug) {
+      cat("Processing net ",netname,"\n")
+    }
+    net <- WarehouseSupply(nethouse,netname)
+    if (is.null(net)) {
+      stop("Could not find/create network ",netname)
+    }
+    hubname <- PnetHub(net)
+    if (nchar(hubname)>0) {
+      hub <- WarehouseSupply(nethouse,hubname)
+      if (is.null(hub)) {
+        stop("Could not find hub for network ",netname,",","hubname")
+      }
+    }
+    nodenames <- unique(Qmat$Node[Qmat$Model==netname])
+    for (nodename in nodenames) {
+      if (debug) {
+        cat("Processing node ",nodename,"\n")
+      }
+      node <- WarehouseSupply(nodehouse,nodename)
+      if (is.null(node)) {
+        stop("Could not find/create node ",nodename, "in model",netname)
+      }
+      tryCatch({
+        Qrows <- Qmat[Qmat$Model==netname & Qmat$Node==nodename,,drop=FALSE]
+        nstates <- nrows(Qrows)
+        if (nstates != Qrows[1,"NStates"] - 1L) {
+          stop("Expected ",nstates != Qrows[1,"NStates"] - 1L,"got",nstates)
+        }
+        ## Check/adjust structure
+        stubs <- list()
+        parnames <- names(which(apply(Qrows[,profnames,drop=FALSE]==1,2,all)))
+        exparnames <- PnodeParentNames(node)
+        if (!setequal(parnames,exparnames)) {
+          if (length(exparnames) > 0L) {
+            cat("While processing links for node: ",node," in network",
+                netname,"\n")
+            cat("Node has parents: ", exparnames,"\n")
+            cat("But Q matrix has parents: ", parnames,"\n")
+            if (override) {
+              warning("Changing net to match Q matrix.")
+            } else {
+              stop("Graphical structure does not match Q matrix.  See console.")
+            }
+            pars <- list()
+            for (pname in setdiff(parnames,expars)) {
+              pars[[pname]] <- WarehouseSupply(nodehouse,c(hubname,pname))
+            }
+            stubs <- PnetMakeStubNode(net,pars)
+            PnodeParents(node) <- c(PnodeParents(node),stubs)
+          }
+        }
+        ## Change order to match node. Even if nominally a match.
+        parnames <- PnodeParentNames(node)
+        if (debug) {
+          cat("Parents: ",paste(parnames,collapse=", "),".\n")
+        }
+        ## Extract Parameters
+        ## "Link","LinkScale",
+        ll <- Qrows[1,"Link"]
+        if (is.na(ll) || nchar(ll)==0L) ll <- defaultLink
+        PnodeLink(node) <- ll
+        lsc <- Qrows[1,"LinkScale"]
+        if (is.na(lsc) || nchar(lsc)==0L) lsc <- defaultLinkScale
+        if (!is.null(lsc)) {
+          PnodeLinkScale(node) <- lsc
+        }
+        if (debug) {
+          cat ("Link: ",ll,"(",lsc,"\n")
+        }
+
+        ## "Rules",
+        rules <- Qrows[,"Rules"]
+        nrules <- sum(nchar(rules)>0L)  #Number of non-missing rules
+        if (nrules == 0L) {
+          rules <- defaultRule
+        }
+        if (nrules!=1L && nrules !=nstates) {
+          stop("Expected ",nstates," (or 1) rules but got ",nrules)
+        }
+        if (debug) {
+          cat ("Rules: ",paste(rules,collapse=", "),".\n")
+        }
+        if (nrules==1L) {
+          PnodeRules(node) <- dgetFromString(rules[1])
+          rules <- list(rules)
+        }
+        else {
+          PnodeRules(node) <- lapply(rules,dgetFromString)
+          rules <- PnodeRules(node)
+        }
+
+        ## "A","B",
+        QrowsQ <- Qrows[,parnames]
+        QrowsA <- Qrows[,paste("A",parnames,sep=".")]
+        QrowsB <- Qrows[,paste("B",parnames,sep=".")]
+
+        if (nstates==1L) {
+          PnodeQ(node) <- TRUE
+          ## Single Row Cases
+          if (rule %in% getOffsetRules()) {
+            ## Offset Case
+            alphas <- Qrows[1,"A"]
+            if (is.na(alphas)) alphas <- defaultAlpha
+            PnodeAlphas(node) <- alpha
+            betas <- QrowsB
+            if (all(is.na(betas))) betas <- rep(defaultBeta,length(parnames))
+            PnodeBetas(node) <- betas
+            if (debug) {
+              cat("Single Row offset: \n")
+              print(Pnode(Q))
+              print(PnodeAlphas(node))
+              print(PnodeBetas(node))
+            }
+          } else {
+            ## Weighted Case (Compensatory)
+            alphas <- QrowsA
+            if (all(is.na(alphas))) alphas <- rep(defaultAlpha,length(parnames))
+            PnodeAlphas(node) <- alphas
+            betas <- Qrows[1,"B"]
+            if (is.na(betas)) betas <- defaultBeta
+            PnodeBetas(node) <- betas
+            if (debug) {
+              cat("Single Row weighted: \n")
+              print(Pnode(Q))
+              print(PnodeAlphas(node))
+              print(PnodeBetas(node))
+            }
+          }
+        } else {
+          ## Multiple Row Cases
+          if (length(rules) == 1L && !(rules %in% getOffSetRules())
+              && all(is.na(QrowsA[-1,])) && all(QrowsQ)) {
+            ## Weighted -- single row of AAs.
+            ## This pattern is only allowed when there is a single
+            ## non-offset rule, all elements of the Q-matrix are true,
+            ## and all rows after the first are blank (NA)
+            PnodeQ(node) <- TRUE
+            alphas <- QrowsA[1,]
+            if (all(is.na(alphas))) alphas <- rep(defaultAlpha,length(parnames))
+            PnodeAlphas(node) <- alphas
+            betas <- Qrows[,"B"]
+            if (is.na(betas)) betas <- rep(defaultBeta,nstates)
+            PnodeBetas(node) <- as.list(betas)
+
+            if (debug) {
+              cat("Multiple Row weighted: \n")
+              print(Pnode(Q))
+              print(PnodeAlphas(node))
+              print(PnodeBetas(node))
+            }
+          } else {
+            ## Offset or Mixed
+            PnodeQ(node) <- QrowsQ
+            if (length(rules) <nstates) {
+              ##If single rules, replicate out as that will be easier
+              for (i in 2:nstates) {
+                rules[[i]] <- rules[[1]]
+              }
+            }
+            alphas <- list()
+            betas <- list()
+            for (istate in 1:nstates) {
+              npar <- sum(QrowQ[i,])
+              if (rules[[i]] %in% getOffsetRules()) {
+                bb <- QrowB[i,QrowQ[i,]]
+                if (all(is.na(bb))) bb <- rep(defaultBeta,npar)
+                betas[[istate]] <- bb
+                aa <- Qrows[i,"A"]
+                if (is.na(aa)) aa <- defaultAlpha
+                alphas[[istate]] <- aa
+              } else { ## Weighted Rule
+                aa <- QrowA[i,QrowQ[i,]]
+                if (all(is.na(aa))) aa <- rep(defaultAlpha,npar)
+                alphas[[istate]] <- aa
+                bb <- Qrows[i,"B"]
+                if (is.na(bb)) bb <- defaultBeta
+                betas[[istate]] <- bb
+              }
+            }
+            PnodeAlphas(node) <- alphas
+            PnodeBetas(node) <- betas
+            if (debug) {
+              cat("Multiple Row mixed: \n")
+              print(PnodeRules(node))
+              print(Pnode(Q))
+              print(PnodeAlphas(node))
+              print(PnodeBetas(node))
+            }
+          } ## End Mixed
+        } ## End Multiple
+
+        ## "PriorWeight"
+        wt <- Qrows[1,"PriorWeight"]
+        if (!is.na(ll) && nchar(ll)>=0L) {
+          PnodePriorWeight(node) <- dgetFromString(wt)
+          if (debug) {
+            cat ("Prior Weight: ",pw,".\n")
+          }
+        }
+
+        ## Build Table
+        BuildTable(node)
+
+        ## Clean out stub nodes
+        PnetRemoveStubNodes(net,stubs)
+
+      }, ## End tryCatch
+      error = function(e) {
+        ## Resignal error with context information about the node.
+        ee <- simpleError(
+            paste("While processing node ",nodename, "in model ",netname,":",
+                  conditionMessage(e)),
+            conditionCall(e))
+      stop(ee)
+      })
+    }  ## Next Node
+  } ## Next Net
+  invisible(netnames)
 }
 
 
@@ -246,7 +488,6 @@ Pnet2Omega <- function(net,prof, defaultRule="Compensatory",
                        defaultBeta=0,defaultLinkScale=1,
                        debug=FALSE) {
   p <- length(prof)
-  statecounts <- sapply(prof,PnodeNumStates)
   profnames <- sapply(prof,PnodeName)
 
   ## Find a natural order so the Q matrix is lower triangular.
@@ -401,14 +642,16 @@ Omega2Pnet <- function(OmegaMat,pn,nodewarehouse,
     node <- nodes[[ndn]]
     parnames <- setdiff(nodenames[QQ[ndn,]==1],ndn)
     exparnames <- PnodeParentNames(node)
-    if (!setequal(parnames,exparnames)) {
-      cat("While processing links for node: ",ndn,"\n")
-      cat("Node has parents: ", exparnames,"\n")
-      cat("But Omega matrix has parents: ", parnames,"\n")
-      if (override) {
-        warning("Changing net to match Omega matrix.")
-      } else {
-        stop("Graphical structure does not match Omega matrix.  See console.")
+    if (length(exparnames) > 0L) {
+      if (!setequal(parnames,exparnames)) {
+        cat("While processing links for node: ",ndn,"\n")
+        cat("Node has parents: ", exparnames,"\n")
+        cat("But Omega matrix has parents: ", parnames,"\n")
+        if (override) {
+          warning("Changing net to match Omega matrix.")
+        } else {
+          stop("Graphical structure does not match Omega matrix.  See console.")
+        }
       }
     }
     # Change order to match matrix. Even if nominally a match.
