@@ -287,7 +287,7 @@ Qmat2Pnet <- function (Qmat, nethouse,nodehouse,defaultRule="Compensatory",
         }
         ## Check/adjust structure
         stubs <- list()
-        parnames <- names(which(apply(Qrows[,profnames,drop=FALSE]==1,2,all)))
+        parnames <- names(which(apply(Qrows[,profnames,drop=FALSE]==1,2,any)))
         exparnames <- PnodeParentNames(node)
         if (!setequal(parnames,exparnames)) {
           if (debug) {
@@ -360,36 +360,41 @@ Qmat2Pnet <- function (Qmat, nethouse,nodehouse,defaultRule="Compensatory",
         if (nstates==1L) {
           PnodeQ(node) <- TRUE
           ## Single Row Cases
-          if (rule %in% getOffsetRules()) {
+          if (rules %in% getOffsetRules()) {
             ## Offset Case
             alphas <- Qrows[1,"A"]
             if (is.na(alphas)) alphas <- defaultAlpha
             PnodeAlphas(node) <- alpha
-            betas <- QrowsB
+            betas <- as.numeric(QrowsB)
             if (all(is.na(betas))) betas <- rep(defaultBeta,length(parnames))
+            names(betas) <- parnames
             PnodeBetas(node) <- betas
             if (debug) {
               cat("Single Row offset: \n")
-              print(Pnode(Q))
+              print(PnodeQ(node))
               print(PnodeAlphas(node))
               print(PnodeBetas(node))
             }
           } else {
             ## Weighted Case (Compensatory)
-            alphas <- QrowsA
+            alphas <- as.numeric(QrowsA)
             if (all(is.na(alphas))) alphas <- rep(defaultAlpha,length(parnames))
+            names(alphas) <- parnames
             PnodeAlphas(node) <- alphas
             betas <- Qrows[1,"B"]
             if (is.na(betas)) betas <- defaultBeta
             PnodeBetas(node) <- betas
             if (debug) {
               cat("Single Row weighted: \n")
-              print(Pnode(Q))
+              print(PnodeQ(node))
               print(PnodeAlphas(node))
               print(PnodeBetas(node))
             }
           }
         } else {
+          QrowsQ <- as.matrix(QrowsQ)
+          QrowsA <- as.matrix(QrowsA)
+          QrowsB <- as.matrix(QrowsB)
           ## Multiple Row Cases
           if (length(rules) == 1L && !(rules %in% getOffSetRules())
               && all(is.na(QrowsA[-1,])) && all(QrowsQ)) {
@@ -398,8 +403,9 @@ Qmat2Pnet <- function (Qmat, nethouse,nodehouse,defaultRule="Compensatory",
             ## non-offset rule, all elements of the Q-matrix are true,
             ## and all rows after the first are blank (NA)
             PnodeQ(node) <- TRUE
-            alphas <- QrowsA[1,]
+            alphas <- as.numeric(QrowsA[1,])
             if (all(is.na(alphas))) alphas <- rep(defaultAlpha,length(parnames))
+            names(alphas) <- parnames
             PnodeAlphas(node) <- alphas
             betas <- Qrows[,"B"]
             if (is.na(betas)) betas <- rep(defaultBeta,nstates)
@@ -407,7 +413,7 @@ Qmat2Pnet <- function (Qmat, nethouse,nodehouse,defaultRule="Compensatory",
 
             if (debug) {
               cat("Multiple Row weighted: \n")
-              print(Pnode(Q))
+              print(PnodeQ(node))
               print(PnodeAlphas(node))
               print(PnodeBetas(node))
             }
@@ -423,19 +429,21 @@ Qmat2Pnet <- function (Qmat, nethouse,nodehouse,defaultRule="Compensatory",
             alphas <- list()
             betas <- list()
             for (istate in 1:nstates) {
-              npar <- sum(QrowQ[i,])
-              if (rules[[i]] %in% getOffsetRules()) {
-                bb <- QrowB[i,QrowQ[i,]]
+              npar <- sum(QrowsQ[istate,])
+              if (rules[[istate]] %in% getOffsetRules()) {
+                bb <- as.numeric(QrowsB[istate,QrowsQ[istate,]])
                 if (all(is.na(bb))) bb <- rep(defaultBeta,npar)
+                names(bb) <- parnames[QrowsQ[istate,]]
                 betas[[istate]] <- bb
-                aa <- Qrows[i,"A"]
+                aa <- Qrows[istate,"A"]
                 if (is.na(aa)) aa <- defaultAlpha
                 alphas[[istate]] <- aa
               } else { ## Weighted Rule
-                aa <- QrowA[i,QrowQ[i,]]
+                aa <- as.numeric(QrowsA[istate,QrowsQ[istate,]])
                 if (all(is.na(aa))) aa <- rep(defaultAlpha,npar)
+                names(aa) <- parnames[QrowsQ[istate,]]
                 alphas[[istate]] <- aa
-                bb <- Qrows[i,"B"]
+                bb <- Qrows[istate,"B"]
                 if (is.na(bb)) bb <- defaultBeta
                 betas[[istate]] <- bb
               }
@@ -445,7 +453,7 @@ Qmat2Pnet <- function (Qmat, nethouse,nodehouse,defaultRule="Compensatory",
             if (debug) {
               cat("Multiple Row mixed: \n")
               print(PnodeRules(node))
-              print(Pnode(Q))
+              print(PnodeQ(node))
               print(PnodeAlphas(node))
               print(PnodeBetas(node))
             }
@@ -454,7 +462,7 @@ Qmat2Pnet <- function (Qmat, nethouse,nodehouse,defaultRule="Compensatory",
 
         ## "PriorWeight"
         wt <- Qrows[1,"PriorWeight"]
-        if (!is.na(ll) && nchar(ll)>=0L) {
+        if (!is.na(wt) && nchar(wt)>=0L) {
           PnodePriorWeight(node) <- dgetFromString(wt)
           if (debug) {
             cat ("Prior Weight: ",pw,".\n")
@@ -462,7 +470,9 @@ Qmat2Pnet <- function (Qmat, nethouse,nodehouse,defaultRule="Compensatory",
         }
 
         ## Build Table
-        BuildTable(node)
+        ## This won't work until we figure out how to set the default
+        ## prior weight.
+        ##BuildTable(node)
 
         ## Clean out stub nodes
         PnetRemoveStubNodes(net,stubs)
