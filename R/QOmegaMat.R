@@ -20,7 +20,7 @@ dputToString <- function (obj) {
 }
 
 dgetFromString <- function (str) {
-  con <- textConnection(str,open="r")
+ con <- textConnection(str,open="r")
   tryCatch(dget(con), finally=close(con))
 }
 
@@ -344,13 +344,12 @@ Qmat2Pnet <- function (Qmat, nethouse,nodehouse,defaultRule="Compensatory",
           cat ("Rules: ",paste(rules,collapse=", "),".\n")
         }
         if (nrules==1L) {
-          PnodeRules(node) <- dgetFromString(rules[1])
-          rules <- list(rules)
+          PnodeRules(node) <- dgetFromString(rules[[1]])
         }
         else {
           PnodeRules(node) <- lapply(rules,dgetFromString)
-          rules <- PnodeRules(node)
         }
+        rules <- PnodeRules(node)
 
         ## "A","B",
         QrowsQ <- Qrows[,parnames]
@@ -359,12 +358,13 @@ Qmat2Pnet <- function (Qmat, nethouse,nodehouse,defaultRule="Compensatory",
 
         if (nstates==1L) {
           PnodeQ(node) <- TRUE
+          if (is.list(rules)) rules <- rules[[1]]
           ## Single Row Cases
           if (rules %in% getOffsetRules()) {
             ## Offset Case
             alphas <- Qrows[1,"A"]
             if (is.na(alphas)) alphas <- defaultAlpha
-            PnodeAlphas(node) <- alpha
+            PnodeAlphas(node) <- alphas
             betas <- as.numeric(QrowsB)
             if (all(is.na(betas))) betas <- rep(defaultBeta,length(parnames))
             names(betas) <- parnames
@@ -419,6 +419,7 @@ Qmat2Pnet <- function (Qmat, nethouse,nodehouse,defaultRule="Compensatory",
             }
           } else {
             ## Offset or Mixed
+            QrowsQ <- QrowsQ==1
             PnodeQ(node) <- QrowsQ
             if (length(rules) <nstates) {
               ##If single rules, replicate out as that will be easier
@@ -465,7 +466,7 @@ Qmat2Pnet <- function (Qmat, nethouse,nodehouse,defaultRule="Compensatory",
         if (!is.na(wt) && nchar(wt)>=0L) {
           PnodePriorWeight(node) <- dgetFromString(wt)
           if (debug) {
-            cat ("Prior Weight: ",pw,".\n")
+            cat ("Prior Weight: ",wt,".\n")
           }
         }
 
@@ -475,7 +476,8 @@ Qmat2Pnet <- function (Qmat, nethouse,nodehouse,defaultRule="Compensatory",
         ##BuildTable(node)
 
         ## Clean out stub nodes
-        PnetRemoveStubNodes(net,stubs)
+        if (length(stubs)>0L)
+          PnetRemoveStubNodes(net,stubs)
 
       }, ## End tryCatch
       error = function(e) {
