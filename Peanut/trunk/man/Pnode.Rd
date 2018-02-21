@@ -6,9 +6,9 @@
 \description{
 
   A node in a parameterized Bayesian network.  Note that this is a
-  \dQuote{mixin} class, it is meant be added to another Bayesian network
-  node class to indicate that it is parameterized using the discrete
-  partial credit framework.
+  abstract class.  If an object implements the Pnode protocol, then
+  \code{is.Pnode(node)} should return \code{TRUE}.
+
 }
 \usage{
 is.Pnode(x)
@@ -57,10 +57,10 @@ Pnode (node, lnAlphas, betas, rules="Compensatory",
   The \code{Pnode} class is basically a protocol which any Bayesian
   network node object can follow to work with the tools in the Peanut
   package.  This is really an abstract class (in the java language,
-  \code{Pnode} would be an interface rather than a class) which exploits
-  the rather loose S3 object system.  In particular, a \code{Pnode} is
-  any object for which \code{is.Pnode} returns true.  The default method
-  looks for the string \code{"Pnode"} in the class list.
+  \code{Pnode} would be an interface rather than a class).  In
+  particular, a \code{Pnode} is any object for which \code{is.Pnode}
+  returns true.  The default method looks for the string \code{"Pnode"}
+  in the class list.
 
   \bold{Fields.} A \code{Pnode} object has eight \dQuote{fields}
   (implemented through the accessor methods), which all \code{Pnode}
@@ -99,6 +99,31 @@ Pnode (node, lnAlphas, betas, rules="Compensatory",
   The function \code{\link{PnodeLinkScale}} gets or sets a scale
   parameter associated with the link function.
 
+  There are some additional optional fields which describe metadata
+  about the node and its states.  The generic functions
+  \code{\link{PnodeName}()}, \code{\link{PnodeTitle}()}, and
+  \code{\link{PnodeDescription}()} access basic metadata about the
+  node.
+
+  The generic function \code{\link{PnodeLabels}()} accesses a set of
+  character labels associated with the node.  This is useful for
+  identifying sets of nodes (e.g., observables, high-level proficiency
+  variables.) 
+  
+  The generic functions \code{\link{PnodeStates}()},
+  \code{\link{PnodeStateTitles}()}, and
+  \code{\link{PnodeStateDescriptions}()} access basic information about
+  the states of the node.  The generic function
+  \code{\link{PnodeNumStates}()} returns the number of states.  The
+  generic function \code{\link{PnodeStateValues}()} access the numeric
+  values associated with the  states. 
+
+  The generic function \code{\link{PnodeParents}(\var{node})} access the parent
+  set of the \var{node}. Note that this function has a setter form which
+  changes the topology of the graph.  The generic functions
+  \code{\link{PnodeParentNames}()} and \code{\link{PnodeNumParents}()}
+  return the corresponding information about the parent variable.
+
   \bold{Generic Functions.} The importance of the \code{Pnode} object is
   that it supports the \code{\link{GEMfit}} method which adjust the
   parameters of the \code{Pnode} objects to fit a set of case data.  In
@@ -135,11 +160,19 @@ Pnode (node, lnAlphas, betas, rules="Compensatory",
 \author{Russell Almond}
 \seealso{
 
-  Fields: \code{\link{PnodeNet}}, \code{\link{PnodeQ}},
+  Parameter Fields: \code{\link{PnodeQ}},
        \code{\link{PnodePriorWeight}}, \code{\link{PnodeRules}}, 
        \code{\link{PnodeLink}}, \code{\link{PnodeLnAlphas}}, 
        \code{\link{PnodeAlphas}}, \code{\link{PnodeBetas}}, 
        \code{\link{PnodeLinkScale}}
+
+  Metadata fields:\code{\link{PnodeNet}}, \code{\link{PnodeParents}}, 
+       \code{\link{PnodeParentNames}}, \code{\link{PnodeNumParents}},     
+       \code{\link{PnodeName}}, \code{\link{PnodeTitle}},
+       \code{\link{PnodeDescription}}, \code{\link{PnodeLabels}}, 
+       \code{\link{PnodeStates}}, \code{\link{PnodeNumStates}},
+       \code{\link{PnodeStateTitles}}, \code{\link{PnodeStateDescriptions}}, 
+       \code{\link{PnodeStateValues}}
     
   Generic Functions:  \code{\link{BuildTable}},
   \code{\link{PnodeParentTvals}}, \code{\link{maxCPTParam}}
@@ -148,6 +181,7 @@ Pnode (node, lnAlphas, betas, rules="Compensatory",
   \code{\link[CPTtools]{calcDPCTable}}, \code{\link[CPTtools]{mapDPC}}
 
   Related Classes: \code{\link{Pnet}}
+
 }
 \examples{
 

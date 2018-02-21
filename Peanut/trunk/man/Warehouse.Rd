@@ -109,42 +109,114 @@ is.PnodeWarehouse(obj)
   
 }
 \value{
-%%  ~Describe the value returned
-%%  If it is a LIST, use
-%%  \item{comp1 }{Description of 'comp1'}
-%%  \item{comp2 }{Description of 'comp2'}
-%% ...
+  The return type of most functions will depend on the type of the
+  warehouse.  In most cases, the functions return an object of the type
+  of the warehouse.
+
+  \item{Pnet Warehouses}{These return \code{TRUE} from the function
+  \code{is.PnetWarehouse()}, and an object of type \code{\link{Pnet}} or
+  \code{NULL} from the functions \code{WarehouseSupply()},
+  \code{WarehouseFetch()}, and \code{WarehouseMake()}.  \code{NULL} is
+  returned when the requested net is not in the warehouse or the
+  manifest.}
+  \item{Pnode Warehouses}{These return \code{TRUE} from the function
+  \code{is.PnodeWarehouse()}, and an object of type \code{\link{Pnode}} or
+  \code{NULL} from the functions \code{WarehouseSupply()},
+  \code{WarehouseFetch()}, and \code{WarehouseMake()}.  \code{NULL} is
+  returned when the requested net is not in the warehouse or the
+  manifest.}
+
+  The returns from the functions \code{WarehouseFree()} and
+  \code{ClearWarehouse()} are arbitrary depending on the implementation.
+
 }
 \references{
-%% ~put references to the literature/web site here ~
+
+Almond, R. G. (presented 2017, August). Tabular views of Bayesian
+networks. In John-Mark Agosta and Tomas Singlair (Chair), \emph{Bayeisan
+  Modeling Application Workshop 2017}. Symposium conducted at the
+meeting of Association for Uncertainty in Artificial Intelligence,
+Sydney, Australia. (International) Retrieved from \url{http://bmaw2017.azurewebsites.net/}
+
+Chambers, J. M. (2016) \emph{Extending R}.  CRC Press.
 }
-\author{
-%%  ~~who you are~~
-}
+\author{Russell G. Almond}
 \note{
-%%  ~~further notes~~
+
+The cache part of the warehouse, almost certainly needs to be
+implemented using the reference class system of Chambers (2016).  In
+particular, an \code{\link[base]{environment}} object provides the kind
+of persistent storage and object persistance and uniqueness necessary
+(this breaks the usual functional programming paradigm of R).
+
 }
-
-%% ~Make other sections like Warning with \section{Warning }{....} ~
-
 \seealso{
-%% ~~objects to See Also as \code{\link{help}}, ~~~
+
+  These functions support the manifest process.
+  \code{\link{WarehouseManifest}()}, \code{\link{WarehouseData}()} 
+
+  These functions construct manifests:
+  \code{\link{BuildNetManifest}()}, \code{\link{BuildNodeManifest}()} 
+
+  These functions use the warehouse to build networks:
+  \code{\link{Omega2Pnet}} \code{\link{Qmat2Pnet}}
+
 }
 \examples{
-##---- Should be DIRECTLY executable !! ----
-##-- ==>  Define data, use random,
-##--	or do  help(data=index)  for the standard data sets.
 
-## The function is currently defined as
-function (warehouse, name) 
-{
-    val <- WarehouseFetch(warehouse, name)
-    if (is.null(val)) 
-        val <- WarehouseMake(warehouse, name)
-    val
+\dontrun{
+## Requires PNetica package
+\library(PNetica)
+sess <- NeticaSession()
+startSession(sess)
+
+### This tests the manifest and factory protocols.
+
+nodeman1 <- read.csv(paste(library(help="PNetica")$path, "auxdata",
+                           "Mini-PP-Nodes.csv", sep=.Platform$file.sep),
+                     row.names=1,stringsAsFactors=FALSE)
+
+netman1 <- read.csv(paste(library(help="PNetica")$path, "auxdata",
+                          "Mini-PP-Nets.csv", sep=.Platform$file.sep),
+                    row.names=1, stringsAsFactors=FALSE)
+
+
+### Test Net building
+Nethouse <- BNWarehouse(manifest=netman1,session=sess,key="Name")
+stopifnot(is.PnetWarehouse(Nethouse))
+
+setwd(paste(library(help="PNetica")$path, "testnets",sep=.Platform$file.sep))
+CM <- WarehouseSupply(Nethouse,"miniPP_CM")
+stopifnot(is.null(WarehouseFetch(Nethouse,"PPcompEM")))
+EM1 <- WarehouseMake(Nethouse,"PPcompEM")
+
+EMs <- lapply(c("PPcompEM","PPconjEM", "PPtwostepEM"),
+              function(nm) WarehouseSupply(Nethouse,nm))
+
+### Test Node Building with already loaded nets
+
+Nodehouse <- NNWarehouse(manifest=nodeman1,
+                         key=c("Model","NodeName"),
+                         session=sess)
+stopifnot(is.PnodeWarehouse(Nodehouse))
+
+phyd <- WarehouseData(Nodehouse,c("miniPP_CM","Physics"))
+
+p3 <- MakePnode.NeticaNode(CM,"Physics",phyd)
+
+phys <- WarehouseSupply(Nodehouse,c("miniPP_CM","Physics"))
+stopifnot(p3==phys)
+
+for (n in 1:nrow(nodeman1)) {
+  name <- as.character(nodeman1[n,c("Model","NodeName")])
+  if (is.null(WarehouseFetch(Nodehouse,name))) {
+    cat("Building Node ",paste(name,collapse="::"),"\n")
+    WarehouseSupply(Nodehouse,name)
   }
 }
-% Add one or more standard keywords, see file 'KEYWORDS' in the
-% R documentation directory.
-\keyword{ ~kwd1 }% use one of  RShowDoc("KEYWORDS")
-\keyword{ ~kwd2 }% __ONLY ONE__ keyword per line
+
+stopSession(sess)
+
+}}
+\keyword{ class }
+\keyword{ interface }
