@@ -1,7 +1,7 @@
 import(methods)
 importFrom(CPTtools,effectiveThetas)
 importFrom(CPTtools,getOffsetRules)
-importFrom(CPTtools,isOffsetRules)
+importFrom(CPTtools,isOffsetRule)
 
 
 ## Pnet and Pnode interfaces

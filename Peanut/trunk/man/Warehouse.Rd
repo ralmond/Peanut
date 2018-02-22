@@ -81,7 +81,7 @@ is.PnodeWarehouse(obj)
   Pnets, and the key is the name of the network.  Each Pnet corresponds
   to a single line in the manifest, and the \var{name} is a character
   scalar.  A Pnet warehouse should return true when the generic function
-  \code{is.PnetWarehouse}()} is called.
+  \code{is.PnetWarehouse()} is called.
 
   Pnode warehouses contain Pnodes, and the \var{name} is a
   character vector of length 2, with structure (\var{netname},
@@ -89,7 +89,7 @@ is.PnodeWarehouse(obj)
   frequently exist in two different networks.  Currently the manifest
   for a node contains one line for each possible state of the node.
   A Pnode warehouse should return true when the generic function
-  \code{is.PnodeWarehouse}()} is called.
+  \code{is.PnodeWarehouse()} is called.
 
   The warehouse object is an abstract class, and implementing classes
   need to provide methods for the generic functions
