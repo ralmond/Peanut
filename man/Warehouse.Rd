@@ -1,4 +1,5 @@
 \name{Warehouse}
+\alias{Warehouse}
 \alias{WarehouseSupply}
 \alias{WarehouseFetch}
 \alias{WarehouseMake}
@@ -42,7 +43,7 @@ is.PnodeWarehouse(obj)
   that when a Pnet or Pnode object is needed, it is requested from the
   corresponding warehouse.  If the object exists, it is returned.  If
   the object does not exist, then the information in the manifest (see
-  \code{WarehouseManifest}()} is used to create a new object.  The key
+  \code{\link{WarehouseManifest}()} is used to create a new object.  The key
   function is \code{WarehouseSupply(\var{warehouse},\var{name})}; this function
   looks for an object corresponding to \var{name} in \code{warehouse}.
   If it exists, it is returned, if not a new one is created.

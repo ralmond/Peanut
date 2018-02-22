@@ -4,7 +4,7 @@ Date: 2018/02/04
 Title: Parameterized Bayesian Networks, Abstract Classes
 Author: Russell Almond
 Maintainer: Russell Almond <ralmond@fsu.edu>
-Depends: R (>= 3.0), CPTtools (>= 0.4)
+Depends: R (>= 3.0), CPTtools (>= 0.4), methods
 Description: This provides support of learning conditional probability tables parameterized using CPTtools
 License: Artistic-2.0 
 URL: http://pluto.coe.fsu.edu/RNetica

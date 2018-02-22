@@ -1,0 +1,20 @@
+Need to doc:
+  ‘BuildNetManifest’
+  ‘BuildNodeManifest’
+  ‘Omega2Pnet’ ‘Pnet2Omega’
+  ‘Pnet2Qmat’ ‘Qmat2Pnet
+  ‘PnetAdjoin’ ‘PnetDetach
+  ‘PnetDescription’ ‘PnetDescription<-’ ‘PnetName’ ‘PnetName<-’
+    ‘PnetPathname’ ‘PnetPathname<-’ ‘PnetTitle’ ‘PnetTitle<-
+  ‘PnetFindNode’
+  ‘PnetHub’ ‘PnetHub<-’
+  ‘PnetMakeStubNodes’ ‘PnetRemoveStubNodes’
+  ‘PnodeDescription’ ‘PnodeTitle’ ‘PnodeTitle<-’
+  ‘PnodeDescription<-’ ‘PnodeName<-’
+  ‘PnodeLabels’ ‘PnodeLabels<-
+  ‘PnodeParents<-’
+  ‘PnodeStates<-'  ‘PnodeStateDescriptions’ ‘PnodeStateDescriptions<-’
+  ‘PnodeStateTitles’ ‘PnodeStateTitles<-’ ‘PnodeStateValues’
+  ‘PnodeStateValues<-’ 
+  ‘WarehouseData’ ‘WarehouseManifest’ ‘WarehouseManifest<-’
+  ‘defaultAlphas’ ‘defaultBetas’ ‘topsort’
