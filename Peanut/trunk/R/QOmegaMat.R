@@ -85,7 +85,7 @@ Pnet2Qmat <- function (obs,prof,defaultRule="Compensatory",
       QQ[irow:(irow+nstate-2),] <- 0
       QQ[irow:(irow+nstate-2),profnames %in% PnodeParentNames(nd)] <- 1
       if (!is.null(PnodeQ(nd))) {
-        QQ[irow:(irow+nstate-2),match(ParentNames(nd),profnames)] <-
+        QQ[irow:(irow+nstate-2),match(PnodeParentNames(nd),profnames)] <-
           PnodeQ(nd)
       }
       QQQ <-QQ[irow:(irow+nstate-2),
@@ -396,7 +396,7 @@ Qmat2Pnet <- function (Qmat, nethouse,nodehouse,defaultRule="Compensatory",
           QrowsA <- as.matrix(QrowsA)
           QrowsB <- as.matrix(QrowsB)
           ## Multiple Row Cases
-          if (length(rules) == 1L && !(rules %in% getOffSetRules())
+          if (length(rules) == 1L && !(rules %in% getOffsetRules())
               && all(is.na(QrowsA[-1,])) && all(QrowsQ)) {
             ## Weighted -- single row of AAs.
             ## This pattern is only allowed when there is a single
