@@ -19,8 +19,31 @@ BuildNetManifest(Pnetlist)
   }
 }
 \details{
-%%  ~~ If necessary, more details than the description above ~~
 
+  A network manifest is a table (data frame) which describes a collection
+  of networks.  It contains meta-data about the networks, and not the
+  information about the nodes, contained in the node manifest
+  (\code{\link{BuildNodeManifest}}) or the relaitonships between the
+  nodes which is contained in the \eqn{Q}-matrix
+  (\code{\link{Pnet2Qmat}}) or the \eqn{\Omega}-Matrix
+  (\code{\link{Pnet2Omega}}).  The role of the net
+  manifest is to be used as to create a Net \link{Warehouse} which is
+  an argument to the \code{\link{Qmat2Pnet}} and
+  \code{\link{Omega2Pnet}} commands, creating networks as they are
+  referenced.  
+
+  The \dQuote{Name} column of the table contains the network name and is
+  a key to the table (so it should be unique).  It corresponds to
+  \code{\link{PnetName}}.  The \dQuote{Title} (\code{\link{PnetTitle}})
+  and \dQuote{Description} (\code{\link{PnetDescription})) columns contain
+  optional meta-data about the node.  The \dQuote{Pathname}
+  (\code{\link{PnetPathname}}) column
+  contiains the location of the file to which the network should be
+  written and from which it can be read.  The \dQuote{Hub}
+  (\code{\link{PnetHub}}) is for spoke models (evidence models) some of
+  whose variables are defined in a hub network.  This the network in
+  question is meant to be a spoke, then this field points at the
+  corresponding hub.
 }
 \value{
 
@@ -28,16 +51,17 @@ BuildNetManifest(Pnetlist)
   have the following values.
   \item{Name}{A character value giving the name of the network.  This
   should be unique for each row and normally must conform to variable
-  naming conventions.}
+  naming conventions.  Corresponds to the function \code{\link{PnetName}}.}
   \item{Title }{An optional character value giving a longer human readable name
-  for the netowrk.}
+  for the netowrk. Corresponds to the function \code{\link{PnetTitle}}.}
   \item{Hub}{If this model is incomplete without being joined to another
   network, then the name of the hub network.  Otherwise an empty
-  character vector.}
+  character vector. Corresponds to the function \code{\link{PnetHub}}.}
   \item{Pathname}{The location of the file from which the network should
-  be read or to which it should be written.}
+  be read or to which it should be written.  Corresponds to the function
+  \code{\link{PnetPathname}}.} 
   \item{Description}{An optional character value documenting the purpose
-  of the network.}
+  of the network. Corresponds to the function \code{\link{PnetDescription}}.}
 
   Note that the name column is regarded as a primary key to the table.
 }
@@ -50,14 +74,18 @@ meeting of Association for Uncertainty in Artificial Intelligence,
 Sydney, Australia. (International) Retrieved from \url{http://bmaw2017.azurewebsites.net/}
 }
 \author{Russell Almond}
-\note{
-%%  ~~further notes~~
-}
-
-%% ~Make other sections like Warning with \section{Warning }{....} ~
-
 \seealso{
-%% ~~objects to See Also as \code{\link{help}}, ~~~
+
+  Network functions called to find network data:
+  \code{\link{PnetName}}, \code{\link{PnetTitle}},
+  \code{\link{PnetPathname}}, \code{\link{PnetHub}},
+  \code{\link{PnetDescription}}
+
+  Used in the construction of Network \code{\link{Warehouse}}s.
+
+  Similar to the function \code{\link{BuildNodeManifest}}.
+  
+
 }
 \examples{
 ##---- Should be DIRECTLY executable !! ----
