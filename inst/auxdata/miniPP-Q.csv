@@ -1,0 +1,5 @@
+"","Model","Node","NStates","State","Link","LinkScale","Physics","IterativeD","EnergyTransfer","NTL","POfMom","Rules","A.Physics","A.IterativeD","A.EnergyTransfer","A.NTL","A.POfMom","A","B.Physics","B.IterativeD","B.EnergyTransfer","B.NTL","B.POfMom","B","PriorWeight"
+"1","PPcompEM","CompensatoryObs",2,"Right","partialCredit",,0,0,0,1,1,"""Compensatory""",,,,0.9,1.1,,,,,,,0.3,""
+"2","PPconjEM","ConjunctiveObs",2,"Right","partialCredit",,0,0,1,0,1,"""OffsetConjunctive""",,,,,,1,,,-0.5,,0.5,,""
+"3","PPtwostepEM","TwoStepObs",3,"Full","partialCredit",,0,0,1,0,0,"""Compensatory""",,,1,,,,,,,,,0.5,""
+"4","PPtwostepEM","TwoStepObs",,"Partial","",,0,1,1,0,0,"""OffsetConjunctive""",,,,,,1,,0.1,1,,,,""

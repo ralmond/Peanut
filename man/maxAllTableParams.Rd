@@ -16,7 +16,7 @@
 }
 \usage{
 maxAllTableParams(net, Mstepit = 5, tol = sqrt(.Machine$double.eps), debug=TRUE)
-\method{maxAllTableParams}{default}(net, Mstepit = 5, tol = sqrt(.Machine$double.eps), debug=TRUE)
+\method{maxAllTableParams}{default}(net, Mstepit = 5, tol = sqrt(.Machine$double.eps), debug=FALSE)
 maxCPTParam(node, Mstepit = 5, tol = sqrt(.Machine$double.eps)) 
 }
 \arguments{

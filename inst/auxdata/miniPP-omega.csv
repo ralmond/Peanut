@@ -1,0 +1,6 @@
+"","Node","Physics","IterativeD","EnergyTransfer","NTL","POfMom","Link","Rules","A.Physics","A.IterativeD","A.EnergyTransfer","A.NTL","A.POfMom","Intercept","PriorWeight"
+"Physics","Physics",1,0,0,0,0,"normalLink","Compensatory",1,0,0,0,0,0,""
+"IterativeD","IterativeD",1,1,0,0,0,"normalLink","Compensatory",0.894427190999916,0.447213595499958,0,0,0,-0.2,""
+"EnergyTransfer","EnergyTransfer",1,0,1,0,0,"normalLink","Compensatory",0.894427190999916,0,0.447213595499958,0,0,0,""
+"NTL","NTL",1,0,1,1,0,"normalLink","Compensatory",0.948683298050514,0,0.836660026534076,0.447213595499958,0,0.3,""
+"POfMom","POfMom",1,0,1,1,1,"normalLink","Compensatory",0.774596669241484,0,0.948683298050514,0.948683298050514,0.447213595499958,0,""
