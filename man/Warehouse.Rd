@@ -173,11 +173,11 @@ startSession(sess)
 
 ### This tests the manifest and factory protocols.
 
-nodeman1 <- read.csv(paste(library(help="PNetica")$path, "auxdata",
+nodeman1 <- read.csv(paste(library(help="Peanut")$path, "auxdata",
                            "Mini-PP-Nodes.csv", sep=.Platform$file.sep),
                      row.names=1,stringsAsFactors=FALSE)
 
-netman1 <- read.csv(paste(library(help="PNetica")$path, "auxdata",
+netman1 <- read.csv(paste(library(help="Peanut")$path, "auxdata",
                           "Mini-PP-Nets.csv", sep=.Platform$file.sep),
                     row.names=1, stringsAsFactors=FALSE)
 

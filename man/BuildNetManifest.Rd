@@ -88,35 +88,32 @@ Sydney, Australia. (International) Retrieved from \url{http://bmaw2017.azurewebs
 
 }
 \examples{
-##---- Should be DIRECTLY executable !! ----
-##-- ==>  Define data, use random,
-##--	or do  help(data=index)  for the standard data sets.
+## This provides an example network manifest.
+netman1 <- read.csv(paste(library(help="Peanut")$path, "auxdata",
+                          "Mini-PP-Nets.csv", sep=.Platform$file.sep),
+                    row.names=1, stringsAsFactors=FALSE)
 
-## The function is currently defined as
-function (Pnetlist) 
-{
-    Name <- character()
-    Hub <- character()
-    Title <- character()
-    Pathname <- character()
-    Description <- character()
-    for (net in Pnetlist) {
-        if (!is.Pnet(net)) {
-            stop("Expected a list of Pnets, got ", net)
-        }
-        Name <- c(Name, PnetName(net))
-        Title <- c(Title, PnetTitle(net))
-        Hub <- c(Hub, PnetHub(net))
-        Pathname <- c(Pathname, PnetPathname(net))
-        Description <- c(Description, PnetDescription(net))
-    }
-    result <- data.frame(Name, Title, Hub, Pathname, Description, 
-        stringsAsFactors = FALSE)
-    rownames(result) <- Name
-    result
-  }
+\dontrun{
+library(PNetica)  ## Example requires PNetica
+
+sess <- NeticaSession()
+startSession(sess)
+
+setwd(file.path(library(help="PNetica")$path, "testnets"))
+
+Nets <- ReadNetworks(c("miniPP-CM.dne", "PPcompEM.dne",
+                       "PPconjEM.dne", "PPtwostepEM.dne"), session=sess)
+
+netman <- BuildNetManifest(Nets)
+stopifnot(all.equal(netman,netman1))
+
+## BNWarehouse is the PNetica Net Warehouse.
+Nethouse <- BNWarehouse(manifest=netman1,session=sess,key="Name")
+
+setwd(curd)
+stopSession(sess)
+
 }
-% Add one or more standard keywords, see file 'KEYWORDS' in the
-% R documentation directory.
-\keyword{ ~kwd1 }% use one of  RShowDoc("KEYWORDS")
-\keyword{ ~kwd2 }% __ONLY ONE__ keyword per line
+}
+\keyword{ interface }
+\keyword{ graphs }

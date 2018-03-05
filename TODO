@@ -1,6 +1,4 @@
 Need to doc:
-  ‘BuildNetManifest’
-  ‘BuildNodeManifest’
   ‘Omega2Pnet’ ‘Pnet2Omega’
   ‘Pnet2Qmat’ ‘Qmat2Pnet
   ‘PnetAdjoin’ ‘PnetDetach
