@@ -1,14 +1,15 @@
 \name{PnetName}
 \alias{PnetName}
 \alias{PnetName<-}
-
 \title{
   Gets or Sets the name of a Netica network.
 }
 \description{
-Gets or sets the name of the network. Names must conform to the
-  \code{\link{IDname}} rules}
 
+Gets or sets the name of the network. Names must generally conform to
+the network naming convention of the host Bayesian network system. In
+particular, they should probably follow the rules for R variable names.
+}
 \usage{
 PnetName(net)
 PnetName(net) <- value
@@ -16,7 +17,7 @@ PnetName(net) <- value
 
 \arguments{
   \item{net}{
-    A \code{\link{NeticaBN}} object which links to the network.
+    A \code{\link{Pnet}} object.
 }
   \item{value}{
     A character scalar containing the new name.
@@ -24,13 +25,12 @@ PnetName(net) <- value
 }
     
 \details{
-  Network names must conform to the \code{\link{IDname}} rules for
-  Netica identifiers.  Trying to set the network to a name that does not
+  Network names must conform to the rules for the host Bayes net system`q.  Trying to set the network to a name that does not
   conform to the rules will produce an error, as will trying to set the
   network name to a name that corresponds to another different network.
 
   The \code{\link{PnetTitle}()} function provides another way to name
-  a network which is not subject to the \code{IDname} restrictions.
+  a network which is not subject to the variable restrictions.
 }
 
 \value{
