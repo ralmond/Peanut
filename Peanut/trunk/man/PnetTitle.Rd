@@ -7,9 +7,10 @@
 Gets the title or comments associated with a Netica network.
 }
 \description{
-The title is a longer name for a network which is not subject to the
-  Netica \code{\link{IDname}} restrictions.  The comment is a free form
-  text associated with a network.
+
+The title is a longer name for a network which is not subject to naming
+restrictions. The description is free form text used to document the
+network.  Both fields are optional.
 }
 \usage{
 PnetTitle(net)
