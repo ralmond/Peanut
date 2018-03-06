@@ -18,13 +18,12 @@ PnetTitle(net) <- value
 PnetDescription(net)
 PnetDescription(net) <- value
 }
-%- maybe also 'usage' for other objects documented here.
 \arguments{
   \item{net}{
-    A \code{\link{NeticaBN}} object.
+    A \code{\link{Pnet}} object.
   }
   \item{value}{
-    A character object giving the new title or comment.
+    A character object giving the new title or description.
   }
 }
 
