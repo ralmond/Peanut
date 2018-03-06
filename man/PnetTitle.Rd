@@ -37,19 +37,15 @@ PnetDescription(net) <- value
 }
 
 \value{
-A character vector of length 1 providing the title or comment.
-}
-\references{
-\newcommand{\nref}{\href{http://norsys.com/onLineAPIManual/functions/#1.html}{#1()}}
-  \url{http://norsys.com/onLineAPIManual/index.html}:
-  \nref{GetNetTitle_bn}, \nref{SetNetTitle_bn},
-  \nref{GetNetComments_bn}, \nref{SetNetComments_bn}
+  A character vector of length 1 providing the title or description.
+
+  Setter methods return the object.
 }
 \author{
   Russell Almond
 }
 \seealso{
-  \code{\link{NeticaBN}}, \code{\link{NetworkName}()} 
+  \code{\link{Pnet}}, \code{\link{PnetName}()} 
 
 }
 \examples{
