@@ -29,10 +29,9 @@ PnetDescription(net) <- value
 
 \details{
   The title is meant to be a human readable alternative to the name,
-  which is not limited to the \code{\link{IDname}} restrictions.  The
-  title also affects how the network is displayed in the Netica GUI.
+  which is not limited to the network naming restrictions.  
 
-  The comment is any text the user chooses to attach to the network.  If
+  The text is any text the user chooses to attach to the network.  If
   \code{value} has length greater than 1, the vector is collapsed into a
   long string with newlines separating the components.
 }
