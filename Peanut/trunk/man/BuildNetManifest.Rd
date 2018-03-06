@@ -35,7 +35,7 @@ BuildNetManifest(Pnetlist)
   The \dQuote{Name} column of the table contains the network name and is
   a key to the table (so it should be unique).  It corresponds to
   \code{\link{PnetName}}.  The \dQuote{Title} (\code{\link{PnetTitle}})
-  and \dQuote{Description} (\code{\link{PnetDescription})) columns contain
+  and \dQuote{Description} (\code{\link{PnetDescription}}) columns contain
   optional meta-data about the node.  The \dQuote{Pathname}
   (\code{\link{PnetPathname}}) column
   contiains the location of the file to which the network should be
