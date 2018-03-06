@@ -56,8 +56,7 @@ The name of the network as a character vector of length 1.
   reference to a corrected object.
 }
 \seealso{
-  \code{\link{CreateNetwork}()}, \code{\link{NeticaBN}},
-  \code{\link{GetNamedNetworks}()}, \code{\link{PnetTitle}()} 
+  \code{\link{Pnet}}, \code{\link{PnetTitle}()} 
 }
 \examples{
 net <- CreateNetwork("funNet")
