@@ -39,21 +39,8 @@ The name of the network as a character vector of length 1.
   The setter method returns the modified object.
 
 }
-\references{
-\newcommand{\nref}{\href{http://norsys.com/onLineAPIManual/functions/#1.html}{#1()}}
-  \url{http://norsys.com/onLineAPIManual/index.html}:
-    \nref{GetNetName_bn}, \nref{SetNetName_bn}
-}
 \author{
   Russell Almond
-}
-\note{
-  \code{NeticaBN} objects are internally implemented as character vectors
-  giving the name of the network.  If a network is renamed, then it is
-  possible that R will hold onto an old reference that still using the
-  old name.  In this case, \code{PnetName(net)} will give the correct
-  name, and \code{GetNamedNets(PnetName(net))} will return a
-  reference to a corrected object.
 }
 \seealso{
   \code{\link{Pnet}}, \code{\link{PnetTitle}()} 
