@@ -1,5 +1,4 @@
 Need to doc:
-  ‘Omega2Pnet’ ‘Pnet2Omega’
   ‘Pnet2Qmat’ ‘Qmat2Pnet
   ‘PnetAdjoin’ ‘PnetDetach
   ‘PnetDescription’ ‘PnetDescription<-’ ‘PnetName’ ‘PnetName<-’
