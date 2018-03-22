@@ -606,7 +606,6 @@ Omega2Pnet <- function(OmegaMat,pn,nodewarehouse,
                        defaultRule="Compensatory",
                        defaultLink="normalLink",defaultAlpha=1,
                        defaultBeta=0,defaultLinkScale=1,
-                       defaultWeight=NULL,
                        debug=FALSE,override=FALSE) {
   if (!is.Pnet(pn)) {
     stop("Blank network must be provided.")
