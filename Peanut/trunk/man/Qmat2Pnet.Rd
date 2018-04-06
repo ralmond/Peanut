@@ -46,14 +46,104 @@ Qmat2Pnet(Qmat, nethouse, nodehouse, defaultRule = "Compensatory", defaultLink =
   \item{debug}{A logical value.  If true, extra information will be
     printed during process of building the Pnet.}
   \item{override}{A logical value.  If false, differences between any
-    exsiting structure in the graph and the Omega matrix will raise an
+    exsiting structure in the graph and the \code{Qmat} will raise an
     error.  If true, the graph will be modified to conform to the matrix.
   }
 }
 \details{
+
+  A \eqn{Q}-matrix is a 0-1 matrix which describes which proficiency
+  (latent) variables are connected to which observable outcome
+  variables; \eqn{q_{jk}=1} if and only if 
+  proficiency variable \eqn{k} is a parent of observable variable
+  \eqn{j}.  Almond (2010) suggested that augmenting the \eqn{Q}-matrix
+  with additional columns representing the combination rules
+  (\code{\link{PnodeRules}}), link function (\code{\link{PnodeLink}}),
+  link scale parameter (if needed, \code{\link{PnodeLinkScale}}) and
+  difficulty parameters (\code{\link{PnodeBetas}}).  The discrimination
+  parameters (\code{\link{PnodeAlphas}}) could be overloaded with the
+  \eqn{Q}-matrix, with non-zero parameters in places where there were
+  1's in the \eqn{Q}-matrix. 
+
+  This arrangement worked fine with combination rules (e.g.,
+  \code{\link[CPTtools}{Compensatory}}) which contained multiple alpha
+  (discrimination) parameters, one for each parent variable,  and a
+  single beta (difficulty).  The introduction of a new type of offset
+  rule (e.g., \code{\link{OffsetDisjunctive}}) which uses a multiple
+  difficulty parameters, one for each parent variable, and a single
+  alpha.  Almond (2016) suggested a new augmentation which has three
+  matrixes in a single table (a Qmat):  the \eqn{Q}-matrix, which
+  contains structural information; the \eqn{A}-matrix, which contains
+  discrimination parameters; and the \eqn{B}-matrix, which contains the
+  difficulty parameters.  The names for the columns for these matrixes
+  contain the names of the proficiency variables, prepended with
+  \dQuote{A.} or \dQuote{B.} in the case of the \eqn{A}-matrix and
+  \eqn{B}-matrix.   There are two additional columns marked \dQuote{A}
+  and \dQuote{B} which are used for the discrimination and difficulty
+  parameter in the multiple-beta and multiple-alpha cases.  There is
+  some redundancy between the \eqn{Q}, \eqn{A} and \eqn{B} matrixes, but
+  this provides an opportunity for checking the validity of the input.
+
+  The introduction of the partial credit link function
+  (\code{\link[CPTtools]{partialCredit}}) added a further
+  complication.  With the partial credit model, there could be a
+  separate set of discrimination or difficulty parameters for each
+  transition for a polytomous item.  Even the
+  \code{\link{CPTtools]{gradedResponse}} link function requires a
+  separate difficulty parameter for each level of the varaible save the
+  first.  The rows of the Qmat data structure are hence augmented to
+  include one row for every state but the lowest-level state.  There
+  should be of fewer rows of associated with the node than the value in
+  the \dQuote{Nstates} column, and the names of the states (values in
+  the \dQuote{State} column) should correspond to every state of the
+  target variable except the first.  It is an error if the number of
+  states does not match the existing node, or if the state names do not
+  match what is already used for the node or is in the manifest for the
+  node \code{\link{Warehouse}}.  
+
+  Note that two nodes in different networks may share the same name, and
+  two states in two different nodes may have the same name as well.
+  Thus, the formal key for the Qmat data frame is (\dQuote{Model},
+  \dQuote{Node}, \dQuote{State}), however, the rows which share the
+  values for (\dQuote{Model}, \dQuote{Node}) form a subtable for that
+  particular node.  In particular, the rows of the \eqn{Q}-matrix
+  subtable for that node form the \emph{inner Q-matrix} for that node.
+  The inner \eqn{Q}-matrix shows which variables are relevant for each
+  state transition in a partial credit model.  The column-wise maximum
+  of the inner \eqn{Q}-matrix forms the row of the outer \eqn{Q}-matrix
+  for that node.  This shows which proficiency nodes are the parent of
+  the observable node.
+
+  The function \code{Qmat2Pnet} creates and sets the parameters of the
+  observable \code{\link{Pnode}}s referenced in the \code{Qmat}
+  argument.  As it needs to reference, and possibly create, a number of
+  \code{\link{Pnet}}s and \code{Pnode}s, it requires both a network and
+  a node \code{\link{Warehouse}}.  If the \code{override} parameter is
+  true, the networks will be modified so that each node has the correct
+  parents, otherwise \code{Qmat2Pnet} will signal an error if the
+  existing network structure is inconsistent with the \eqn{Q}-matrix.
+
+  As there is only one link function for each \var{node}, the values of
+  \code{\link{PnodeLink}(\var{node})} and
+  \code{\link{PnodeLinkScale}(\var{node})} 
+  are set based on the values in the \dQuote{Link} and
+  \dQuote{LinkScale} columns and the first row corresponding to
+  \var{node}.  Note that the choice of link functions determines what is
+  sensible for the other values but this is not checked by the code.
+
+  The value of \code{\link{PnodeRules}(\var{node})} can either be a single
+  value or a list of rule names.  The first value in the sub-Qmat must a
+  character value, but if the other values are missing then a single
+  value is used.  If not, all of the entries should be non-missing.  If
+  this is a single value, then effectively the same combination rule is
+  used for each transition.
+  
+
+  \code{\link{PnodeAlphas}(\var{node})} and \code{\link{PnodeBetas}(\var{node})}
+
 %%  ~~ If necessary, more details than the description above ~~
 }
-\section{\eqn{Q}-Matrix Structure}{
+\section{\eqn{Q}-Matrix (Qmat) Structure}{
 
   The output augmented \eqn{Q}-matrix is a data frame with the columns
   described below.  The number of columns is variable, with items marked
