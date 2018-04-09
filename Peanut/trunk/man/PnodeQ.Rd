@@ -79,6 +79,8 @@ PnodeQ(node) <- value
   be consistent for this to work correctly, but no error checking is
   done on any of the setter methods.
 
+  Note that the setter form may destructively modify the Pnode object
+  (this depends on the implementation).
 
 }
 \seealso{

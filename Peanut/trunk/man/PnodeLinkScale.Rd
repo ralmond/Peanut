@@ -44,6 +44,9 @@ PnodeLinkScale(node) <- value
 
   The value of the link scale parameter, or \code{NULL} if it is not
   needed.
+
+  Note that the setter form may destructively modify the Pnode object
+  (this depends on the implementation).
   
 }
 \references{

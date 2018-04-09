@@ -17,7 +17,6 @@
 PnodeLink(node)
 PnodeLink(node) <- value
 }
-%- maybe also 'usage' for other objects documented here.
 \arguments{
   \item{node}{A \code{\link{Pnode}} object.}
   \item{value}{The name of a link function or function object which can
@@ -85,6 +84,9 @@ PnodeLink(node) <- value
 \value{
   A character scalar giving the name of a combination function or a
   combination function object.
+
+  Note that the setter form may destructively modify the Pnode object
+  (this depends on the implementation).
 
 }
 \references{

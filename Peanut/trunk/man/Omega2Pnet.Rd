@@ -135,9 +135,9 @@ Omega2Pnet(OmegaMat, pn, nodewarehouse, defaultRule = "Compensatory", defaultLin
   values of \code{\link{PnodeLink}(\var{node})} and
   \code{\link{PnodeRules}(\var{node})}. The off-diagonal elements of the
   A-matrix are used to set \code{\link{PnodeAlphas}(\var{node})} and the
-  diagonal elements to set \code{\PnodeLinkScale}(\var{node})}.  The
+  diagonal elements to set \code{\link{PnodeLinkScale}(\var{node})}.  The
   values in the \dQuote{Intercept} column are the negatives of the values
-  \code{\link{PnodeBetas}(\var{node}).  Finally, the values in the
+  \code{\link{PnodeBetas}(\var{node})}.  Finally, the values in the
   \dQuote{PriorWeight} column correspond to the values of
   \code{\link{PnodePriorWeight}(\var{node})}.  In any of these cases, if
   the value in the Omega matrix is missing, then the default value will
@@ -154,25 +154,26 @@ Omega2Pnet(OmegaMat, pn, nodewarehouse, defaultRule = "Compensatory", defaultLin
   An Omega Matrix should be an object of class \code{\link[base]{data.frame}})
   with number of rows equal to the number of nodes.  Throughout let
   \var{node} stand for the name of a node.
-
-  \item{Node}{The name of the node described in this column.}
-  \item{\var{node}}{One column for each node.  The value in this column
-    should be 1 if the node in the column is regarded as a parent of the
-    node referenced in the row.}
-  \item{Link}{The name of a link function.  Currently,
-    \dQuote{\link[CPTtools]{normalLink}} is the only value supported.}
-  \item{Rules}{The name of the combination rule to use.  Currently,
-    \dQuote{\link[CPTtools]{Compensatory}} is recommended.}
-  \item{A.\var{node}}{One column for each node.  This should be a
-    positive value if the corresponding \var{node} column has a 1.  This
-    gives the regression coefficient.  If \var{node} corresponds to the
-    current row, this is the residual standard deviation rather than a
-    regression coefficient.  See details.}
-  \item{Intercept}{A numeric value giving the change in prevalence for
-    the two variables (see details).}
-  \item{PriorWeight}{The amount of weight which should be given to the
-    current values when learning conditional probability tables.  See
-    \code{\link{PnodePriorWeight}}.} 
+  \describe{
+    \item{Node}{The name of the node described in this column.}
+    \item{\var{node}}{One column for each node.  The value in this column
+      should be 1 if the node in the column is regarded as a parent of the
+      node referenced in the row.}
+    \item{Link}{The name of a link function.  Currently,
+      \dQuote{\link[CPTtools]{normalLink}} is the only value supported.}
+    \item{Rules}{The name of the combination rule to use.  Currently,
+      \dQuote{\link[CPTtools]{Compensatory}} is recommended.}
+    \item{A.\var{node}}{One column for each node.  This should be a
+      positive value if the corresponding \var{node} column has a 1.  This
+      gives the regression coefficient.  If \var{node} corresponds to the
+      current row, this is the residual standard deviation rather than a
+      regression coefficient.  See details.}
+    \item{Intercept}{A numeric value giving the change in prevalence for
+      the two variables (see details).}
+    \item{PriorWeight}{The amount of weight which should be given to the
+      current values when learning conditional probability tables.  See
+      \code{\link{PnodePriorWeight}}.}
+  }
 }
 
 \value{
@@ -181,6 +182,21 @@ Omega2Pnet(OmegaMat, pn, nodewarehouse, defaultRule = "Compensatory", defaultLin
   modified by the commands to conform to the Omega matrix.
 
 }
+\section{Side Effects}{
+
+  This function destructively modifies \code{pnet} and nodes referenced
+  in the Qmat and supplied by the warehouses.
+
+  Note that unlike typical R implementations, this is not necessarily
+  safe.  In particular, if the Qmat references 10 node, and an error
+  is raised when trying to modify the 5th node, the first 4 nodes will
+  be modified, the last 5 will not be and the 5th node may be partially
+  modified.  This is different from most R functions where changes are
+  not committed unless the function returns successfully.
+
+}
+
+
 \references{
 
   Whittaker, J. (1990).  \emph{Graphical Models in Applied Multivariate
@@ -223,7 +239,8 @@ While the Omega matrix allows the user to specify both link function
   See \code{\link{Warehouse}} for description of the node warehouse
   argument.
 
-  See \code{\link{normalLink}} and \code{\link{Conjunctive}} for more
+  See \code{\link[CPTtools]{normalLink}} and
+  \code{\link[CPTtools]{Compensatory}} for more 
   information about the mathematical model.
   
   The node attributes set from the Omega matrix include:
