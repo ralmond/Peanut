@@ -85,6 +85,9 @@ PnodeRules(node) <- value
   combination function object, or a list of the same.  If a list, its
   length is one less than the number of states of \code{node}.
   
+  Note that the setter form may destructively modify the Pnode object
+  (this depends on the implementation).
+
 }
 \references{
 

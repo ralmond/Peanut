@@ -151,6 +151,9 @@ PnodeAlphas(node) <- value
   \code{\link[CPTtools]{gradedResponse}} link function) then a single
   numeric vector instead of a list is returned.
 
+  Note that the setter form may destructively modify the Pnode object
+  (this depends on the implementation).
+
 }
 \references{
 

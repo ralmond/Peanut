@@ -66,10 +66,10 @@ Qmat2Pnet(Qmat, nethouse, nodehouse, defaultRule = "Compensatory", defaultLink =
   1's in the \eqn{Q}-matrix. 
 
   This arrangement worked fine with combination rules (e.g.,
-  \code{\link[CPTtools}{Compensatory}}) which contained multiple alpha
+  \code{\link[CPTtools]{Compensatory}}) which contained multiple alpha
   (discrimination) parameters, one for each parent variable,  and a
   single beta (difficulty).  The introduction of a new type of offset
-  rule (e.g., \code{\link{OffsetDisjunctive}}) which uses a multiple
+  rule (e.g., \code{\link[CPTtools]{OffsetDisjunctive}}) which uses a multiple
   difficulty parameters, one for each parent variable, and a single
   alpha.  Almond (2016) suggested a new augmentation which has three
   matrixes in a single table (a Qmat):  the \eqn{Q}-matrix, which
@@ -89,7 +89,7 @@ Qmat2Pnet(Qmat, nethouse, nodehouse, defaultRule = "Compensatory", defaultLink =
   complication.  With the partial credit model, there could be a
   separate set of discrimination or difficulty parameters for each
   transition for a polytomous item.  Even the
-  \code{\link{CPTtools]{gradedResponse}} link function requires a
+  \code{\link[CPTtools]{gradedResponse}} link function requires a
   separate difficulty parameter for each level of the varaible save the
   first.  The rows of the Qmat data structure are hence augmented to
   include one row for every state but the lowest-level state.  There
@@ -112,7 +112,8 @@ Qmat2Pnet(Qmat, nethouse, nodehouse, defaultRule = "Compensatory", defaultLink =
   state transition in a partial credit model.  The column-wise maximum
   of the inner \eqn{Q}-matrix forms the row of the outer \eqn{Q}-matrix
   for that node.  This shows which proficiency nodes are the parent of
-  the observable node.
+  the observable node.  This corresponds to 
+  \code{\link{PnodeQ}(\var{node})}. 
 
   The function \code{Qmat2Pnet} creates and sets the parameters of the
   observable \code{\link{Pnode}}s referenced in the \code{Qmat}
@@ -138,10 +139,136 @@ Qmat2Pnet(Qmat, nethouse, nodehouse, defaultRule = "Compensatory", defaultLink =
   this is a single value, then effectively the same combination rule is
   used for each transition.
   
+  The interpretation of the \eqn{A}-matrix and the \eqn{B}-matrix
+  depends on the value in the \dQuote{Rules} column.  There are two
+  types of rules, multiple-A rules and multiple-B rules (offset rules).
+  The CPTtools funciton \code{\link[CPTtools]{isOffsetRule}} checks to
+  see what kind of a rule it is.  The multiple-A rules, of which
+  \code{\link[CPTools]{Compensatory}} is the canonical example, have one
+  discrimination (or slope) parameter for every parent variable (values
+  of 1 in the \eqn{Q}-matrix) and have a single difficulty (negative
+  intercept) parameter which is in the \dQuote{B} column of the Qmat.
+  The multiple-B or offset rules, of which
+  \code{\link[CPTtools]{OffsetConjunctive}} is the canonical example,
+  have a difficulty (negative intercept) parameter for each parent
+  variable and a single discrimination (slope) parameter which is in the
+  \dQuote{A} column.  The function \code{Qmat2Pnet} uses the value of
+  \code{isOffsetRule} to determine whether to use the multiple-B (true)
+  or multiple-A (false) paradigm.
 
-  \code{\link{PnodeAlphas}(\var{node})} and \code{\link{PnodeBetas}(\var{node})}
+  A simple example is a binary observable variable which uses the
+  \code{\link[CPTools]{Compensatory}} rule.  This is essentially a
+  regression model (logistic regression with
+  \code{\link[CPTtools]{partialCredit}} or
+  \code{\link[CPTtools]{gradedResponse}} link funcitons, linear
+  regression with \code{\link[CPTtools]{normalLink}} link function) on
+  the parent variables.  The linear predictor is:
+  \deqn{\frac{1}{\sqrt{K}} (a_1\theta_1 + \ldots + a_K\theta_K) - b .}
+  The values \eqn{\theta_1, \ldots, \theta_K} are effective thetas, real
+  values corresponding to the states of the parent variables.  The
+  value \eqn{a_i} is stored in the column \dQuote{A.\var{namei}} where
+  \var{namei} is the name of the \eqn{i}th proficiency variable; the
+  value of \code{\link{PnodeAlphas}(\var{node})} is the vector \eqn{a_1,
+  \ldots, a_k} with names corresponding to the parent variables.  The
+  value of \eqn{b} is stored in the \dQuote{B} column; the value of
+  \code{\link{PnodeBetas}(\var{node})} is \eqn{b}.
 
-%%  ~~ If necessary, more details than the description above ~~
+  The multiple-B pattern replaces the \eqn{A}-matrix with the
+  \eqn{B}-matrix and the column \dQuote{A} with \dQuote{B}.
+  Consider binary observable variable which uses the
+  \code{\link[CPTools]{OffsetConjuctive}} rule.  The linear predictor is:
+  \deqn{a \min (\theta_1 -b+1, \ldots , \theta_K- b_K) .}
+  The value \eqn{b_i} is stored in the column \dQuote{B.\var{namei}} where
+  \var{namei} is the name of the \eqn{i}th proficiency variable; the
+  value of \code{\link{PnodeBetas}(\var{node})} is the vector \eqn{b_1,
+  \ldots, b_k} with names corresponding to the parent variables.   The
+  value of \eqn{a} is stored in the \dQuote{A} column; the value of
+  \code{\link{PnodeBetas}(\var{node})} is \eqn{a}.
+
+  When there are more than two states in the output varible,
+  \code{\link{PnodeRules}}, \code{\link{PnodeAlphas}(\var{node})} and
+  \code{\link{PnodeBetas}(\var{node})} become lists to indicate that a
+  different value should be used for each transition between states.
+  If there is a single value in the \dQuote{Rules} column, or
+  equivalently the value of \code{\link{PnodeRules}} is a scalar, then
+  the same rule is repeated for each state transition.  The same is true
+  for \code{\link{PnodeAlphas}(\var{node})} and
+  \code{\link{PnodeBetas}(\var{node})}.  If these values are a list,
+  that indicates that a different value is to be used for each
+  transition.  If they are a vector that means that different values (of
+  discriminations for multiple-a rules or difficulties for multiple-b
+  rules) are needed for the parent variables, but the same set of values
+  is to be used for each state transition.  If different values are to
+  be used then the values are a list of vectors.
+
+  The necessary configuration of \eqn{a}'s and \eqn{b}'s depends on the
+  type of link function.  Here are the rules for the currently existing
+  link funcitons:
+  \describe{
+    \item{normal}{(\code{\link[CPTtools]{normalLink}}) This link function
+    uses the same linear predictor for each transition, so there should be
+    a single rule, and \code{\link{PnodeAlphas}(\var{node})} and
+    \code{\link{PnodeBetas}(\var{node})} should both be vectors (with
+    \eqn{b} of length 1 for a multiple-a rule).  This rule also requires a
+    positive value for the \code{\link{PnodeLinkScale}(\var{node})} in the
+    \dQuote{"LinkScale"} column.  The values in the \dQuote{A.\var{name}}
+    and \dQuote{B.\var{name}} for rows after the first can be left as
+    \code{NA}'s to indicate that the same values are reused.}
+
+    \item{graded response}{(\code{\link[CPTtools]{gradedResponse}}) This
+    link function models the probability of getting at or above each
+    state and then calculates the differences between them to produce
+    the conditional probability table.  In order to avoid negative
+    probabilities, the probability of being in a higher state must
+    always be nonincreasing.  The surest way to ensure this is to both
+    use the same combination rules at each state and the same set of
+    discrimination parameters for each state.  The difficulty parameters
+    must be nondecreasing.  Again, values for rows after the first can
+    be left as \code{NA}s to indicate that the same value should be
+    resused.}
+    
+    \item{partial credit}{(\code{\link[CPTtools]{partialCredit}}) This
+    link function models the conditional probability from moving from
+    the previous state to the current state.  As such, there is no
+    restriction on the rules or parameters.  In particular, it can
+    alternate between multiple-a and multiple-b style rules from row to
+    row. 
+
+    Another restriction that the use of the partial credit rule lifts is
+    the restriction that all parent variable must be used in each
+    transition.  Note that there is one row of the \eqn{Q}-matrix (the
+    inner \eqn{Q}-matrix) for each state transition.  Only the parent
+    variables with 1's in the particular state row are considered when
+    building the \code{\link{PnodeAlphas}(\var{node})} and
+    \code{\link{PnodeBetas}(\var{node})} for this model.  Note that only
+    the partial credit link function can take advantage of the multiple
+    parents, the other two require all parents to be used for every
+    state. }
+  }
+
+  The function \code{Qmat2Pnet} takes a data frame containing a Qmat
+  sets the properties of the corresponding nodes to match the
+  description in the Qmat.  It assumes that the proficiency variables
+  have already been built, so it is almost always a good idea to first
+  run \code{\link{Omega2Pnet}} to build the proficiency variables. 
+
+  The function \code{Qmat2Pnet}  loops through the values in the
+  \dQuote{Model} column, calling on the network \code{\link{Warehouse}}
+  argument to supply (fetch or build) the requested network.  It then
+  loops through the values in the \dQuote{Node} column, calling on the
+  node \code{\link{Warehouse}} to supply them.  First, it attempts to
+  adjust the parents of \var{node} to match the \eqn{Q}-matrix.  If the
+  parent nodes are not in the current model, stub nodes are created by
+  referencing the corresponding nodes in the proficiency model (the
+  model corresponding to \code{\link{PnetHub}}).  If \code{override} is
+  \code{TRUE}, the network will be modified so that \code{node} has the
+  indicated parents; if it is \code{FALSE} an error will be signaled if
+  the pattern in the \eqn{Q}-matrix does not match the network
+  structure.  Then the values of various properties of a
+  \code{\link{Pnode}}, in particular, the link function, the combination
+  rules and the parameters, are set based on the values in Qmat (as
+  described above).
+
 }
 \section{\eqn{Q}-Matrix (Qmat) Structure}{
 
@@ -150,7 +277,7 @@ Qmat2Pnet(Qmat, nethouse, nodehouse, defaultRule = "Compensatory", defaultLink =
   \var{prof} actually corresponding to a number of columns with names
   taken from the proficiency variables (the \code{prof} argument).
 
-
+  \describe{
   \item{Model}{The name of the \code{\link{Pnet}} in which the node
     in this row lives.}
   \item{Node}{The name of the \code{\link{Pnode}} described in this
@@ -159,7 +286,7 @@ Qmat2Pnet(Qmat, nethouse, nodehouse, defaultRule = "Compensatory", defaultLink =
   \item{Nstates}{The number of states for this node.  Generally, each
     node should have one fewer rows than this number.}
   \item{State}{The name of the state for this row.  This should be
-    unique within the (\dQuote{Model},\dQuote{Node}) combination.  
+    unique within the (\dQuote{Model},\dQuote{Node}) combination.}
   \item{Link}{The name of a link function.  This corresponds to
     \code{\link{PnodeLink}(\var{node})}.} 
   \item{LinkScale}{Either a positive number giving the link scale
@@ -197,297 +324,110 @@ Qmat2Pnet(Qmat, nethouse, nodehouse, defaultRule = "Compensatory", defaultLink =
 }
 }
 \value{
-%%  ~Describe the value returned
-%%  If it is a LIST, use
-%%  \item{comp1 }{Description of 'comp1'}
-%%  \item{comp2 }{Description of 'comp2'}
-%% ...
+
+  Invisibly returns a list of models visited.
+
+}
+\section{Side Effects}{
+
+  This function destructively modifies the networks and nodes referenced
+  in the Qmat and supplied by the warehouses.
+
+  Note that unlike typical R implementations, this is not necessarily
+  safe.  In particular, if the Qmat references 10 models, and an error
+  is raised when trying to modify the 5th model, the first 4 models will
+  be modifid, the last 5 will not be and the 5th model may be partially
+  modified.  This is different from most R functions where changes are
+  not committed unless the function returns successfully.
+
 }
 \references{
-%% ~put references to the literature/web site here ~
-}
-\author{
-%%  ~~who you are~~
-}
-\note{
-%%  ~~further notes~~
-}
 
-%% ~Make other sections like Warning with \section{Warning }{....} ~
+  Almond, R. G. (2010). \sQuote{I can name that Bayesian network in two
+  matrixes.} \emph{International Journal of Approximate Reasoning.}
+  \bold{51}, 167-178.
 
+  Almond, R. G. (presented 2017, August). Tabular views of Bayesian
+  networks. In John-Mark Agosta and Tomas Singlair (Chair), \emph{Bayeisan
+    Modeling Application Workshop 2017}. Symposium conducted at the
+  meeting of Association for Uncertainty in Artificial Intelligence,
+  Sydney, Australia. (International) Retrieved from
+  \url{http://bmaw2017.azurewebsites.net/} 
+
+}
+\author{Russell Almond}
 \seealso{
-%% ~~objects to See Also as \code{\link{help}}, ~~~
+  The inverse operation is \code{\link{Pnet2Qmat}}.
+
+  See \code{\link{Warehouse}} for description of the network and node
+  warehouse arguments
+
+  See \code{\link[CPTtools]{partialCredit}},
+  \code{\link[CPTtools]{gradedResponse}}, and
+  \code{\link[CPTtools]{normalLink}} for currently available link
+  functions.  See \code{\link[CPTtools]{Conjunctive}} and
+  \code{\link[CPTtools]{OffsetConjunctive}} for more information about
+  available combination rules.
+  
+  The node attributes set from the Omega matrix include:
+  \code{\link{PnodeParents}(\var{node})},
+  \code{\link{PnodeLink}(\var{node})},
+  \code{\link{PnodeLinkScale}(\var{node})},
+  \code{\link{PnodeQ}(\var{node})},
+  \code{\link{PnodeRules}(\var{node})},
+  \code{\link{PnodeAlphas}(\var{node})},
+  \code{\link{PnodeBetas}(\var{node})}, and
+  \code{\link{PnodePriorWeight}(\var{node})}
 }
 \examples{
-##---- Should be DIRECTLY executable !! ----
-##-- ==>  Define data, use random,
-##--	or do  help(data=index)  for the standard data sets.
 
-## The function is currently defined as
-function (Qmat, nethouse, nodehouse, defaultRule = "Compensatory", 
-    defaultLink = "partialCredit", defaultAlpha = 1, defaultBeta = NULL, 
-    defaultLinkScale = NULL, debug = FALSE, override = FALSE) 
-{
-    if (!is.PnodeWarehouse(nodehouse)) {
-        stop("Node warehouse must be supplied.")
-    }
-    if (!is.PnetWarehouse(nethouse)) {
-        stop("Net warehouse must be supplied.")
-    }
-    if (!all(Qmat.reqcol \%in\% names(Qmat))) {
-        stop("Badly formed Q matrix.")
-    }
-    Anames <- names(Qmat)[grep("A\\..*", names(Qmat))]
-    profnames <- sapply(strsplit(Anames, ".", fixed = TRUE), 
-        function(x) x[2])
-    if (!all(profnames \%in\% names(Qmat))) {
-        stop("Expected columns for proficiency variables:", profnames)
-    }
-    if (!all(paste("B", profnames, sep = ".") \%in\% names(Qmat))) {
-        stop("Expected B columns for proficiency variables:", 
-            profnames)
-    }
-    netnames <- unique(Qmat$Model)
-    for (netname in netnames) {
-        if (debug) {
-            cat("Processing net ", netname, "\n")
-        }
-        net <- WarehouseSupply(nethouse, netname)
-        if (is.null(net)) {
-            stop("Could not find/create network ", netname)
-        }
-        hubname <- PnetHub(net)
-        if (nchar(hubname) > 0) {
-            hub <- WarehouseSupply(nethouse, hubname)
-            if (is.null(hub)) {
-                stop("Could not find hub for network ", netname, 
-                  ",", "hubname")
-            }
-        }
-        nodenames <- unique(Qmat$Node[Qmat$Model == netname])
-        for (nodename in nodenames) {
-            if (debug) {
-                cat("Processing node ", nodename, "\n")
-            }
-            node <- WarehouseSupply(nodehouse, c(netname, nodename))
-            if (is.null(node)) {
-                stop("Could not find/create node ", nodename, 
-                  "in model", netname)
-            }
-            tryCatch({
-                Qrows <- Qmat[Qmat$Model == netname & Qmat$Node == 
-                  nodename, , drop = FALSE]
-                nstates <- nrow(Qrows)
-                if (nstates != Qrows[1, "NStates"] - 1L) {
-                  stop("Expected ", nstates != Qrows[1, "NStates"] - 
-                    1L, "got", nstates)
-                }
-                stubs <- list()
-                parnames <- names(which(apply(Qrows[, profnames, 
-                  drop = FALSE] == 1, 2, any)))
-                exparnames <- PnodeParentNames(node)
-                if (!setequal(parnames, exparnames)) {
-                  if (debug) {
-                    cat("Node has parents: ", exparnames, "\n")
-                    cat("But Q matrix has parents: ", parnames, 
-                      "\n")
-                  }
-                  if (length(exparnames) > 0L) {
-                    cat("While processing links for node: ", 
-                      nodename, " in network", netname, "\n")
-                    cat("Node has parents: ", exparnames, "\n")
-                    cat("But Q matrix has parents: ", parnames, 
-                      "\n")
-                    if (override) {
-                      warning("Changing net to match Q matrix.")
-                    }
-                    else {
-                      stop("Graphical structure does not match Q matrix.  See console.")
-                    }
-                  }
-                  pars <- list()
-                  for (pname in setdiff(parnames, exparnames)) {
-                    pars[[pname]] <- WarehouseSupply(nodehouse, 
-                      c(hubname, pname))
-                  }
-                  stubs <- PnetMakeStubNodes(net, pars)
-                  PnodeParents(node) <- c(PnodeParents(node), 
-                    stubs)
-                }
-                parnames <- PnodeParentNames(node)
-                if (debug) {
-                  cat("Final parents: ", paste(parnames, collapse = ", "), 
-                    ".\n")
-                }
-                ll <- Qrows[1, "Link"]
-                if (is.na(ll) || nchar(ll) == 0L) 
-                  ll <- defaultLink
-                PnodeLink(node) <- ll
-                lsc <- Qrows[1, "LinkScale"]
-                if (is.na(lsc) || nchar(lsc) == 0L) 
-                  lsc <- defaultLinkScale
-                if (!is.null(lsc)) {
-                  PnodeLinkScale(node) <- lsc
-                }
-                if (debug) {
-                  cat("Link: ", ll, "(", lsc, "). \n")
-                }
-                rules <- Qrows[, "Rules"]
-                nrules <- sum(nchar(rules) > 0L)
-                if (nrules == 0L) {
-                  rules <- defaultRule
-                }
-                if (nrules != 1L && nrules != nstates) {
-                  stop("Expected ", nstates, " (or 1) rules but got ", 
-                    nrules)
-                }
-                if (debug) {
-                  cat("Rules: ", paste(rules, collapse = ", "), 
-                    ".\n")
-                }
-                if (nrules == 1L) {
-                  PnodeRules(node) <- dgetFromString(rules[[1]])
-                }
-                else {
-                  PnodeRules(node) <- lapply(rules, dgetFromString)
-                }
-                rules <- PnodeRules(node)
-                QrowsQ <- Qrows[, parnames]
-                QrowsA <- Qrows[, paste("A", parnames, sep = ".")]
-                QrowsB <- Qrows[, paste("B", parnames, sep = ".")]
-                if (nstates == 1L) {
-                  PnodeQ(node) <- TRUE
-                  if (is.list(rules)) 
-                    rules <- rules[[1]]
-                  if (rules \%in\% getOffsetRules()) {
-                    alphas <- Qrows[1, "A"]
-                    if (is.na(alphas)) 
-                      alphas <- defaultAlpha
-                    PnodeAlphas(node) <- alphas
-                    betas <- as.numeric(QrowsB)
-                    if (all(is.na(betas))) 
-                      betas <- rep(defaultBeta, length(parnames))
-                    names(betas) <- parnames
-                    PnodeBetas(node) <- betas
-                    if (debug) {
-                      cat("Single Row offset: \n")
-                      print(PnodeQ(node))
-                      print(PnodeAlphas(node))
-                      print(PnodeBetas(node))
-                    }
-                  }
-                  else {
-                    alphas <- as.numeric(QrowsA)
-                    if (all(is.na(alphas))) 
-                      alphas <- rep(defaultAlpha, length(parnames))
-                    names(alphas) <- parnames
-                    PnodeAlphas(node) <- alphas
-                    betas <- Qrows[1, "B"]
-                    if (is.na(betas)) 
-                      betas <- defaultBeta
-                    PnodeBetas(node) <- betas
-                    if (debug) {
-                      cat("Single Row weighted: \n")
-                      print(PnodeQ(node))
-                      print(PnodeAlphas(node))
-                      print(PnodeBetas(node))
-                    }
-                  }
-                }
-                else {
-                  QrowsQ <- as.matrix(QrowsQ)
-                  QrowsA <- as.matrix(QrowsA)
-                  QrowsB <- as.matrix(QrowsB)
-                  if (length(rules) == 1L && !(rules \%in\% getOffsetRules()) && 
-                    all(is.na(QrowsA[-1, ])) && all(QrowsQ)) {
-                    PnodeQ(node) <- TRUE
-                    alphas <- as.numeric(QrowsA[1, ])
-                    if (all(is.na(alphas))) 
-                      alphas <- rep(defaultAlpha, length(parnames))
-                    names(alphas) <- parnames
-                    PnodeAlphas(node) <- alphas
-                    betas <- Qrows[, "B"]
-                    if (is.na(betas)) 
-                      betas <- rep(defaultBeta, nstates)
-                    PnodeBetas(node) <- as.list(betas)
-                    if (debug) {
-                      cat("Multiple Row weighted: \n")
-                      print(PnodeQ(node))
-                      print(PnodeAlphas(node))
-                      print(PnodeBetas(node))
-                    }
-                  }
-                  else {
-                    QrowsQ <- QrowsQ == 1
-                    PnodeQ(node) <- QrowsQ
-                    if (length(rules) < nstates) {
-                      for (i in 2:nstates) {
-                        rules[[i]] <- rules[[1]]
-                      }
-                    }
-                    alphas <- list()
-                    betas <- list()
-                    for (istate in 1:nstates) {
-                      npar <- sum(QrowsQ[istate, ])
-                      if (rules[[istate]] \%in\% getOffsetRules()) {
-                        bb <- as.numeric(QrowsB[istate, QrowsQ[istate, 
-                          ]])
-                        if (all(is.na(bb))) 
-                          bb <- rep(defaultBeta, npar)
-                        names(bb) <- parnames[QrowsQ[istate, 
-                          ]]
-                        betas[[istate]] <- bb
-                        aa <- Qrows[istate, "A"]
-                        if (is.na(aa)) 
-                          aa <- defaultAlpha
-                        alphas[[istate]] <- aa
-                      }
-                      else {
-                        aa <- as.numeric(QrowsA[istate, QrowsQ[istate, 
-                          ]])
-                        if (all(is.na(aa))) 
-                          aa <- rep(defaultAlpha, npar)
-                        names(aa) <- parnames[QrowsQ[istate, 
-                          ]]
-                        alphas[[istate]] <- aa
-                        bb <- Qrows[istate, "B"]
-                        if (is.na(bb)) 
-                          bb <- defaultBeta
-                        betas[[istate]] <- bb
-                      }
-                    }
-                    PnodeAlphas(node) <- alphas
-                    PnodeBetas(node) <- betas
-                    if (debug) {
-                      cat("Multiple Row mixed: \n")
-                      print(PnodeRules(node))
-                      print(PnodeQ(node))
-                      print(PnodeAlphas(node))
-                      print(PnodeBetas(node))
-                    }
-                  }
-                }
-                wt <- Qrows[1, "PriorWeight"]
-                if (!is.na(wt) && nchar(wt) >= 0L) {
-                  PnodePriorWeight(node) <- dgetFromString(wt)
-                  if (debug) {
-                    cat("Prior Weight: ", wt, ".\n")
-                  }
-                }
-                if (length(stubs) > 0L) 
-                  PnetRemoveStubNodes(net, stubs)
-            }, error = function(e) {
-                ee <- simpleError(paste("While processing node ", 
-                  nodename, "in model ", netname, ":", conditionMessage(e)), 
-                  conditionCall(e))
-                stop(ee)
-            })
-        }
-    }
-    invisible(netnames)
-  }
+## Sample Q matrix
+Q1 <- read.csv(paste(library(help="Peanut")$path, "auxdata",
+                           "miniPP-Q.csv", sep=.Platform$file.sep),
+               stringsAsFactors=FALSE)
+
+\dontrun{
+library(PNetica) ## Needs PNetica
+sess <- NeticaSession()
+startSession(sess)
+curd <- getwd()
+
+netman1 <- read.csv(paste(library(help="Peanut")$path, "auxdata",
+                          "Mini-PP-Nets.csv", sep=.Platform$file.sep),
+                    row.names=1,stringsAsFactors=FALSE)
+
+nodeman1 <- read.csv(paste(library(help="Peanut")$path, "auxdata",
+                           "Mini-PP-Nodes.csv", sep=.Platform$file.sep),
+                     row.names=1,stringsAsFactors=FALSE)
+
+## Insures we are building nets from scratch
+setwd(tempdir())
+## Network and node warehouse, to create networks and nodes on demand.
+Nethouse <- BNWarehouse(manifest=netman1,session=sess,key="Name")
+
+Nodehouse <- NNWarehouse(manifest=nodeman1,
+                         key=c("Model","NodeName"),
+                         session=sess)
+
+## Build the proficiency model first:
+CM <- WarehouseSupply(Nethouse,"miniPP_CM")
+CM1 <- Omega2Pnet(omegamat,CM,Nodehouse,override=TRUE,debug=TRUE)
+
+## Build the nets from the Qmat
+
+Qmat2Pnet(Q1, Nethouse,Nodehouse,debug=TRUE)
+
+## Build the Qmat from the nets
+## Generate a list of nodes
+obs <-sapply(list(sess$nets$PPcompEM,sess$nets$PPconjEM,sess$nets$PPtwostepEM),
+             NetworkAllNodes)
+
+Q2 <- Pnet2Qmat(obs,NetworkAllNodes(CM),debug=TRUE)
+
+
+stopSession(sess)
+setwd(curd)
 }
-% Add one or more standard keywords, see file 'KEYWORDS' in the
-% R documentation directory.
-\keyword{ ~kwd1 }% use one of  RShowDoc("KEYWORDS")
-\keyword{ ~kwd2 }% __ONLY ONE__ keyword per line
+}
+\keyword{ distribution }
+\keyword{ graph }

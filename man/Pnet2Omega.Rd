@@ -113,7 +113,7 @@ Pnet2Omega(net, prof, defaultRule = "Compensatory", defaultLink = "normalLink", 
   \code{\link{Pnet}}.  Only the nodes specified in the \code{prof}
   argument are included in the matrix, each row corresponding to a node.
   The values in the \dQuote{Node} column are taken from
-  \code{PnodeName}(\var{node}}. The values in the structural
+  \code{\link{PnodeName}(\var{node})}. The values in the structural
   part of the matrix are taken from the graphical structure,
   specifically \code{\link{PnodeParents}(\var{node})}.  The
   \dQuote{Link} and \dQuote{Rules} columns are taken from
@@ -121,9 +121,9 @@ Pnet2Omega(net, prof, defaultRule = "Compensatory", defaultLink = "normalLink", 
   \code{\link{PnodeRules}(\var{node})}. The off-diagonal elements of the
   A-matrix are taken from the values of
   \code{\link{PnodeAlphas}(\var{node})} and the diagonal elements from
-  \code{\PnodeLinkScale}(\var{node})}.  The values in the
+  \code{\link{PnodeLinkScale}(\var{node})}.  The values in the
   \dQuote{Intercept} column are the negatives of the values
-  \code{\link{PnodeBetas}(\var{node}).  Finally, the values in the
+  \code{\link{PnodeBetas}(\var{node})}.  Finally, the values in the
   \dQuote{PriorWeight} column correspond to the values of
   \code{\link{PnodePriorWeight}(\var{node})}; note that a value of
   \code{NA} indicates that the prior weight should be taken from the
@@ -174,7 +174,8 @@ Pnet2Omega(net, prof, defaultRule = "Compensatory", defaultLink = "normalLink", 
   networks. In John-Mark Agosta and Tomas Singlair (Chair), \emph{Bayeisan
     Modeling Application Workshop 2017}. Symposium conducted at the
   meeting of Association for Uncertainty in Artificial Intelligence,
-  Sydney, Australia. (International) Retrieved from \url{http://bmaw2017.azurewebsites.net/}
+  Sydney, Australia. (International) Retrieved from
+  \url{http://bmaw2017.azurewebsites.net/} 
 }
 \author{Russell Almond}
 \note{
@@ -201,7 +202,8 @@ Pnet2Omega(net, prof, defaultRule = "Compensatory", defaultLink = "normalLink", 
 \seealso{
   The inverse operation is \code{\link{Omega2Pnet}}.
 
-  See \code{\link{normalLink}} and \code{\link{Conjunctive}} for more
+  See \code{\link[CPTtools]{normalLink}} and
+  \code{\link[CPTtools]{Compensatory}} for more 
   information about the mathematical model.
 
   The node functions from which the Omega matrix is populated includes:
