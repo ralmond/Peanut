@@ -360,7 +360,9 @@ Qmat2Pnet(Qmat, nethouse, nodehouse, defaultRule = "Compensatory", defaultLink =
   The inverse operation is \code{\link{Pnet2Qmat}}.
 
   See \code{\link{Warehouse}} for description of the network and node
-  warehouse arguments
+  warehouse arguments.  The functions \code{\link{PnetMakeStubNodes}}
+  and \code{\link{PnetRemoveStubNodes}} are used internally to create
+  the stub nodes in evidence models.
 
   See \code{\link[CPTtools]{partialCredit}},
   \code{\link[CPTtools]{gradedResponse}}, and

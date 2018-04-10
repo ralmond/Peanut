@@ -1,56 +1,99 @@
 \name{PnodeStateTitles}
 \alias{PnodeStateTitles}
+\alias{PnodeStateTitles<-}
 \alias{PnodeStateDescriptions}
-\title{Accesses titles and descriptions of a Pnode's states.}
+\alias{PnodeStateDescriptions<-}
+\title{
+  Accessors for the titles and descriptions associated with states of
+  a parameterized node.
+}
 \description{
-%%  ~~ A concise (1-5 lines) description of what the function does. ~~
+
+  Each state of a \code{\link{Pnode}} has a short name (which could be
+  restricted by the implementation) and a longer title (which generally
+  can contain emedded spaces and other details to make it more
+  readable).  Each state also can have a description associated with it.
+  These functions get or set the state titles or descriptions.
 }
 \usage{
 PnodeStateTitles(node)
+PnodeStateTitles(node) <- value
 PnodeStateDescriptions(node)
+PnodeStateDescriptions(node) <- value
 }
 \arguments{
   \item{node}{
-%%     ~~Describe \code{node} here~~
-}
+    A \code{\link{Pnode}} object whose state titles
+    or descriptions will be accessed. 
+  }
+  \item{value}{
+    A character vector of the same length as the number of states
+  \code{length(\link{PnodeStates}(\var{node}))} which
+    provides the new state titles or descriptions.
+  }
 }
 \details{
-%%  ~~ If necessary, more details than the description above ~~
+  The titles are meant to be a more human readable version of the state
+  names and are not subject the variable naming restrictions.
+  The descriptions are meant to be a longer free form notes.
+
+  Both titles and descriptions are returned as a named character vector with
+  names corresponding to the state names.  Therefore one can change a
+  single state title or description by accessing it either using the state
+  number or the state name.
 }
 \value{
-%%  ~Describe the value returned
-%%  If it is a LIST, use
-%%  \item{comp1 }{Description of 'comp1'}
-%%  \item{comp2 }{Description of 'comp2'}
-%% ...
-}
-\references{
-%% ~put references to the literature/web site here ~
+  Both \code{PnodeStateTitles()} and \code{PnodeStateDescriptions()} return a
+  character vector of length
+  \code{length(\link{PnodeStates}(\var{node}))} giving the 
+  titles or descriptions respectively.  The names of this vector are
+  \code{\link{PnodeStates}(\var{node})}.
+
+  The setter methods return the modified \code{\link{Pnode}}
+  object invisibly. 
 }
 \author{
-%%  ~~who you are~~
+  Russell Almond
 }
-\note{
-%%  ~~further notes~~
-}
-
-%% ~Make other sections like Warning with \section{Warning }{....} ~
-
 \seealso{
-%% ~~objects to See Also as \code{\link{help}}, ~~~
+  \code{\link{Pnode}}, \code{\link{PnodeStates}()},
+  \code{\link{NodeStateValues}()}
 }
 \examples{
-##---- Should be DIRECTLY executable !! ----
-##-- ==>  Define data, use random,
-##--	or do  help(data=index)  for the standard data sets.
+\dontrun{
+library(PNetica)##Requires PNetica
+sess <- NeticaSession()
+startSession(sess)
+cnet <- CreateNetwork("CreativeNet", session=sess)
 
-## The function is currently defined as
-structure(function (node) 
-standardGeneric("PnodeStateTitles"), generic = structure("PnodeStateTitles", package = "Peanut"), package = "Peanut", group = list(), valueClass = character(0), signature = "node", default = structure(function (node) 
-UseMethod("PnodeStateTitles"), target = structure("ANY", class = structure("signature", package = "methods"), .Names = "node", package = "methods"), defined = structure("ANY", class = structure("signature", package = "methods"), .Names = "node", package = "methods"), generic = structure("PnodeStateTitles", package = "Peanut"), class = structure("derivedDefaultMethod", package = "methods")), skeleton = (structure(function (node) 
-UseMethod("PnodeStateTitles"), target = structure("ANY", class = structure("signature", package = "methods"), .Names = "node", package = "methods"), defined = structure("ANY", class = structure("signature", package = "methods"), .Names = "node", package = "methods"), generic = structure("PnodeStateTitles", package = "Peanut"), class = structure("derivedDefaultMethod", package = "methods")))(node), class = structure("standardGeneric", package = "methods"))
+orig <- NewDiscreteNode(cnet,"Originality", c("H","M","L"))
+PnodeStateTitles(orig) <- c("High","Medium","Low")
+PnodeStateDescriptions(orig)[1] <- "Produces solutions unlike those typically seen."
+
+stopifnot(
+  PnodeStateTitles(orig) == c("High","Medium","Low"),
+  grep("solutions unlike", PnodeStateDescriptions(orig))==1,
+  PnodeStateDescriptions(orig)[3]==""
+  )
+
+sol <- NewDiscreteNode(cnet,"Solution",
+       c("Typical","Unusual","VeryUnusual"))
+stopifnot(
+  all(PnodeStateTitles(sol) == ""),
+  all(PnodeStateDescriptions(sol) == "")
+  )
+
+PnodeStateTitles(sol)["VeryUnusual"] <- "Very Unusual"
+PnodeStateDescriptions(sol) <- paste("Distance from typical solution",
+                      c("<1", "1--2", ">2"))
+stopifnot(
+  PnodeStateTitles(sol)[3]=="Very Unusual",
+  PnodeStateDescriptions(sol)[1] == "Distance from typical solution <1"
+  )
+
+DeleteNetwork(cnet)
+stopSession(sess)
 }
-% Add one or more standard keywords, see file 'KEYWORDS' in the
-% R documentation directory.
-\keyword{ ~kwd1 }% use one of  RShowDoc("KEYWORDS")
-\keyword{ ~kwd2 }% __ONLY ONE__ keyword per line
+}
+\keyword{ interface }
+\keyword{ attribute }

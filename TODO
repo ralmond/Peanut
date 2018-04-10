@@ -1,11 +1,3 @@
 Need to doc:
-  ‘PnetMakeStubNodes’ ‘PnetRemoveStubNodes’
-  ‘PnodeDescription’ ‘PnodeTitle’ ‘PnodeTitle<-’
-  ‘PnodeDescription<-’ ‘PnodeName<-’
-  ‘PnodeLabels’ ‘PnodeLabels<-
-  ‘PnodeParents<-’
-  ‘PnodeStates<-'  ‘PnodeStateDescriptions’ ‘PnodeStateDescriptions<-’
-  ‘PnodeStateTitles’ ‘PnodeStateTitles<-’ ‘PnodeStateValues’
-  ‘PnodeStateValues<-’ 
   ‘WarehouseData’ ‘WarehouseManifest’ ‘WarehouseManifest<-’
   ‘defaultAlphas’ ‘defaultBetas’ ‘topsort’

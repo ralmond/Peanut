@@ -1,57 +1,75 @@
 \name{PnodeTitle}
 \alias{PnodeTitle}
+\alias{PnodeTitle<-}
 \alias{PnodeDescription}
-\title{Access the title or description of a node.}
+\alias{PnodeDescription<-}
+\title{
+  Gets the title or Description associated with a parameterized node node.
+}
 \description{
-%%  ~~ A concise (1-5 lines) description of what the function does. ~~
+
+  The title is a longer name for a node which is not subject to the
+  naming restrictions.  The description is a free form
+  text associated with a node.
+
 }
 \usage{
 PnodeTitle(node)
+PnodeTitle(node) <- value
 PnodeDescription(node)
+PnodeDescription(node) <- value
 }
-%- maybe also 'usage' for other objects documented here.
 \arguments{
   \item{node}{
-%%     ~~Describe \code{node} here~~
-}
+    A \code{\link{Pnode}} object.
+  }
+  \item{value}{
+    A character object giving the new title or description.
+  }
 }
 \details{
-%%  ~~ If necessary, more details than the description above ~~
+
+  The title is meant to be a human readable alternative to the name,
+  which is not limited to the variable name restrictions (i.e., it can
+  contain spaces and punctuation).  The title may also affect how the
+  node is displayed. 
+
+  The description is any text the user chooses to attach to the node.  If
+  \var{value} has length greater than 1, the vector is collapsed into a
+  long string with newlines separating the components.
 }
 \value{
-%%  ~Describe the value returned
-%%  If it is a LIST, use
-%%  \item{comp1 }{Description of 'comp1'}
-%%  \item{comp2 }{Description of 'comp2'}
-%% ...
-}
-\references{
-%% ~put references to the literature/web site here ~
+  A character vector of length 1 providing the title or description.
 }
 \author{
-%%  ~~who you are~~
+  Russell Almond
 }
-\note{
-%%  ~~further notes~~
-}
-
-%% ~Make other sections like Warning with \section{Warning }{....} ~
-
 \seealso{
-%% ~~objects to See Also as \code{\link{help}}, ~~~
+  \code{\link{Pnode}}, \code{\link{PnodeName}()} 
 }
 \examples{
-##---- Should be DIRECTLY executable !! ----
-##-- ==>  Define data, use random,
-##--	or do  help(data=index)  for the standard data sets.
+\dontrun{
+library(PNetica) ## Requires PNetica
+sess <- NeticaSession()
+startSession(sess)
+net2 <- CreateNetwork("secondNet", session=sess)
 
-## The function is currently defined as
-structure(function (node) 
-standardGeneric("PnodeTitle"), generic = structure("PnodeTitle", package = "Peanut"), package = "Peanut", group = list(), valueClass = character(0), signature = "node", default = structure(function (node) 
-UseMethod("PnodeTitle"), target = structure("ANY", class = structure("signature", package = "methods"), .Names = "node", package = "methods"), defined = structure("ANY", class = structure("signature", package = "methods"), .Names = "node", package = "methods"), generic = structure("PnodeTitle", package = "Peanut"), class = structure("derivedDefaultMethod", package = "methods")), skeleton = (structure(function (node) 
-UseMethod("PnodeTitle"), target = structure("ANY", class = structure("signature", package = "methods"), .Names = "node", package = "methods"), defined = structure("ANY", class = structure("signature", package = "methods"), .Names = "node", package = "methods"), generic = structure("PnodeTitle", package = "Peanut"), class = structure("derivedDefaultMethod", package = "methods")))(node), class = structure("standardGeneric", package = "methods"))
+firstNode <- NewDiscreteNode(net2,"firstNode")
+
+PnodeTitle(firstNode) <- "My First Bayesian Network Node"
+stopifnot(PnodeTitle(firstNode)=="My First Bayesian Network Node")
+
+now <- date()
+PnodeDescription(firstNode)<-c("Node created on",now)
+stopifnot(PnodeDescription(firstNode) ==
+  paste(c("Node created on",now),collapse="\n"))
+
+## Print here escapes the newline, so is harder to read
+cat(PnodeDescription(firstNode),"\n")
+
+DeleteNetwork(net2)
+stopSession(sess)
 }
-% Add one or more standard keywords, see file 'KEYWORDS' in the
-% R documentation directory.
-\keyword{ ~kwd1 }% use one of  RShowDoc("KEYWORDS")
-\keyword{ ~kwd2 }% __ONLY ONE__ keyword per line
+}
+\keyword{ interface }
+\keyword{ attribute }
