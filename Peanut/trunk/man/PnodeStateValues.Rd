@@ -1,55 +1,85 @@
 \name{PnodeStateValues}
 \alias{PnodeStateValues}
-\title{Accesses numeric values associated with a state.}
+\alias{PnodeStateValues<-}
+\title{
+  Accesses the numeric values associated with the state of a
+  parameterized node.
+}
 \description{
-%%  ~~ A concise (1-5 lines) description of what the function does. ~~
+
+  The values are a numeric value (on a standard normal scale) associated
+  with the levels of a discrete \code{\link{Pnode}}.  This function
+  fetches or retrieves the numeric values for the states of \var{node}.  
+
+  Note that the default method for the funciton
+  \code{\link{PnodeParentTvals}} uses the values of
+  \code{PnodeStateValues} on the parent nodes.
+
 }
 \usage{
 PnodeStateValues(node)
+PnodeStateValues(node) <- value
 }
-%- maybe also 'usage' for other objects documented here.
 \arguments{
   \item{node}{
-%%     ~~Describe \code{node} here~~
-}
+    A \code{\link{Pnode}} whose levels are to be accessed.
+  }
+  \item{value}{
+    A numeric vector of values which 
+    should have length \code{length(\link{PnodeStates}(\var{node}))}. 
+  }
 }
 \details{
-%%  ~~ If necessary, more details than the description above ~~
+
+  Note that the first time the \code{PnodeStateValues()} are set, the entire
+  vector must be set.  After that point individual values may be
+  changed. 
+
 }
 \value{
-%%  ~Describe the value returned
-%%  If it is a LIST, use
-%%  \item{comp1 }{Description of 'comp1'}
-%%  \item{comp2 }{Description of 'comp2'}
-%% ...
-}
-\references{
-%% ~put references to the literature/web site here ~
+  A numeric vector of length \code{length(Pnodetates())},
+  with names equal to the state names.  If levels have not be set, NAs
+  will be returned.
+
 }
 \author{
-%%  ~~who you are~~
+  Russell Almond
 }
-\note{
-%%  ~~further notes~~
-}
-
-%% ~Make other sections like Warning with \section{Warning }{....} ~
-
 \seealso{
-%% ~~objects to See Also as \code{\link{help}}, ~~~
+  \code{\link{Pnode}},   \code{\link{PnodeStates}()}, 
+  \code{\link{PnodeName}()}, \code{\link{PnodeStateTitles}()},
+  \code{\link{PnodeParentTvals}()}
 }
 \examples{
-##---- Should be DIRECTLY executable !! ----
-##-- ==>  Define data, use random,
-##--	or do  help(data=index)  for the standard data sets.
+\dontrun{
+library(PNetica)##Requires PNetica
+sess <- NeticaSession()
+startSession(sess)
+lnet <- CreateNetwork("LeveledNet", session=sess)
 
-## The function is currently defined as
-structure(function (node) 
-standardGeneric("PnodeStateValues"), generic = structure("PnodeStateValues", package = "Peanut"), package = "Peanut", group = list(), valueClass = character(0), signature = "node", default = structure(function (node) 
-UseMethod("PnodeStateValues"), target = structure("ANY", class = structure("signature", package = "methods"), .Names = "node", package = "methods"), defined = structure("ANY", class = structure("signature", package = "methods"), .Names = "node", package = "methods"), generic = structure("PnodeStateValues", package = "Peanut"), class = structure("derivedDefaultMethod", package = "methods")), skeleton = (structure(function (node) 
-UseMethod("PnodeStateValues"), target = structure("ANY", class = structure("signature", package = "methods"), .Names = "node", package = "methods"), defined = structure("ANY", class = structure("signature", package = "methods"), .Names = "node", package = "methods"), generic = structure("PnodeStateValues", package = "Peanut"), class = structure("derivedDefaultMethod", package = "methods")))(node), class = structure("standardGeneric", package = "methods"))
+vnode <- NewDiscreteNode(lnet,"volt_switch",c("Off","Reverse","Forwards"))
+stopifnot(
+  length(PnodeStateValues(vnode))==3,
+  names(PnodeStateValues(vnode)) == NodeStates(vnode),
+  all(is.na(PnodeStateValues(vnode)))
+)
+
+## Don't run this until the levels for vnode have been set,
+## it will generate an error.
+try(PnodeStateValues(vnode)[2] <- 0)
+
+PnodeStateValues(vnode) <- 1:3
+stopifnot(
+  length(PnodeStateValues(vnode))==3,
+  names(PnodeStateValues(vnode)) == PnodeStates(vnode),
+  PnodeStateValues(vnode)[2]==2
+)
+
+PnodeStateValues(vnode)["Reverse"] <- -2
+
+DeleteNetwork(lnet)
+stopSession(sess)
 }
-% Add one or more standard keywords, see file 'KEYWORDS' in the
-% R documentation directory.
-\keyword{ ~kwd1 }% use one of  RShowDoc("KEYWORDS")
-\keyword{ ~kwd2 }% __ONLY ONE__ keyword per line
+}
+\keyword{ interface }
+\keyword{ attribute }

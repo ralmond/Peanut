@@ -109,7 +109,8 @@ PnetDetach(motif, spoke)
 }
 \seealso{
 
-  \code{\link{Pnet}}, \code{\link{PnetHub}}, \code{\link{Qmat2Pnet}}
+  \code{\link{Pnet}}, \code{\link{PnetHub}}, \code{\link{Qmat2Pnet}},
+  \code{\link{PnetMakeStubNodes}}
 
 }
 \examples{
@@ -117,11 +118,11 @@ PnetDetach(motif, spoke)
 library(PNetica) # Requires PNetica
 sess <- NeticaSession()
 startSession(sess)
-curd <- getwd()
-setwd(file.path(library(help="PNetica")$path, "testnets"))
 
-PM <- ReadNetworks("miniPP-CM.dne", session=sess)
-EM1 <- ReadNetworks("PPcompEM.dne", session=sess)
+PM <- ReadNetworks(file.path(library(help="PNetica")$path, "testnets",
+     "miniPP-CM.dne"), session=sess)
+EM1 <- ReadNetworks(file.path(library(help="PNetica")$path, "testnets",
+      "PPcompEM.dne"), session=sess)
 
 Phys <- PnetFindNode(PM,"Physics")
 
@@ -148,7 +149,6 @@ stopifnot(all.equal(bel2,bel2a))
 
 DeleteNetwork(list(PM,EM1))
 stopSession(sess)
-setwd(curd)
 }
 }
 \keyword{ graphs }
