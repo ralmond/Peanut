@@ -1,9 +1,4 @@
 Need to doc:
-  ‘PnetAdjoin’ ‘PnetDetach
-  ‘PnetDescription’ ‘PnetDescription<-’ ‘PnetName’ ‘PnetName<-’
-    ‘PnetPathname’ ‘PnetPathname<-’ ‘PnetTitle’ ‘PnetTitle<-
-  ‘PnetFindNode’
-  ‘PnetHub’ ‘PnetHub<-’
   ‘PnetMakeStubNodes’ ‘PnetRemoveStubNodes’
   ‘PnodeDescription’ ‘PnodeTitle’ ‘PnodeTitle<-’
   ‘PnodeDescription<-’ ‘PnodeName<-’

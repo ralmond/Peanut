@@ -53,11 +53,8 @@ Pnet.default <- function (net, priorWeight=10, pnodes=list()) {
   net
 }
 
-BuildAllTables <- function (net, debug=FALSE)
-  UseMethod("BuildAllTables")
-setGeneric("BuildAllTables")
 
-BuildAllTables.default <- function (net, debug=FALSE) {
+BuildAllTables <- function (net, debug=FALSE) {
   lapply(PnetPnodes(net),
          function (node) {
            if (debug) cat("Building",PnodeName(node),"\n")
@@ -65,6 +62,8 @@ BuildAllTables.default <- function (net, debug=FALSE) {
            })
   invisible(net)
 }
+
+setGeneric("BuildAllTables")
 
 ### To fit hub and spoke model.
 

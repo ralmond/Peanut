@@ -4,7 +4,7 @@
 \alias{PnetTitle<-}
 \alias{PnetDescription<-}
 \title{
-Gets the title or comments associated with a Netica network.
+Gets the title or comments associated with a parameterized network.
 }
 \description{
 
@@ -49,20 +49,29 @@ PnetDescription(net) <- value
 
 }
 \examples{
-firstNet <- CreateNetwork("firstNet")
+\dontrun{
+library(PNetica) ## Requires PNetica
+sess <- NeticaSession()
+startSession(sess)
+
+firstNet <- CreateNetwork("firstNet",sess)
 
 PnetTitle(firstNet) <- "My First Bayesian Network"
 stopifnot(PnetTitle(firstNet)=="My First Bayesian Network")
 
 now <- date()
-NetworkComment(firstNet)<-c("Network created on",now)
+PnetDescription(firstNet)<-c("Network created on",now)
 ## Print here escapes the newline, so is harder to read
-cat(NetworkComment(firstNet),"\n")
-stopifnot(NetworkComment(firstNet) ==
+cat(PnetDescription(firstNet),"\n")
+stopifnot(PnetDescription(firstNet) ==
   paste(c("Network created on",now),collapse="\n"))
 
 
 DeleteNetwork(firstNet)
+
+stopSession(sess)
 }
-\keyword{ ~kwd1 }% use one of  RShowDoc("KEYWORDS")
-\keyword{ ~kwd2 }% __ONLY ONE__ keyword per line
+}
+\keyword{ graph }
+\keyword{ interface }
+\keyword{ attribute }
