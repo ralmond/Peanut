@@ -25,7 +25,8 @@ PnetName(net) <- value
 }
     
 \details{
-  Network names must conform to the rules for the host Bayes net system`q.  Trying to set the network to a name that does not
+  Network names must conform to the rules for the host Bayes net
+  system`q.  Trying to set the network to a name that does not 
   conform to the rules will produce an error, as will trying to set the
   network name to a name that corresponds to another different network.
 
@@ -60,5 +61,6 @@ stopifnot(PnetName(net)=="SomethingElse")
 }
 
 }
+\keyword{ graph }
 \keyword{ interface }
 \keyword{ attribute }
