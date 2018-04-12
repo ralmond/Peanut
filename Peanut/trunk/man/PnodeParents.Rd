@@ -19,7 +19,7 @@ PnodeParents(node) <- value
     A \code{\link{Pnode}} object whose parents are of interest.
   }
   \item{value}{
-    A list of \code{\link{Pode}} objects (or \code{NULL}s)
+    A list of \code{\link{Pnode}} objects (or \code{NULL}s)
   which will become the new parents.  Order of the nodes is important.
   See details. 
   }

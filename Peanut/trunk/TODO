@@ -1,3 +1,2 @@
 Need to doc:
-  ‘WarehouseData’ ‘WarehouseManifest’ ‘WarehouseManifest<-’
   ‘defaultAlphas’ ‘defaultBetas’ ‘topsort’

@@ -89,7 +89,7 @@ Pnet2Qmat <- function (obs,prof,defaultRule="Compensatory",
           PnodeQ(nd)
       }
       QQQ <-QQ[irow:(irow+nstate-2),
-               match(ParentNames(nd),profnames),
+               match(PnodeParentNames(nd),profnames),
                drop=FALSE] == 1        # as.logical drops dims!
       if (debug) {
         cat("Q matrix:\n")
