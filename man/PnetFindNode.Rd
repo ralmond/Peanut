@@ -30,7 +30,7 @@ PnetFindNode(net, name)
 }
 
 \value{
-  The \code{\link{PnetNode}} object or list of \code{Pnode}
+  The \code{\link{Pnode}} object or list of \code{Pnode}
   objects corresponding to \code{names}, 
 }
 \author{

@@ -18,7 +18,7 @@ PnodeName(node)<- value
 }
 \arguments{
   \item{node}{
-    A \code{\link{Pode}} object that references the node.
+    A \code{\link{Pnode}} object that references the node.
   }
   \item{value}{
     An character vector of length 1 giving the new name.  

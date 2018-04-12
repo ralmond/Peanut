@@ -1,8 +1,8 @@
 \name{BNgenerics}
-\alias{PnodeName}
-\alias{PnodeStates}
+%\alias{PnodeName}
+%\alias{PnodeStates}
 \alias{PnodeNumStates}
-\alias{PnodeParents}
+%\alias{PnodeParents}
 \alias{PnodeNumParents}
 \alias{PnodeParentNames}
 
@@ -32,7 +32,7 @@ PnodeParentNames(node)
   so that basic code can be written which is generic across Bayes net
   packages.  For example, if \code{nd} is a
   \code{\link{RNetica}{NeticaNode}} object, then \code{PnodeName(nd)} is
-  a synonym for \code{\link[RNetica]{NodeName(nd)}}.  However, using
+  a synonym for \code{\link[RNetica]{NodeName}(nd)}.  However, using
   \code{PnodeName(nd)} is more portable as it could expand to another
   function if using a different Bayes net package.
 
@@ -40,10 +40,6 @@ PnodeParentNames(node)
   number of parents and number of states which are common to most
   implementations.
 
-  Note that setter methods are not supported, thus although
-  \code{NodeName(nd) <- newname} is valid in
-  \code{\link[RNetica]{RNetica.package}}, \code{PnodeName(nd) <-
-  newname} will return an error.
 
 }
 \value{

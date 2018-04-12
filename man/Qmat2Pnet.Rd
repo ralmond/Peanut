@@ -144,7 +144,7 @@ Qmat2Pnet(Qmat, nethouse, nodehouse, defaultRule = "Compensatory", defaultLink =
   types of rules, multiple-A rules and multiple-B rules (offset rules).
   The CPTtools funciton \code{\link[CPTtools]{isOffsetRule}} checks to
   see what kind of a rule it is.  The multiple-A rules, of which
-  \code{\link[CPTools]{Compensatory}} is the canonical example, have one
+  \code{\link[CPTtools]{Compensatory}} is the canonical example, have one
   discrimination (or slope) parameter for every parent variable (values
   of 1 in the \eqn{Q}-matrix) and have a single difficulty (negative
   intercept) parameter which is in the \dQuote{B} column of the Qmat.
@@ -157,7 +157,7 @@ Qmat2Pnet(Qmat, nethouse, nodehouse, defaultRule = "Compensatory", defaultLink =
   or multiple-A (false) paradigm.
 
   A simple example is a binary observable variable which uses the
-  \code{\link[CPTools]{Compensatory}} rule.  This is essentially a
+  \code{\link[CPTtools]{Compensatory}} rule.  This is essentially a
   regression model (logistic regression with
   \code{\link[CPTtools]{partialCredit}} or
   \code{\link[CPTtools]{gradedResponse}} link funcitons, linear
@@ -176,7 +176,7 @@ Qmat2Pnet(Qmat, nethouse, nodehouse, defaultRule = "Compensatory", defaultLink =
   The multiple-B pattern replaces the \eqn{A}-matrix with the
   \eqn{B}-matrix and the column \dQuote{A} with \dQuote{B}.
   Consider binary observable variable which uses the
-  \code{\link[CPTools]{OffsetConjuctive}} rule.  The linear predictor is:
+  \code{\link[CPTtools]{OffsetConjunctive}} rule.  The linear predictor is:
   \deqn{a \min (\theta_1 -b+1, \ldots , \theta_K- b_K) .}
   The value \eqn{b_i} is stored in the column \dQuote{B.\var{namei}} where
   \var{namei} is the name of the \eqn{i}th proficiency variable; the
@@ -306,12 +306,12 @@ Qmat2Pnet(Qmat, nethouse, nodehouse, defaultRule = "Compensatory", defaultLink =
     column should contain the appropriate discriminations, otherwise,
     its value should be \code{NA}.}
   \item{A}{If a multiple-beta style
-    combination rule (e.g., \code{\link[CPTtools]{OffsetConjuctive}}) this
+    combination rule (e.g., \code{\link[CPTtools]{OffsetConjunctive}}) this
     column should contain the single discrimination, otherwise,
     its value should be \code{NA}.}
   \item{B.\var{prof}}{There is one column for each proficiency with the
     proficiency name appended to \dQuote{B.}.  If a multiple-bet style
-    combination rule (e.g., \code{\link[CPTtools]{OffsetConjuctive}}) this
+    combination rule (e.g., \code{\link[CPTtools]{OffsetConjunctive}}) this
     column should contain the appropriate difficulty (negative
     intercept), otherwise, its value should be \code{NA}.}
   \item{B}{If a multiple-beta style

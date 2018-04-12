@@ -59,7 +59,7 @@ PnodeStates(node) <- value
 \seealso{
   \code{\link{Pnode}},
   \code{\link{PnodeName}()}, \code{\link{PnodeStateTitles}()},
-  \code{\link{PnodeStateValues}()}, \code{\link{PnodeStateComments}()},
+  \code{\link{PnodeStateValues}()}, \code{\link{PnodeStateDescriptions}()},
 }
 \examples{
 \dontrun{

@@ -37,7 +37,7 @@ BuildNodeManifest(Pnodelist)
   variable can appear with the same name but slightly different
   definitions in two different networks.  Consequently, the key for this
   table is the \dQuote{Model} and \dQuote{NodeName} columns (usually the
-  first two).  The function \code{\link{ManifestData}} when applied to a
+  first two).  The function \code{\link{WarehouseData}} when applied to a
   node warehouse should have a key of length 2 (model and node name) and
   will return multiple lines, one line corresponding to each state of
   the data frame.
@@ -65,7 +65,7 @@ BuildNodeManifest(Pnodelist)
   \bold{Node-level Key Fields}:
   \item{Model}{A character value giving the name of the Bayesian network
   to which this node belongs.  Corresponds to the value of
-  \code{\link{PnodePnet}}. }
+  \code{\link{PnodeNet}}. }
   \item{NodeName}{A character value giving the name of the node.  All
   rows with the same value in the model and node name columns are
   assumed to reference the same node. Corresponds to the value of
@@ -76,7 +76,7 @@ BuildNodeManifest(Pnodelist)
   hub) then this is the name of the hub model (i.e., the name of the
   proficiency model corresponding to an evidence model. Corresponds to
   the value of 
-  \code{\link{PnetHub}(PnodePnet(\var{node}))}.}
+  \code{\link{PnetHub}(PnodeNet(\var{node}))}.}
   \item{NodeTitle}{A character value containing a slightly longer
   description of the node, unlike the name this is not generally
   restricted to variable name formats.  Corresponds to the value of
@@ -92,11 +92,11 @@ BuildNodeManifest(Pnodelist)
   \bold{State-level Key Fields}:
   \item{Nstates}{The number of states.  This should be an integer
   greater than or equal to 2.  Corresponds to the value of
-  \code{\link{PnodeNstates}}.}
+  \code{\link{PnodeNumStates}}.}
   \item{StateName}{The name of the state.  This should be a string value
   and it should be different for every row within the subset of rows
   corresponding to a single node. Corresponds to the value of
-  \code{\link{PnodeStateNames}}.}
+  \code{\link{PnodeStates}}.}
 
   \bold{State-level Fields}:
   \item{StateTitle}{A longer name not subject to variable naming
@@ -122,13 +122,14 @@ Sydney, Australia. (International) Retrieved from \url{http://bmaw2017.azurewebs
 
   Node functions called to find node meta-data:
   \code{\link{PnodeName}}, \code{\link{PnodeTitle}},
-  \code{\link{PnodePnet}}, \code{\link{PnetHub}},
-  \code{\link{PnodeDescription}}, \code{\link{PnetLabels}}.
-  \code{\link{PnodeNstates}}, \code{\link{PnodeStateNames}},
+  \code{\link{PnodeNet}}, \code{\link{PnetHub}},
+  \code{\link{PnodeDescription}}, \code{\link{PnodeLabels}}.
+  \code{\link{PnodeNumStates}}, 
   \code{\link{PnodeStateTitles}}, \code{\link{PnodeStateDescriptions}},
   \code{\link{PnodeStateValues}}.
 
-  Used in the construction of Network \code{\link{Warehouse}}s.
+  Used in the construction of Network \code{\link{Warehouse}}s (see
+  \code{\link{WarehouseManifest}}). 
 
   Similar to the function \code{\link{BuildNetManifest}}.
 

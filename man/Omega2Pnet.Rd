@@ -96,7 +96,7 @@ Omega2Pnet(OmegaMat, pn, nodewarehouse, defaultRule = "Compensatory", defaultLin
   value representing Parent Node \eqn{k} \eqn{a_k} represent the
   corresponding coefficient from the \eqn{A}-table.  Let \eqn{\sigma_j =
   a_{j,j}} that is the diagonal element of the \eqn{A}-table
-  corresponding to the variable under consideration.  Let \eqn{b_j_} be
+  corresponding to the variable under consideration.  Let \eqn{b_j} be
   the value of the intercept column for Node \eqn{j}.  Then the model
   specifies that \eqn{theta_j} has a normal distribution with mean
   \deqn{\frac{1}{\sqrt{K}}\sum a_k\theta_k + b_j,} and standard

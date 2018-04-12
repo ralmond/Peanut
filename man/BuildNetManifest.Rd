@@ -81,7 +81,8 @@ Sydney, Australia. (International) Retrieved from \url{http://bmaw2017.azurewebs
   \code{\link{PnetPathname}}, \code{\link{PnetHub}},
   \code{\link{PnetDescription}}
 
-  Used in the construction of Network \code{\link{Warehouse}}s.
+  Used in the construction of Network \code{\link{Warehouse}}s (see
+  \code{\link{WarehouseManifest}}).
 
   Similar to the function \code{\link{BuildNodeManifest}}.
   
