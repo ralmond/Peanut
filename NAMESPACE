@@ -19,7 +19,8 @@ export(is.Pnet, as.Pnet, Pnet,
        defaultAlphas, defaultBetas,
        PnodeBetas, "PnodeBetas<-",
        PnodeLinkScale, "PnodeLinkScale<-",
-       BuildTable,GetPriorWeight,PnodeParentTvals
+       BuildTable,GetPriorWeight,PnodeParentTvals,
+       PnetSerialize, PnetUnserialize, unserializePnet
   )
 exportMethods(is.Pnet, as.Pnet, Pnet,
        PnetPriorWeight, "PnetPriorWeight<-",
