@@ -143,3 +143,29 @@ PnetFindNode <- function(net, name)
   UseMethod("PnetFindNode")
 setGeneric("PnetFindNode")
 
+## This should return a list of two objects, a string indicating the
+## type and a serialized version of the object.
+PnetSerialize <- function(net) UseMethod("PnetSerialize")
+setGeneric("PnetSerialize")
+
+
+setGeneric("unserializePnet", function(factory,data)
+  standardGeneric("unserializePnet"))
+## Uses fake UseMethod protocol.
+PnetUnserialize <- function (serial) {
+  if (!is.null(serial$factory)) {
+    factory <- get(serial$factory)
+    if (is.null(factory)) {
+      stop("Could not find factory ",serial$factory)
+    }
+    unserializePnet(factory,serial)
+  } else {
+    if (is.null(serial$type)) {
+      stop("Neither type or factory supplied.")
+    }
+    do.call(paste("PnetUnserialize",serial$type,sep="."),serial)
+  }
+}
+
+
+
