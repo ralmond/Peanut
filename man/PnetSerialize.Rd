@@ -76,44 +76,67 @@ unserializePnet(factory,data)
 }
 \section{Type String Protocol}{
 
-
-
+  This mechanism mimics the S3 method dispatch method, although it
+  doesn't really use it.  If the argument to \code{PnetUnserialize} has
+  a \code{type} field (but no \code{factory} field) then it will call a
+  funciton called \code{PnetUnserialize.\emph{type}}.
 }
 
 \value{
-%%  ~Describe the value returned
-%%  If it is a LIST, use
-%%  \item{comp1 }{Description of 'comp1'}
-%%  \item{comp2 }{Description of 'comp2'}
-%% ...
+
+  The \code{PnetSerialize} function returns a list with the following
+  elements: 
+  \item{name}{The name of the network.  If this matches an existing
+    network, then it will be replaced on unserialize, otherwise a new
+    network will be created.}
+  \item{data}{Serialized data for the network.}
+  \item{factory}{The name of a global object which can restore networks
+    from serialized data.}
+  \item{type}{The name of a class for which an
+    \code{PnetUnserialize.\emph{type}} method exits.}
+  \item{...}{There may be other data, but note that programs
+    saving/restoring the serialized representation may not know how to
+    handle these extra fields.}
+
+  The \code{PnetUnserialize} and \code{unserializePnet} functions return
+  an object of type \code{\link{Pnet}}.
+
 }
-\references{
-%% ~put references to the literature/web site here ~
-}
-\author{
-%%  ~~who you are~~
-}
+\author{Russell Almond}
 \note{
-%%  ~~further notes~~
+  The first use of this function was designed to save/restore a network
+  from a \link[mongolite]{mongo} database.  This format easily supports
+  extra fields in the return list.  The samething is true if the network
+  is serialized using either JSON/BSON or the normal R
+  \code{\link[base]{dump}} mechanism.
+
+  On the other hand, if the network is to be stored in a SQL database,
+  the using program will not have places to store the extra fields.
 }
-
-%% ~Make other sections like Warning with \section{Warning }{....} ~
-
 \seealso{
-%% ~~objects to See Also as \code{\link{help}}, ~~~
+  \code{\link{Pnet}}, \code{\link{PnetWarehouse}}
 }
 \examples{
-##---- Should be DIRECTLY executable !! ----
-##-- ==>  Define data, use random,
-##--	or do  help(data=index)  for the standard data sets.
+\dontrun{
+\library{mongolite}
+\library{jsonlite}
 
-## The function is currently defined as
-structure(function (net) 
-standardGeneric("PnetSerialize"), generic = structure("PnetSerialize", package = "Peanut"), package = "Peanut", group = list(), valueClass = character(0), signature = "net", default = structure(function (net) 
-UseMethod("PnetSerialize"), target = structure("ANY", class = structure("signature", package = "methods"), .Names = "net", package = "methods"), defined = structure("ANY", class = structure("signature", package = "methods"), .Names = "net", package = "methods"), generic = structure("PnetSerialize", package = "Peanut"), class = structure("derivedDefaultMethod", package = "methods")), skeleton = (structure(function (net) 
-UseMethod("PnetSerialize"), target = structure("ANY", class = structure("signature", package = "methods"), .Names = "net", package = "methods"), defined = structure("ANY", class = structure("signature", package = "methods"), .Names = "net", package = "methods"), generic = structure("PnetSerialize", package = "Peanut"), class = structure("derivedDefaultMethod", package = "methods")))(net), class = structure("standardGeneric", package = "methods"))
+collect <- new mongo("studentModels","test",
+                     "mogodb://user:pwd@127.0.0.1:27017/test")
+
+sm.ser <- PnetSerialize(sm.net)
+## base 64 encode the data to protect it from JSON syntax issues.
+sm.ser$data <- base64_enc(sm.ser$data)
+
+collect$update(paste('{"name":"',sm.ser$name,'"}'),sm.ser)
+
+## Use iterator method to find, so we get in list rather than data frame
+## representation. 
+it <- collect$iterate(paste('{"name":"',name1,'"}'),limit=1)
+sm1.ser <- it$one()
+sm1 <- PnetUnserialize(sm1.ser)
+
 }
-% Add one or more standard keywords, see file 'KEYWORDS' in the
-% R documentation directory.
-\keyword{ ~kwd1 }% use one of  RShowDoc("KEYWORDS")
-\keyword{ ~kwd2 }% __ONLY ONE__ keyword per line
+}
+\keyword{ IO }
+\keyword{ graphs }
