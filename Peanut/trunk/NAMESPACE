@@ -19,8 +19,7 @@ export(is.Pnet, as.Pnet, Pnet,
        defaultAlphas, defaultBetas,
        PnodeBetas, "PnodeBetas<-",
        PnodeLinkScale, "PnodeLinkScale<-",
-       BuildTable,GetPriorWeight,PnodeParentTvals,
-       PnetSerialize, PnetUnserialize, unserializePnet
+       BuildTable,GetPriorWeight,PnodeParentTvals
   )
 exportMethods(is.Pnet, as.Pnet, Pnet,
        PnetPriorWeight, "PnetPriorWeight<-",
@@ -63,7 +62,9 @@ export(PnodeName, "PnodeName<-",
        PnetDescription, "PnetDescription<-",
        PnetFindNode,
        PnetMakeStubNodes, PnetRemoveStubNodes,PnetAdjoin,
-       PnetDetach)
+       PnetDetach,
+       PnetSerialize, PnetUnserialize, unserializePnet
+       )
 exportMethods(PnodeName, "PnodeName<-",
        PnodeTitle, "PnodeTitle<-",
        PnodeDescription, "PnodeDescription<-",
