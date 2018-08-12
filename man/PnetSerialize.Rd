@@ -17,8 +17,9 @@ unserializePnet(factory,data)
 }
 \arguments{
   \item{net}{A \code{\link{Pnet}} to be serialized.}
-  \item{serial}{A list containing at least to elements.  One is the
-    \code{data} element which contains the serialized data.  The other
+  \item{serial}{A list containing at least three elements.  One is the
+    name of the network.  One is the \code{data} element which contains
+    the serialized data as a raw vector. The third 
     is either a \code{factory} element containing the name of a global
     symbol containing a factory for reading the object or a \code{type}
     argument giving the name of the constructor.}
@@ -40,11 +41,13 @@ unserializePnet(factory,data)
   but these may be ignored by other programs.
 
   The intent is to provide a representation that can be saved to a
-  database.  The \code{data} element will be stored as a blob (binary
-  large object) and the other elements as strings.  Document based
-  databases (e.g., \link[mongolite]{mongo}) may handle the additional
-  fields but relational database will have difficulty with them, so
-  implementers should only rely on the three fields.
+  database.  The \code{data} element should be a raw vector (e.g., the
+  output of \code{\link[base]{serialize}(...,NULL)}) and will be stored
+  as a blob (binary large object) and the other elements should be
+  strings.  Document based databases (e.g., \link[mongolite]{mongo}) may
+  handle the additional fields but relational database will have
+  difficulty with them, so implementers should only rely on the three
+  fields.
 
   The function \code{PnetUnserialize} reverses this operation.  If
   \code{factory} is supplied, then the factory protocol is used for
@@ -89,7 +92,8 @@ unserializePnet(factory,data)
   \item{name}{The name of the network.  If this matches an existing
     network, then it will be replaced on unserialize, otherwise a new
     network will be created.}
-  \item{data}{Serialized data for the network.}
+  \item{data}{Serialized data for the network.  This should be a raw
+  vector.}
   \item{factory}{The name of a global object which can restore networks
     from serialized data.}
   \item{type}{The name of a class for which an
@@ -125,7 +129,7 @@ collect <- new mongo("studentModels","test",
                      "mogodb://user:pwd@127.0.0.1:27017/test")
 
 sm.ser <- PnetSerialize(sm.net)
-## base 64 encode the data to protect it from JSON syntax issues.
+## base 64 encode the data to make it easier to store.
 sm.ser$data <- base64_enc(sm.ser$data)
 
 collect$update(paste('{"name":"',sm.ser$name,'"}'),sm.ser)
@@ -134,6 +138,8 @@ collect$update(paste('{"name":"',sm.ser$name,'"}'),sm.ser)
 ## representation. 
 it <- collect$iterate(paste('{"name":"',name1,'"}'),limit=1)
 sm1.ser <- it$one()
+## Decode back to the raw vector.
+sm1.ser$data <- base64_dec(sm1.ser$data)
 sm1 <- PnetUnserialize(sm1.ser)
 
 }
