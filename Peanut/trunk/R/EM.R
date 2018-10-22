@@ -1,6 +1,6 @@
 
 GEMfit <- function (net, cases, tol=sqrt(.Machine$double.eps), maxit=100,
-                   Estepit=1, Mstepit=3,trace=FALSE,debugNo=maxit+1) {
+                   Estepit=1, Mstepit=30,trace=FALSE,debugNo=maxit+1) {
 
   ## Base case
   converged <- FALSE
@@ -13,14 +13,18 @@ GEMfit <- function (net, cases, tol=sqrt(.Machine$double.eps), maxit=100,
   while(!converged && iter <= maxit) {
     ## E-step
     calcExpTables(net, cases, Estepit=Estepit, tol=tol)
+    #browser()
 
     ## M-step
     maxAllTableParams(net, Mstepit=Mstepit, tol=tol,
                       debug=iter>=debugNo)
-
+    #browser()
     ## Update parameters & convergence test
     iter <- iter + 1
     BuildAllTables(net,debug=iter>=debugNo)
+    
+    #browser()
+    
     llike[iter] <- calcPnetLLike(net,cases)
     if (trace) cat("Iteration ",iter,"; Log likelihood",llike[iter],"\n")
     converged <- (abs(llike[iter]-llike[iter-1]) < tol)
