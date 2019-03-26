@@ -2,7 +2,7 @@ import(methods)
 importFrom(CPTtools,effectiveThetas)
 importFrom(CPTtools,getOffsetRules)
 importFrom(CPTtools,isOffsetRule)
-
+import(shiny)
 
 ## Pnet and Pnode interfaces
 export(is.Pnet, as.Pnet, Pnet,
@@ -111,4 +111,5 @@ S3method("maxAllTableParams", default)
 ## Q and Omega matrixes
 export(Pnet2Omega,Pnet2Qmat,topsort,Omega2Pnet,Qmat2Pnet)
 
-
+## Gadgets
+export(CompensatoryGadget,OffsetGadget,RegressionGadget)
