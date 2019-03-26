@@ -196,18 +196,20 @@ PnodeAlphas(node) <- value
 \examples{
 \dontrun{
 library(PNetica) ## Requires implementation
+sess <- NeticaSession()
+startSession(sess)
 
-tNet <- CreateNetwork("TestNet")
+tNet <- CreateNetwork("TestNet",sess)
 
 
 theta1 <- NewDiscreteNode(tNet,"theta1",
                          c("VH","High","Mid","Low","VL"))
 NodeLevels(theta1) <- effectiveThetas(NodeNumStates(theta1))
-NodeProbs(theta1) <- rep(1/NodeNumStates(theta),NodeNumStates(theta1))
+NodeProbs(theta1) <- rep(1/NodeNumStates(theta1),NodeNumStates(theta1))
 theta2 <- NewDiscreteNode(tNet,"theta2",
                          c("VH","High","Mid","Low","VL"))
 NodeLevels(theta2) <- effectiveThetas(NodeNumStates(theta2))
-NodeProbs(theta2) <- rep(1/NodeNumStates(theta),NodeNumStates(theta2))
+NodeProbs(theta2) <- rep(1/NodeNumStates(theta1),NodeNumStates(theta2))
 
 partial3 <- NewDiscreteNode(tNet,"partial3",
                             c("FullCredit","PartialCredit","NoCredit"))
