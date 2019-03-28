@@ -2,6 +2,7 @@
 \alias{CompensatoryGadget}
 \alias{OffsetGadget}
 \alias{RegressionGadget}
+\alias{DPCGadget}
 \title{Shiny gadget for editing parameterized nodes (PNodes)}
 \description{
 
@@ -15,6 +16,7 @@
 CompensatoryGadget(pnode)
 OffsetGadget(pnode)
 RegressionGadget(pnode, useR2 = PnodeNumParents(pnode)>0L)
+DPCGadget(pnode)
 }
 \arguments{
   \item{pnode}{A \code{\link{Pnode}} object to be modified.}
@@ -155,6 +157,16 @@ partial3 <- RegressionGadget(partial3)
 ## Single parent case
 theta2 <- Pnode(theta2,c(),0,link="normalLink",linkScale=1)
 theta2 <- RegressionGadget(theta2)
+
+## Complex case with Q-matrix
+## Set up so that first skill only needed for first transition, second
+## skill for second transition; Adjust alphas to match
+PnodeQ(partial3) <- matrix(c(TRUE,TRUE,
+                             TRUE,FALSE), 2,2, byrow=TRUE)
+PnodeLnAlphas(partial3) <- list(FullCredit=c(-.25,.25),
+                                PartialCredit=0)
+
+partial3 <- DPCGadget(partial3)
 
 
 }
