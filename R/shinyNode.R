@@ -19,7 +19,7 @@ CompensatoryGadget <- function(pnode) {
   pQ <- TRUE
   pa <- PnodeAlphas(pnode)
   if (!is.numeric(pa)) {
-    pa <- rep(1.0,pa)
+    pa <- rep(1.0,npar)
   }
   if (is.null(names(pa))) names(pa) <- parnames
   pb <- PnodeBetas(pnode)
@@ -376,6 +376,287 @@ RegressionGadget <- function(pnode, useR2=PnodeNumParents(pnode)>0L) {
 
     observeEvent(input$done, {
       stopApp(reassembleNode())
+    })
+  }
+  runGadget(ui,server,
+            viewer=dialogViewer(paste("Editor for node ",PnodeName(pnode)),
+                                800,800))
+}
+
+DPCGadget <- function(pnode) {
+
+  ## Node Structure
+  pstates <- PnodeStates(pnode)
+  nps <- length(pstates)
+  nps1 <- nps -1L
+  ppar <- PnodeParents(pnode)
+  parnames <- PnodeParentNames(pnode)
+  npar <- length(ppar)
+  parStates <- lapply(ppar,PnodeStates)
+
+  ## Node Parameters
+  pLink <- "partialCredit"
+  pRules <- PnodeRules(pnode)
+  if (is.null(pRules)) pRules <- "Compensatory"
+  pRules <- rep(pRules,length.out=nps1)
+  pRules <- as.list(pRules)
+  names(pRules) <- pstates[1L:nps1]
+
+  ## Q
+  pQ <- PnodeQ(pnode)
+  if (isTRUE(pQ)) pQ <- matrix(TRUE,nps1,npar)
+  rownames(pQ) <- pstates[1L:nps1]
+  colnames(pQ) <- parnames
+
+  ## Alpha Structure
+  anames <- c("CommonAlpha",parnames)
+  pa0 <- rep(1.0,length(anames))
+  names(pa0) <- anames
+  paa <- PnodeAlphas(pnode)
+  if (is.numeric(paa)) {
+    if (!is.null(names(paa)))
+      pa0[names(paa)] <- paa
+    else {
+      if (length(paa) == 1L)
+        pa0[1L] <- paa
+      else {
+        if (length(paa)==npar)
+          pa0[2L:(npar+1L)] <- paa
+      }
+    }
+  }
+  pa <- rep(list(pa0),nps1)
+  names(pa) <- names(pRules)
+  if (is.list(paa) && length(paa)==nps1) {
+    for (i in 1:nps1) {
+      pai <- paa[[i]]
+      if (!is.null(names(pai)))
+        pa[[i]][names(pai)] <- pai
+      else {
+        if (length(pai) == 1L)
+          pa[[i]][1L] <- pai
+        else {
+          if (length(pai)==npar)
+            pa[[i]][2L:(npar+1L)] <- pai
+        }
+      }
+    }
+  }
+
+  ## Beta Structure
+  bnames <- c("CommonBeta",parnames)
+  pb0 <- rep(0.0,length(bnames))
+  names(pb0) <- bnames
+  pbb <- PnodeBetas(pnode)
+  if (is.numeric(pbb)) {
+    if (is.null(names(pbb)))
+      pb0[names(pbb)] <- pbb
+    else {
+      if (length(pbb) == 1L)
+        pb0[1L] <- pbb
+      else {
+        if (length(pbb)==npar)
+          pb0[2L:(npar+1L)] <- pbb
+      }
+    }
+  }
+  pb <- rep(list(pb0),nps1)
+  names(pb) <- names(pRules)
+  if (is.list(pbb) && length(pbb)==nps1) {
+    for (i in 1:nps1) {
+      pbi <- pbb[[i]]
+      if (!is.null(names(pbi)))
+        pb[[i]][names(pbi)] <- pbi
+      else {
+        if (length(pbi) == 1L)
+          pb[[i]][1L] <- pbi
+        else {
+          if (length(pbi)==npar)
+            pb[[i]][2L:(npar+1L)] <- pbi
+        }
+      }
+    }
+  }
+
+  ui <- fluidPage(
+    useShinyjs(),
+    title=(paste("Editor for node ",PnodeName(pnode))),
+    wellPanel(h1(paste("Editor for node ",PnodeName(pnode))),
+              actionButton("cancel","Cancel"),
+              actionButton("done","OK")),
+    {
+      tabs <- lapply(names(pRules),
+                 function(st) {
+                   tabPanel(st,
+                     fluidRow(column(2,h3("Transition to state ",st)),
+                              column(width=4,offset=2,
+                                     selectInput(paste("rules",st,sep="."),
+                                                 "Structure Function (Rule):",
+                                                 c("Compensatory","Conjunctive",
+                                                   "Disjunctive","OffsetConjunctive",
+                                                   "OffsetDisjunctive")))),
+                     fluidRow(column(width=4,h4(paste("Q-matrix row for ",st))),
+                              lapply(parnames,function(par) {
+                                column(width=3,
+                                       checkboxInput(paste("Q",st,par,sep="."),
+                                                     par,pQ[st,par]))
+                                })),
+                     fluidRow(column(width=1,h4("Alphas:")),
+                              lapply(anames,function(par) {
+                                column(width=3,
+                                       sliderInput(paste("a",st,par,sep="."),
+                                                   par,
+                                                   min=0.01,max=2,
+                                                   value=pa[[st]][par])
+                                       )})),
+                     fluidRow(column(width=1,h4("Betas:")),
+                              lapply(bnames,function(par) {
+                                column(width=3,
+                                       sliderInput(paste("b",st,par,sep="."),
+                                                   par,
+                                                   min=-3,max=3,
+                                                   value=pb[[st]][par])
+                                       )})))
+                   })
+      fluidRow(column(width=12,(do.call(tabsetPanel,tabs))))
+    },
+    fluidRow(
+        column(width=12,
+               tabsetPanel(
+                   tabPanel("Plot",plotOutput("barchart")),
+                   tabPanel("Table",tableOutput("cptFrame")))))
+  )
+
+  server <-  function (input, output, session) {
+
+    newRules <- reactive({
+      nrules <-
+        lapply(names(pRules),
+               function (st) {
+                 input[[paste("rules",st,sep=".")]]
+               })
+      names(nrules) <- names(pRules)
+      ## print("Rules:")
+      ## print(nrules)
+      nrules
+      })
+
+    offsetRules <- reactive({
+      orules <- sapply(newRules(),isOffsetRule)
+      names(orules) <- names(pRules)
+      ## print("Offsets:")
+      ## print(orules)
+      orules
+    })
+
+    newQ <- reactive({
+      QQ <- pQ
+      for (st in rownames(pQ)) {
+        for (par in colnames(pQ)) {
+          QQ[st,par] <- input[[paste("Q",st,par,sep=".")]]
+        }
+      }
+      ## print("Q:")
+      ## print(QQ)
+      QQ
+    })
+
+    ## Reassemble vectors
+    newpa <- reactive({
+      orules <- offsetRules()
+      QQ <- newQ()
+      newa <-
+        lapply(names(orules),
+               function(st) {
+                 if (orules[st])
+                   input[[paste("a",st,anames[1L],sep=".")]]
+                 else {
+                   rowa <- sapply(anames[2L:(npar+1L)][QQ[st,]],
+                                  function(par) {
+                                    input[[paste("a",st,par,sep=".")]]
+                                  })
+                   names(rowa) <- bnames[2L:(npar+1L)][QQ[st,]]
+                   rowa
+                 }
+               })
+      ## print("Alphas:")
+      ## print(newa)
+      names(newa) <- names(orules)
+      newa
+    })
+
+
+    ## Reassemble vectors
+    newpb <- reactive({
+      orules <- offsetRules()
+      QQ <- newQ()
+      newb <-
+        lapply(names(orules),
+               function(st) {
+                 if (!orules[st])
+                   input[[paste("b",st,bnames[1L],sep=".")]]
+                 else {
+                   rowb <- sapply(bnames[2L:(npar+1L)][QQ[st,]],
+                                  function(par) {
+                                    input[[paste("b",st,par,sep=".")]]
+                                  })
+                   names(rowb) <- bnames[2L:(npar+1L)][QQ[st,]]
+                   rowb
+                 }
+               })
+      names(newb) <- names(orules)
+      ## print("Betas:")
+      ## print(newb)
+      newb
+    })
+
+
+    ## Reassemble Node
+    reassembleNode <- reactive( {
+      PnodeQ(pnode) <- newQ()
+      PnodeRules(pnode) <- newRules()
+      PnodeLink(pnode) <- pLink
+      PnodeAlphas(pnode) <- newpa()
+      PnodeBetas(pnode) <- newpb()
+      pnode
+    })
+    ## Build CPF
+    buildCPF <- reactive({
+      calcDPCFrame(parStates,pstates,lapply(newpa(),log),
+                   newpb(),newRules(),pLink,NULL,newQ())
+    })
+
+    output$barchart <- renderPlot({
+      barchart.CPF(buildCPF())
+    })
+
+    output$cptFrame <- renderTable(buildCPF(),striped=TRUE,digits=3)
+
+    observeEvent(input$done, {
+      stopApp(reassembleNode())
+    })
+
+    observe({
+      orules <- offsetRules()
+      QQ <- newQ()
+      for (st in rownames(pQ)) {
+        for (i in 2L:(npar+1L)) {
+          toggleState(paste("a",st,anames[i],sep="."),
+                      condition = !orules[[st]] & QQ[st,anames[i]])
+          toggleState(paste("b",st,bnames[i],sep="."),
+                      condition =  orules[[st]] & QQ[st,bnames[i]])
+        }
+      }
+    })
+    observe({
+      orules <- offsetRules()
+      print(orules)
+      for (st in rownames(pQ)) {
+        toggleState(paste("a",st,anames[1L],sep="."),
+                    condition=isTRUE(orules[[st]]))
+        toggleState(paste("b",st,bnames[1L],sep="."),
+                    condition=!isTRUE(orules[[st]]))
+      }
     })
   }
   runGadget(ui,server,
