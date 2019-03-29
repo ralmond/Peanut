@@ -13,16 +13,20 @@
 
 }
 \usage{
-CompensatoryGadget(pnode)
-OffsetGadget(pnode)
-RegressionGadget(pnode, useR2 = PnodeNumParents(pnode)>0L)
-DPCGadget(pnode)
+CompensatoryGadget(pnode, color="firebrick")
+OffsetGadget(pnode, color="plum")
+RegressionGadget(pnode, useR2 = PnodeNumParents(pnode)>0L,
+         color="sienna")
+DPCGadget(pnode, color="steelblue")
 }
 \arguments{
   \item{pnode}{A \code{\link{Pnode}} object to be modified.}
   \item{useR2}{Logical value, if true (default for nodes with at least
     one parent), then R-squared will be used instead of the actual link
     scale parameter on the graphical input.}
+  \item{color}{A base color to use for barcharts (see
+    \code{\link[CPTtools]{barchart.CPF}}).  Execute \code{colors()} for
+    a list of choices.}
 }
 \details{
 
@@ -168,7 +172,7 @@ PnodeLnAlphas(partial3) <- list(FullCredit=c(-.25,.25),
 
 partial3 <- DPCGadget(partial3)
 
-
+}
 }
 \keyword{ manip }
 \keyword{ interface }

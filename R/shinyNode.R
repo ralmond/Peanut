@@ -1,7 +1,7 @@
 ########
 ## Shiny editor for a node.
 
-CompensatoryGadget <- function(pnode) {
+CompensatoryGadget <- function(pnode, color="firebrick") {
 
   ## Node Structure
   pstates <- PnodeStates(pnode)
@@ -103,7 +103,7 @@ CompensatoryGadget <- function(pnode) {
     })
 
     output$barchart <- renderPlot({
-      barchart.CPF(buildCPF())
+      barchart.CPF(buildCPF(),baseCol=color)
     })
 
     output$cptFrame <- renderTable(buildCPF(),striped=TRUE,digits=3)
@@ -117,7 +117,7 @@ CompensatoryGadget <- function(pnode) {
                                 800,800))
 }
 
-OffsetGadget <- function(pnode) {
+OffsetGadget <- function(pnode, color="plum") {
 
   ## Node Structure
   pstates <- PnodeStates(pnode)
@@ -234,7 +234,7 @@ OffsetGadget <- function(pnode) {
     })
 
     output$barchart <- renderPlot({
-      barchart.CPF(buildCPF())
+      barchart.CPF(buildCPF(), baseCol=color)
     })
 
     output$cptFrame <- renderTable(buildCPF(),striped=TRUE,digits=3)
@@ -249,7 +249,8 @@ OffsetGadget <- function(pnode) {
 }
 
 
-RegressionGadget <- function(pnode, useR2=PnodeNumParents(pnode)>0L) {
+RegressionGadget <- function(pnode, useR2=PnodeNumParents(pnode)>0L,
+                             color = "sienna") {
 
   ## Node Structure
   pstates <- PnodeStates(pnode)
@@ -369,7 +370,7 @@ RegressionGadget <- function(pnode, useR2=PnodeNumParents(pnode)>0L) {
     })
 
     output$barchart <- renderPlot({
-      barchart.CPF(buildCPF())
+      barchart.CPF(buildCPF(), baseCol=color)
     })
 
     output$cptFrame <- renderTable(buildCPF(),striped=TRUE,digits=3)
@@ -383,7 +384,7 @@ RegressionGadget <- function(pnode, useR2=PnodeNumParents(pnode)>0L) {
                                 800,800))
 }
 
-DPCGadget <- function(pnode) {
+DPCGadget <- function(pnode, color="steelblue") {
 
   ## Node Structure
   pstates <- PnodeStates(pnode)
@@ -627,7 +628,7 @@ DPCGadget <- function(pnode) {
     })
 
     output$barchart <- renderPlot({
-      barchart.CPF(buildCPF())
+      barchart.CPF(buildCPF(), baseCol=color)
     })
 
     output$cptFrame <- renderTable(buildCPF(),striped=TRUE,digits=3)
