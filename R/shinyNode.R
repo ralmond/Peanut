@@ -10,6 +10,12 @@ CompensatoryGadget <- function(pnode, color="firebrick") {
   parnames <- PnodeParentNames(pnode)
   npar <- length(ppar)
   parStates <- lapply(ppar,PnodeStates)
+  tvals <- PnodeParentTvals(pnode)
+  thetas <- do.call("expand.grid",tvals)
+  if (nrow(thetas) == 0L) {
+    thetas <- data.frame(X0=0)
+  }
+  if (npar >0L) markers <- expand.grid(parStates)
 
   ## Node Parameters
   pRules <- PnodeRules(pnode)
@@ -37,7 +43,7 @@ CompensatoryGadget <- function(pnode, color="firebrick") {
       ## Structure and Link
       fluidRow(column(width=4,
                       selectInput("link","Link Function:",
-                                  c("Parital Credit"="partialCredit",
+                                  c("Partial Credit"="partialCredit",
                                     "Graded Response"="gradedResponse"),
                                   selected=pLink)),
                column(width=6,
@@ -66,7 +72,9 @@ CompensatoryGadget <- function(pnode, color="firebrick") {
           column(width=12,
                  tabsetPanel(
                      tabPanel("Plot",plotOutput("barchart")),
-                     tabPanel("Table",tableOutput("cptFrame")))))
+                     tabPanel("Table",tableOutput("cptFrame")),
+                     tabPanel("Effective Thetas",tableOutput("etFrame")))))
+
   )
 
   server <-  function (input, output, session) {
@@ -102,11 +110,30 @@ CompensatoryGadget <- function(pnode, color="firebrick") {
                    input$rules,input$link,NULL,pQ)
     })
 
+    ## Effective Thetas table
+    eThetasFrame <- reactive({
+      rules <- input$rules
+      newa <- newpa()
+      newb <- newpb()
+      et <- matrix(0,nrow(thetas),nps-1L) #Take care of no parent case
+      for (kk in 1L:(nps-1L)) {
+        et[,kk] <- do.call(rules,
+                           list(thetas,newa,newb[[kk]]))
+      }
+      colnames(et) <- pstates[1L:(nps-1L)]
+      if (npar >0L)
+        result <- data.frame(markers,et)
+      else
+        result <- data.frame(et)
+    })
+
+
     output$barchart <- renderPlot({
       barchart.CPF(buildCPF(),baseCol=color)
     })
 
     output$cptFrame <- renderTable(buildCPF(),striped=TRUE,digits=3)
+    output$etFrame <- renderTable(eThetasFrame(),striped=TRUE,digits=3)
 
     observeEvent(input$done, {
       stopApp(reassembleNode())
@@ -126,6 +153,12 @@ OffsetGadget <- function(pnode, color="plum") {
   parnames <- PnodeParentNames(pnode)
   npar <- length(ppar)
   parStates <- lapply(ppar,PnodeStates)
+  tvals <- PnodeParentTvals(pnode)
+  thetas <- do.call("expand.grid",tvals)
+  if (nrow(thetas) == 0L) {
+    thetas <- data.frame(X0=0)
+  }
+  if (npar >0L) markers <- expand.grid(parStates)
 
   ## Node Parameters
   pRules <- PnodeRules(pnode)
@@ -193,7 +226,9 @@ OffsetGadget <- function(pnode, color="plum") {
           column(width=12,
                  tabsetPanel(
                      tabPanel("Plot",plotOutput("barchart")),
-                     tabPanel("Table",tableOutput("cptFrame")))))
+                     tabPanel("Table",tableOutput("cptFrame")),
+                     tabPanel("Effective Thetas",tableOutput("etFrame")))))
+
   )
 
   server <-  function (input, output, session) {
@@ -232,12 +267,29 @@ OffsetGadget <- function(pnode, color="plum") {
       calcDPCFrame(parStates,pstates,lapply(newpa(),log),newpb(),
                    input$rules,input$link,NULL,pQ)
     })
+    ## Effective Thetas table
+    eThetasFrame <- reactive({
+      rules <- input$rules
+      newa <- newpa()
+      newb <- newpb()
+      et <- matrix(0,nrow(thetas),nps-1L) #Take care of no parent case
+      for (kk in 1L:(nps-1L)) {
+        et[,kk] <- do.call(rules,
+                           list(thetas,newa[[kk]],newb))
+      }
+      colnames(et) <- pstates[1L:(nps-1L)]
+      if (npar >0L)
+        result <- data.frame(markers,et)
+      else
+        result <- data.frame(et)
+    })
 
     output$barchart <- renderPlot({
       barchart.CPF(buildCPF(), baseCol=color)
     })
 
     output$cptFrame <- renderTable(buildCPF(),striped=TRUE,digits=3)
+    output$etFrame <- renderTable(eThetasFrame(),striped=TRUE,digits=3)
 
     observeEvent(input$done, {
       stopApp(reassembleNode())
@@ -259,6 +311,12 @@ RegressionGadget <- function(pnode, useR2=PnodeNumParents(pnode)>0L,
   parnames <- PnodeParentNames(pnode)
   npar <- length(ppar)
   parStates <- lapply(ppar,PnodeStates)
+  tvals <- PnodeParentTvals(pnode)
+  thetas <- do.call("expand.grid",tvals)
+  if (nrow(thetas) == 0L) {
+    thetas <- data.frame(X0=0)
+  }
+  if (npar >0L) markers <- expand.grid(parStates)
 
   ## Node Parameters
   pRules <- PnodeRules(pnode)
@@ -275,7 +333,6 @@ RegressionGadget <- function(pnode, useR2=PnodeNumParents(pnode)>0L,
   pb <- pb[1]
   pls <- PnodeLinkScale(pnode)
   R2 <- sum(pa*pa)/length(pa)/(sum(pa*pa)/length(pa)+pls*pls)
-  print(useR2)
 
   ui <- fluidPage(
       title=(paste("Editor for node ",PnodeName(pnode))),
@@ -318,7 +375,9 @@ RegressionGadget <- function(pnode, useR2=PnodeNumParents(pnode)>0L,
           column(width=12,
                  tabsetPanel(
                      tabPanel("Plot",plotOutput("barchart")),
-                     tabPanel("Table",tableOutput("cptFrame")))))
+                     tabPanel("Table",tableOutput("cptFrame")),
+                     tabPanel("Effective Thetas",tableOutput("etFrame")))))
+
   )
 
   server <-  function (input, output, session) {
@@ -369,11 +428,27 @@ RegressionGadget <- function(pnode, useR2=PnodeNumParents(pnode)>0L,
                    newrules(),pLink,newpls(),pQ)
     })
 
+    ## Effective Thetas table
+    eThetasFrame <- reactive({
+      rules <- input$rules
+      newa <- newpa()
+      newb <- newpb()
+      et <- matrix(0,nrow(thetas),nps-1L) #Take care of no parent case
+        et <- do.call(rules,
+                           list(thetas,newa,newb))
+      et <- matrix(et,nrow(thetas),1L)
+      if (npar >0L)
+        result <- data.frame(markers,theta=et)
+      else
+        result <- data.frame(theta=et)
+    })
+
     output$barchart <- renderPlot({
       barchart.CPF(buildCPF(), baseCol=color)
     })
 
     output$cptFrame <- renderTable(buildCPF(),striped=TRUE,digits=3)
+    output$etFrame <- renderTable(eThetasFrame(),striped=TRUE,digits=3)
 
     observeEvent(input$done, {
       stopApp(reassembleNode())
@@ -394,6 +469,13 @@ DPCGadget <- function(pnode, color="steelblue") {
   parnames <- PnodeParentNames(pnode)
   npar <- length(ppar)
   parStates <- lapply(ppar,PnodeStates)
+  tvals <- PnodeParentTvals(pnode)
+  thetas <- do.call("expand.grid",tvals)
+  if (nrow(thetas) == 0L) {
+    thetas <- data.frame(X0=0)
+  }
+  if (npar >0L) markers <- expand.grid(parStates)
+
 
   ## Node Parameters
   pLink <- "partialCredit"
@@ -495,7 +577,8 @@ DPCGadget <- function(pnode, color="steelblue") {
                                                  "Structure Function (Rule):",
                                                  c("Compensatory","Conjunctive",
                                                    "Disjunctive","OffsetConjunctive",
-                                                   "OffsetDisjunctive")))),
+                                                   "OffsetDisjunctive"),
+                                                 selected=pRules[[st]]))),
                      fluidRow(column(width=4,h4(paste("Q-matrix row for ",st))),
                               lapply(parnames,function(par) {
                                 column(width=3,
@@ -525,7 +608,8 @@ DPCGadget <- function(pnode, color="steelblue") {
         column(width=12,
                tabsetPanel(
                    tabPanel("Plot",plotOutput("barchart")),
-                   tabPanel("Table",tableOutput("cptFrame")))))
+                   tabPanel("CP Table",tableOutput("cptFrame")),
+                   tabPanel("Effective Thetas",tableOutput("etFrame")))))
   )
 
   server <-  function (input, output, session) {
@@ -611,6 +695,23 @@ DPCGadget <- function(pnode, color="steelblue") {
       newb
     })
 
+    eThetasFrame <- reactive({
+      rules <- newRules()
+      newa <- newpa()
+      newb <- newpb()
+      QQ <- newQ()
+      et <- matrix(0,nrow(thetas),nps-1L) #Take care of no parent case
+      for (kk in 1L:(nps-1L)) {
+        et[,kk] <- do.call(rules[[kk]],
+                           list(thetas[,QQ[kk,],drop=FALSE],
+                                newa[[kk]],newb[[kk]]))
+      }
+      colnames(et) <- pstates[1L:(nps-1L)]
+      if (npar >0L)
+        result <- data.frame(markers,et)
+      else
+        result <- data.frame(et)
+    })
 
     ## Reassemble Node
     reassembleNode <- reactive( {
@@ -632,7 +733,7 @@ DPCGadget <- function(pnode, color="steelblue") {
     })
 
     output$cptFrame <- renderTable(buildCPF(),striped=TRUE,digits=3)
-
+    output$etFrame <- renderTable(eThetasFrame(),striped=TRUE,digits=3)
     observeEvent(input$done, {
       stopApp(reassembleNode())
     })
@@ -651,7 +752,7 @@ DPCGadget <- function(pnode, color="steelblue") {
     })
     observe({
       orules <- offsetRules()
-      print(orules)
+      #print(orules)
       for (st in rownames(pQ)) {
         toggleState(paste("a",st,anames[1L],sep="."),
                     condition=isTRUE(orules[[st]]))
