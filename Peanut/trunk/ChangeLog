@@ -1,3 +1,8 @@
+2019-04-19  Rusell Almond  <ralmond@Cherry>
+
+	* R/Statistic.R (Statistic): Added Statistic Objects.  So far just
+	single node.  Also need multiple node statistics.
+
 2019-03-27  Rusell Almond  <ralmond@Cherry>
 
 	* R/shinyNode.R (DPCGadget): Right now using hard coded list of

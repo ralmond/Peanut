@@ -114,3 +114,9 @@ export(Pnet2Omega,Pnet2Qmat,topsort,Omega2Pnet,Qmat2Pnet)
 
 ## Gadgets
 export(CompensatoryGadget,OffsetGadget,RegressionGadget,DPCGadget)
+
+## Statistics
+exportClass(Statistic)
+export(Statistic,calcStat, PnodeMargin, PnodeEAP, PnodeSD, PnodeMedian,
+       PnodeMode)
+exportMethods(calcStat)
