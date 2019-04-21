@@ -117,6 +117,6 @@ export(CompensatoryGadget,OffsetGadget,RegressionGadget,DPCGadget)
 
 ## Statistics
 exportClass(Statistic)
-export(Statistic,calcStat, PnodeMargin, PnodeEAP, PnodeSD, PnodeMedian,
+export(name,Statistic,calcStat, PnodeMargin, PnodeEAP, PnodeSD, PnodeMedian,
        PnodeMode)
-exportMethods(calcStat)
+exportMethods(calcStat, name)
