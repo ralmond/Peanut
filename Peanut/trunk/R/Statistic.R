@@ -4,16 +4,19 @@ setClass("Statistic",
                  node="character",
                  fun="character"))
 
-Statistic <- function (fun,node,name=fun,...) {
+Statistic <- function (fun,node,name=sprintf("%s(%s)",fun,node),...) {
   new("Statistic",name=name,node=node,fun=fun,...)
 }
 
 setMethod("toString","Statistic",function (x,...) {
-  sprintf("Statistic: { %s of %s }",x@name, x@node)
+  sprintf("Statistic: { %s }",x@name)
   })
 setMethod("show","Statistic",function(object) {
   cat(toString(object),"\n")
 })
+
+setGeneric("name",function(x) standardGeneric("name"))
+setMethod("name","Statitic", function(x) x@name)
 
 setGeneric("calcStat",function (stat,net) standardGeneric("calcStat"))
 setMethod("calcStat",c("Statistic"),
