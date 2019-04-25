@@ -1,6 +1,6 @@
 Package: Peanut
-Version: 0.5-2
-Date: 2019/04/21
+Version: 0.5-3
+Date: 2019/04/24
 Title: Parameterized Bayesian Networks, Abstract Classes
 Author: Russell Almond
 Maintainer: Russell Almond <ralmond@fsu.edu>

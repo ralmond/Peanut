@@ -91,7 +91,7 @@ export(BuildNetManifest,BuildNodeManifest)
 ## Warehouses
 export(ClearWarehouse,WarehouseManifest,"WarehouseManifest<-",
        WarehouseData,WarehouseSupply,WarehouseFetch,
-       WarehouseMake,WarehouseFree,
+       WarehouseMake,WarehouseFree, WarehouseUnpack,
        is.PnodeWarehouse,is.PnetWarehouse)
 exportMethods(ClearWarehouse,
               WarehouseManifest,"WarehouseManifest<-",
