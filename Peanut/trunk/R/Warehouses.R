@@ -31,6 +31,12 @@ WarehouseMake <- function (warehouse,name)
     UseMethod("WarehouseMake")
 setGeneric("WarehouseMake")
 
+## Serial should have components name and data.
+WarehouseUnpack <- function(warehouse,serial)
+  UseMethod("WarehouseUnpack")
+setGeneric("WarehouseUnpack")
+
+
 WarehouseFree <- function (warehouse,name)
     UseMethod("WarehouseFree")
 setGeneric("WarehouseFree")
