@@ -16,12 +16,17 @@ WarehouseData <- function (warehouse,name)
     UseMethod("WarehouseData")
 setGeneric("WarehouseData")
 
-WarehouseSupply <- function(warehouse,name) {
+WarehouseSupply <- function(warehouse,name)
+  UseMethod("WarehouseSupply")
+setGeneric("WarehouseSupply")
+
+
+setMethod("WarehouseSupply", c("ANY"), function(warehouse,name) {
   val <- WarehouseFetch(warehouse,name)
   if (is.null(val))
     val <- WarehouseMake(warehouse,name)
   val
-}
+})
 
 WarehouseFetch <- function (warehouse,name)
     UseMethod("WarehouseFetch")
