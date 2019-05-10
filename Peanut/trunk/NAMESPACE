@@ -95,7 +95,7 @@ export(ClearWarehouse,WarehouseManifest,"WarehouseManifest<-",
        is.PnodeWarehouse,is.PnetWarehouse)
 exportMethods(ClearWarehouse,
               WarehouseManifest,"WarehouseManifest<-",
-       WarehouseData,WarehouseFetch,
+       WarehouseData,WarehouseFetch,WarehouseSupply,
        WarehouseMake,WarehouseFree,
        is.PnodeWarehouse,is.PnetWarehouse)
 
