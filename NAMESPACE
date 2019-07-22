@@ -2,6 +2,7 @@ import(methods)
 importFrom(CPTtools,effectiveThetas)
 importFrom(CPTtools,getOffsetRules)
 importFrom(CPTtools,isOffsetRule)
+importFrom(CPTtools,calcDPCFrame,barchart.CPF)
 import(shiny)
 importFrom(shinyjs, useShinyjs, toggleState)
 
@@ -56,6 +57,7 @@ export(PnodeName, "PnodeName<-",
        PnodeStateDescriptions, "PnodeStateDescriptions<-",
        PnodeStateValues, "PnodeStateValues<-",
        PnodeParents, "PnodeParents<-", PnodeParentNames, PnodeNumParents,
+       isPnodeContinuous,
        PnetName, "PnetName<-",
        PnetTitle, "PnetTitle<-",
        PnetHub, "PnetHub<-",
@@ -75,6 +77,7 @@ exportMethods(PnodeName, "PnodeName<-",
        PnodeStateDescriptions, "PnodeStateDescriptions<-",
        PnodeStateValues, "PnodeStateValues<-",
        PnodeParents, "PnodeParents<-", PnodeParentNames, PnodeNumParents,
+       isPnodeContinuous,
        PnetName, "PnetName<-",
        PnetTitle, "PnetTitle<-",
        PnetHub, "PnetHub<-",

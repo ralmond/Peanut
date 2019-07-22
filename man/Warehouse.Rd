@@ -100,13 +100,14 @@ is.PnodeWarehouse(obj)
   \code{is.PnodeWarehouse}.
 
   There are two reference implementations in
-  \code{\link[PNetica]{BNWarehouse-class}} and
-  \code{\link[PNetica]{NNWarehouse-class}} (network and node warehouses
+  \code{\link[PNetica]{BNWarehouse}} and
+  \code{\link[PNetica]{NNWarehouse}} (network and node warehouses
   respectively).  Both of these take advantage of the fact that the
   session and network objects in \code{\link[RNetica]{RNetica-package}}
   have built in environments which cache the networks and nodes
-  respectively.  The \code{\link[RGAUtils]{Warehouse-class}} object is a
-  generic implementation that also may be of some use to potential implementors.
+  respectively.  The \code{\link[RGAutils]{Warehouse-class}} object is a
+  generic implementation that also may be of some use to potential
+  implementors. 
   
 }
 \value{

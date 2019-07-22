@@ -31,7 +31,7 @@ PnodeParentNames(node)
   functions that any reasonable Bayes net package is likely to support
   so that basic code can be written which is generic across Bayes net
   packages.  For example, if \code{nd} is a
-  \code{\link{RNetica}{NeticaNode}} object, then \code{PnodeName(nd)} is
+  \code{\link[RNetica]{NeticaNode}} object, then \code{PnodeName(nd)} is
   a synonym for \code{\link[RNetica]{NodeName}(nd)}.  However, using
   \code{PnodeName(nd)} is more portable as it could expand to another
   function if using a different Bayes net package.

@@ -1,5 +1,6 @@
-"","Name","Title","Hub","Pathname","Description"
-"miniPP_CM","miniPP_CM","Physics Playground Excerpt","","miniPP-CM.dne","A few selected nodes from Physics Playground for testing Peanut/PNetica"
-"PPcompEM","PPcompEM","Compensatory Evidence Model","miniPP_CM","PPcompEM.dne","An evidence model with a single compensatory observable"
-"PPconjEM","PPconjEM","Conjuctive Evidence Model","miniPP_CM","PPconjEM.dne","An evidence model with a single conjuctive observable"
-"PPtwostepEM","PPtwostepEM","Two-step Evidence Model","miniPP_CM","PPtwostepEM.dne","An evidence model with an observable which has different mechanisms for each level."
+,Name,Title,Hub,Pathname,Description
+miniPP_CM,miniPP_CM,Physics Playground Excerpt,,miniPP-CM.dne,A few selected nodes from Physics Playground for testing Peanut/PNetica
+PPcompEM,PPcompEM,Compensatory Evidence Model,miniPP_CM,PPcompEM.dne,An evidence model with a single compensatory observable
+PPconjEM,PPconjEM,Conjuctive Evidence Model,miniPP_CM,PPconjEM.dne,An evidence model with a single conjuctive observable
+PPtwostepEM,PPtwostepEM,Two-step Evidence Model,miniPP_CM,PPtwostepEM.dne,An evidence model with an observable which has different mechanisms for each level.
+PPdurAttEM,PPdurAttEM,Duration and Attemtps,miniPP_CM,PPdurAttEM.dne,An evidence model with continuous variables.

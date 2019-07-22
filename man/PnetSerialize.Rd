@@ -82,7 +82,7 @@ unserializePnet(factory,data)
   This mechanism mimics the S3 method dispatch method, although it
   doesn't really use it.  If the argument to \code{PnetUnserialize} has
   a \code{type} field (but no \code{factory} field) then it will call a
-  funciton called \code{PnetUnserialize.\emph{type}}.
+  funciton called \code{PnetUnserialize.}\emph{type}.
 }
 
 \value{
@@ -97,7 +97,7 @@ unserializePnet(factory,data)
   \item{factory}{The name of a global object which can restore networks
     from serialized data.}
   \item{type}{The name of a class for which an
-    \code{PnetUnserialize.\emph{type}} method exits.}
+    \code{PnetUnserialize.}\emph{type} method exits.}
   \item{...}{There may be other data, but note that programs
     saving/restoring the serialized representation may not know how to
     handle these extra fields.}
@@ -118,7 +118,7 @@ unserializePnet(factory,data)
   the using program will not have places to store the extra fields.
 }
 \seealso{
-  \code{\link{Pnet}}, \code{\link{PnetWarehouse}}
+  \code{\link{Pnet}}, \code{\link{Warehouse}}
 }
 \examples{
 \dontrun{

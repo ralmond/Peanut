@@ -53,6 +53,11 @@ Maintainer: \packageMaintainer{Peanut}
   Probability Tables.  Paper presented at the 2015 Bayesian Application 
   Workshop at the Uncertainty in Artificial Intelligence Conference.
 
+  Almond, R. G., Mislevy, R. J., Steinberg, L. S., Yan, D. and
+  Williamson, D. M. (2015) \emph{Bayesian Networks in Educational
+  Assessment}.  Springer.  (ISBN 978-1-4939-2124-9).
+
+
 }
 \keyword{ package }
 \keyword{ graphs }

@@ -75,6 +75,11 @@ setGeneric("PnodeStateValues")
   UseMethod("PnodeStateValues<-")
 setGeneric("PnodeStateValues<-")
 
+isPnodeContinuous <- function (node)
+  UseMethod("isPnodeContinuous")
+setGeneric("isPnodeContinuous")
+
+
 #### Parents
 
 PnodeParents <- function (node)
