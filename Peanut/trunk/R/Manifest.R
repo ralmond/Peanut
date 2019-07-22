@@ -39,6 +39,8 @@ BuildNodeManifest <- function (Pnodelist) {
   Nstates <- integer()
   NodeDescription <- character()
   NodeLabels <- character()
+  Continuous <- logical()
+  UpperBound <- numeric()
 
   ## State Level Fields
   StateName <- character()
@@ -61,6 +63,7 @@ BuildNodeManifest <- function (Pnodelist) {
     Nstates <- c(Nstates,k)
     NodeDescription <- c(NodeDescription,PnodeDescription(nd))
     NodeLabels <- c(NodeLabels,paste(PnodeLabels(nd),collapse=","))
+    Continuous <- c(Continuous,isPnodeContinuous(nd))
     ## Pad the node level fields with blank lines
     if (k>1) {
       ModelHub <- c(ModelHub,rep("",k-1))
@@ -68,19 +71,27 @@ BuildNodeManifest <- function (Pnodelist) {
       Nstates <- c(Nstates,rep(NA_integer_,k-1))
       NodeDescription <- c(NodeDescription,rep("",k-1))
       NodeLabels <- c(NodeLabels,rep("",k-1))
+      Continuous <- c(Continuous,rep(as.logical(NA),k-1))
+      UpperBound <- c(UpperBound,rep(NA_real_,k-1))
     }
     StateName <- c(StateName,PnodeStates(nd))
     StateTitle <- c(StateTitle,PnodeStateTitles(nd))
     StateDescription <- c(StateDescription,PnodeStateDescriptions(nd))
-    if (!is.null(PnodeStateValues(nd))) {
-      StateValue <- c(StateValue,PnodeStateValues(nd))
+    if (isPnodeContinuous(nd)) {
+      StateValue <- c(StateValue,PnodeStateValues(nd)[1:k])
+      UpperBound <- c(UpperBound,PnodeStateValues(nd)[k])
     } else {
-      StateValue <- c(StateValue,rep(NA,k))
+      if (!is.null(PnodeStateValues(nd))) {
+        StateValue <- c(StateValue,PnodeStateValues(nd))
+      } else {
+        StateValue <- c(StateValue,rep(NA,k))
+      }
+      UpperBound <- c(UpperBound,NA_real_)
     }
   }
   result <- data.frame(Model,NodeName,ModelHub,NodeTitle,NodeDescription,
-                       NodeLabels,Nstates,StateName,StateTitle,
-                       StateDescription, StateValue,
+                       NodeLabels,Continuous,Nstates,StateName,StateTitle,
+                       StateDescription, StateValue,UpperBound,
                        stringsAsFactors=FALSE)
   ## Seems there is a bug in the class checking mechanism,
   ## Easiest to just leave it as a data.frame

@@ -1,2 +1,14 @@
 Need to doc:
-  ‘defaultAlphas’ ‘defaultBetas’ ‘topsort’
+  ‘topsort’
+
+* checking for missing documentation entries ... WARNING
+Undocumented code objects:
+  ‘PnodeEAP’ ‘PnodeMargin’ ‘PnodeMedian’ ‘PnodeMode’ ‘PnodeSD’
+  ‘Statistic’ ‘WarehouseUnpack’ ‘calcStat’ ‘name’
+Undocumented S4 classes:
+  ‘Statistic’
+Undocumented S4 methods:
+  generic 'WarehouseSupply' and siglist 'ANY'
+  generic 'calcStat' and siglist 'Statistic'
+  generic 'name' and siglist 'Statistic'
+

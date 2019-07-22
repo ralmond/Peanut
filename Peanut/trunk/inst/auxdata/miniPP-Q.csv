@@ -1,5 +1,12 @@
-"","Model","Node","NStates","State","Link","LinkScale","Physics","IterativeD","EnergyTransfer","NTL","POfMom","Rules","A.Physics","A.IterativeD","A.EnergyTransfer","A.NTL","A.POfMom","A","B.Physics","B.IterativeD","B.EnergyTransfer","B.NTL","B.POfMom","B","PriorWeight"
-"1","PPcompEM","CompensatoryObs",2,"Right","partialCredit",,0,0,0,1,1,"""Compensatory""",,,,0.9,1.1,,,,,,,0.3,""
-"2","PPconjEM","ConjunctiveObs",2,"Right","partialCredit",,0,0,1,0,1,"""OffsetConjunctive""",,,,,,1,,,-0.5,,0.5,,""
-"3","PPtwostepEM","TwoStepObs",3,"Full","partialCredit",,0,0,1,0,0,"""Compensatory""",,,1,,,,,,,,,0.5,""
-"4","PPtwostepEM","TwoStepObs",,"Partial","",,0,1,1,0,0,"""OffsetConjunctive""",,,,,,1,,0.1,1,,,,""
+,Model,Node,NStates,State,Link,LinkScale,Physics,IterativeD,EnergyTransfer,NTL,POfMom,Rules,A.Physics,A.IterativeD,A.EnergyTransfer,A.NTL,A.POfMom,A,B.Physics,B.IterativeD,B.EnergyTransfer,B.NTL,B.POfMom,B,PriorWeight
+1,PPcompEM,CompensatoryObs,2,Right,partialCredit,,0,0,0,1,1,"""Compensatory""",,,,0.9,1.1,,,,,,,0.3,
+2,PPconjEM,ConjunctiveObs,2,Right,partialCredit,,0,0,1,0,1,"""OffsetConjunctive""",,,,,,1,,,-0.5,,0.5,,
+3,PPtwostepEM,TwoStepObs,3,Full,partialCredit,,0,0,1,0,0,"""Compensatory""",,,1,,,,,,,,,0.5,
+4,PPtwostepEM,TwoStepObs,,Partial,,,0,1,1,0,0,"""OffsetConjunctive""",,,,,,1,,0.1,1,,,,
+5,PPdurAttEM,Duration,4,Q1,partialCredit,,0,0,1,1,0,“Compensatory”,,,0.8,1.2,,,,,,,,,
+6,PPdurAttEM,Duration,,Q2,,,0,0,1,1,0,“Compensatory”,,,0.64,0.96,,,,,,,,-0.125,
+7,PPdurAttEM,Duration,,Q3,,,0,0,1,1,0,“Compensatory”,,,0.64,0.96,,,,,,,,-0.125,
+9,PPdurAttEM,Attempts,4,one,partialCredit,,0,0,1,1,0,“Compensatory”,,,0.64,0.96,,,,,,,,-0.125,
+10,PPdurAttEM,Attempts,,two,,,0,0,1,1,0,“Compensatory”,,,0.64,0.96,,,,,,,,-0.125,
+11,PPdurAttEM,Attempts,,three,,,0,0,1,1,0,“Compensatory”,,,0.64,0.96,,,,,,,,-0.125,
+,,,,,,,,,,,,,,,,,,,,,,,,-0.125,

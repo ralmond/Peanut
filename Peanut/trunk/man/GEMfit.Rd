@@ -12,7 +12,7 @@
 }
 \usage{
 GEMfit(net, cases, tol = sqrt(.Machine$double.eps),
-       maxit = 100, Estepit = 1, Mstepit = 3,
+       maxit = 100, Estepit = 1, Mstepit = 30,
        trace=FALSE, debugNo=maxit+1)
 }
 \arguments{
