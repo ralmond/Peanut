@@ -1,3 +1,8 @@
+2019-07-23  Russell Almond  <ralmond@Limu>
+
+	* R/Manifest.R (BuildNodeManifest): Changed the way continuous
+	nodes are handled.
+
 2019-04-19  Rusell Almond  <ralmond@Cherry>
 
 	* R/Statistic.R (Statistic): Added Statistic Objects.  So far just
