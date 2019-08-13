@@ -1,35 +1,35 @@
-,Model,NodeName,ModelHub,NodeTitle,NodeDescription,NodeLabels,Continuous,Nstates,StateName,StateTitle,StateDescription,StateValue,UpperBounds
-1,miniPP_CM,Physics,,Physics Understanding,General understanding of Newtonian mechanics.,"pnode,Proficiency",FALSE,3,High,Highest 1/3,Highest third of target population,0.967421566101701,
-2,miniPP_CM,Physics,,,,,,,Medium,Middle 1/3,Middle Third of target Population,0,
-3,miniPP_CM,Physics,,,,,,,Low,Lowest 1/3,Lowest third of target population,-0.967421566101701,
-4,miniPP_CM,IterativeD,,Use iterative design to solve a problem,"Mass and GPE are directly related
-Height and GPE are directly related","Proficiencies,pnodes,LowLevel,Proficiency",FALSE,3,High,,Complete Mastery,0.967421566101701,
-5,miniPP_CM,IterativeD,,,,,,,Medium,,Partial Mastery,0,
-6,miniPP_CM,IterativeD,,,,,,,Low,,No Mastery,-0.967421566101701,
-7,miniPP_CM,EnergyTransfer,,Energy can Transfer,Energy can transfer from one object to another.,"Proficiencies,pnodes,LowLevel,Proficiency",FALSE,3,High,,Can use to solve difficult problems,0.967421566101701,
-8,miniPP_CM,EnergyTransfer,,,,,,,Medium,,Can use to solve simple but not difficult problems,0,
-9,miniPP_CM,EnergyTransfer,,,,,,,Low,,Can not solve simple problems.,-0.967421566101701,
-10,miniPP_CM,NTL,,Newton's Third Law,"Force pairs act in opposite directions
-Force pairs have equal magnitudes","Proficiencies,pnodes,LowLevel,Proficiency",FALSE,3,High,,,0.967421566101701,
-11,miniPP_CM,NTL,,,,,,,Medium,,,0,
-12,miniPP_CM,NTL,,,,,,,Low,,,-0.967421566101701,
-13,miniPP_CM,POfMom,,Properties of momentum,"Momentum is directly related to mass
+"","Model","NodeName","ModelHub","NodeTitle","NodeDescription","NodeLabels","Continuous","Nstates","StateName","StateTitle","StateDescription","StateValue","LowerBound","UpperBound"
+"1","miniPP_CM","Physics","","Physics Understanding","General understanding of Newtonian mechanics.","pnodes,Proficiencies",FALSE,3,"High","Highest 1/3","Highest third of target population",0.967421566101701,NA,NA
+"2","miniPP_CM","Physics","","","","",NA,NA,"Medium","Middle 1/3","Middle Third of target Population",0,NA,NA
+"3","miniPP_CM","Physics","","","","",NA,NA,"Low","Lowest 1/3","Lowest third of target population",-0.967421566101701,NA,NA
+"4","miniPP_CM","IterativeD","","Use iterative design to solve a problem","Mass and GPE are directly related
+Height and GPE are directly related","pnodes,LowLevel,Proficiencies",FALSE,3,"High","","Complete Mastery",0.967421566101701,NA,NA
+"5","miniPP_CM","IterativeD","","","","",NA,NA,"Medium","","Partial Mastery",0,NA,NA
+"6","miniPP_CM","IterativeD","","","","",NA,NA,"Low","","No Mastery",-0.967421566101701,NA,NA
+"7","miniPP_CM","EnergyTransfer","","Energy can Transfer","Energy can transfer from one object to another.","pnodes,LowLevel,Proficiencies",FALSE,3,"High","","Can use to solve difficult problems",0.967421566101701,NA,NA
+"8","miniPP_CM","EnergyTransfer","","","","",NA,NA,"Medium","","Can use to solve simple but not difficult problems",0,NA,NA
+"9","miniPP_CM","EnergyTransfer","","","","",NA,NA,"Low","","Can not solve simple problems.",-0.967421566101701,NA,NA
+"10","miniPP_CM","NTL","","Newton's Third Law","Force pairs act in opposite directions
+Force pairs have equal magnitudes","pnodes,LowLevel,Proficiencies",FALSE,3,"High","","",0.967421566101701,NA,NA
+"11","miniPP_CM","NTL","","","","",NA,NA,"Medium","","",0,NA,NA
+"12","miniPP_CM","NTL","","","","",NA,NA,"Low","","",-0.967421566101701,NA,NA
+"13","miniPP_CM","POfMom","","Properties of momentum","Momentum is directly related to mass
 Momentum is directly related to velocity
-Momentum is parallel to velocity","Proficiencies,pnodes,LowLevel,Proficiency",FALSE,3,High,,,0.967421566101701,
-14,miniPP_CM,POfMom,,,,,,,Medium,,,0,
-15,miniPP_CM,POfMom,,,,,,,Low,,,-0.967421566101701,
-Right,PPcompEM,CompensatoryObs,miniPP_CM,Compensatory Observable,A binary response which requires both parent variables for high probability of success.,"onodes,Observables,pnodes",FALSE,2,Right,,,,
-Wrong,PPcompEM,CompensatoryObs,,,,,,,Wrong,,,,
-Right1,PPconjEM,ConjunctiveObs,miniPP_CM,Conjunctive Observable,A binary response whose probability of success is related to average of parent variables.,"onodes,Observables,pnodes",FALSE,2,Right,,,,
-Wrong1,PPconjEM,ConjunctiveObs,,,,,,,Wrong,,,,
-Full,PPtwostepEM,TwoStepObs,miniPP_CM,Partial Credit observable,A partial credit response where each step requires different inputs.,"onodes,Observables,pnodes",FALSE,3,Full,Complete Solution,,,
-Partial,PPtwostepEM,TwoStepObs,,,,,,,Partial,First step but not second,,,
-None,PPtwostepEM,TwoStepObs,,,,,,,None,No attempt of failed first step,,,
-Q1,PPdurAttEM,Duration,miniPP_CM,Time spent on level,Total time spent on level less time spent on learning supports,"onodes,Observables,pnodes",TRUE,4,Q1,0–30.190,,0,
-Q2,PPdurAttEM,Duration,,,,,,,Q2,30.190–67.037,,30.19,
-Q3,PPdurAttEM,Duration,,,,,,,Q3,67.037–154.893,,67.037,
-Q4,PPdurAttEM,Duration,,,,,,,Q4,154.893—Inf,,154.893,Inf
-one,PPdurAttEM,Attempts,miniPP_CM,Number of Attempts,The number of times level was started or restarted,"onodes,Observables,pnodes",TRUE,4,one,1,,0.1,
-two,PPdurAttEM,Attempts,,,,,,,two,2,,1.1,
-three,PPdurAttEM,Attempts,,,,,,,three,3,,2.1,
-fourPlus,PPdurAttEM,Attempts,,,,,,,fourPlus,4 or more,,3.1,Inf
+Momentum is parallel to velocity","pnodes,LowLevel,Proficiencies",FALSE,3,"High","","",0.967421566101701,NA,NA
+"14","miniPP_CM","POfMom","","","","",NA,NA,"Medium","","",0,NA,NA
+"15","miniPP_CM","POfMom","","","","",NA,NA,"Low","","",-0.967421566101701,NA,NA
+"Right","PPcompEM","CompensatoryObs","miniPP_CM","Compensatory Observable","A binary response which requires both parent variables for high probability of success.","onodes,Observables,pnodes",FALSE,2,"Right","","",NA,NA,NA
+"Wrong","PPcompEM","CompensatoryObs","","","","",NA,NA,"Wrong","","",NA,NA,NA
+"Right1","PPconjEM","ConjunctiveObs","miniPP_CM","Conjunctive Observable","A binary response whose probability of success is related to average of parent variables.","onodes,Observables,pnodes",FALSE,2,"Right","","",NA,NA,NA
+"Wrong1","PPconjEM","ConjunctiveObs","","","","",NA,NA,"Wrong","","",NA,NA,NA
+"Full","PPtwostepEM","TwoStepObs","miniPP_CM","Partial Credit observable","A partial credit response where each step requires different inputs.","onodes,Observables,pnodes",FALSE,3,"Full","Complete Solution","",NA,NA,NA
+"Partial","PPtwostepEM","TwoStepObs","","","","",NA,NA,"Partial","First step but not second","",NA,NA,NA
+"None","PPtwostepEM","TwoStepObs","","","","",NA,NA,"None","No attempt of failed first step","",NA,NA,NA
+"one","PPdurAttEM","Attempts","miniPP_CM","Number of Attempts","The number of times level was started or restarted","onodes,Observables,pnodes",TRUE,4,"one","1","",NA,0.5,1.5
+"two","PPdurAttEM","Attempts","","","","",NA,NA,"two","2","",NA,1.5,2.5
+"three","PPdurAttEM","Attempts","","","","",NA,NA,"three","3","",NA,2.5,3.5
+"fourPlus","PPdurAttEM","Attempts","","","","",NA,NA,"fourPlus","4 or more","",NA,3.5,Inf
+"Q1","PPdurAttEM","Duration","miniPP_CM","Time spent on level","Total time spent on level less time spent on learning supports","onodes,Observables,pnodes",TRUE,4,"Q1","0–30.190","",NA,0,30.19
+"Q2","PPdurAttEM","Duration","","","","",NA,NA,"Q2","30.190–67.037","",NA,30.19,67.037
+"Q3","PPdurAttEM","Duration","","","","",NA,NA,"Q3","67.037–154.893","",NA,67.037,154.893
+"Q4","PPdurAttEM","Duration","","","","",NA,NA,"Q4","154.893—Inf","",NA,154.893,Inf

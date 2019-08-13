@@ -1,6 +1,6 @@
 \name{Pnet}
 \alias{Pnet}
-\alias{Pnet.default}
+\alias{Pnet,ANY-method}
 \alias{is.Pnet}
 \alias{as.Pnet}
 \title{A Parameterized Bayesian network}
@@ -14,7 +14,7 @@
 is.Pnet(x)
 as.Pnet(x)
 Pnet(net, priorWeight=10, pnodes=list())
-\method{Pnet}{default}(net, priorWeight=10, pnodes=list())
+\method{Pnet}{ANY}(net, priorWeight=10, pnodes=list())
 
 
 }
@@ -154,8 +154,10 @@ Pnet(net, priorWeight=10, pnodes=list())
  \dontrun{
 
 library(PNetica)  ## Implementation of Peanut protocol
+sess <- NeticaSession()
+startSession(sess)
 ## Create network structure using RNetica calls
-IRT10.2PL <- CreateNetwork("IRT10_2PL")
+IRT10.2PL <- CreateNetwork("IRT10_2PL",session=sess)
 
 theta <- NewDiscreteNode(IRT10.2PL,"theta",
                          c("VH","High","Mid","Low","VL"))

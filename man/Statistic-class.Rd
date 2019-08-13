@@ -42,7 +42,7 @@ Objects are created using the function \code{\link{Statistic}(fun, node,
       \code{fun} (using \code{do.call} to \code{net} and the actual nodes.}
     \item{name}{\code{signature(x = "Statistic")}: Returns the name of
       the statistic.}
-    }
+  }
 }
 \references{
 

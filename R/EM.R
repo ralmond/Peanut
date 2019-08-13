@@ -2,13 +2,16 @@
 GEMfit <- function (net, cases, tol=sqrt(.Machine$double.eps), maxit=100,
                    Estepit=1, Mstepit=30,trace=FALSE,debugNo=maxit+1) {
 
+  oldThreshold <- flog.threshold()
   ## Base case
   converged <- FALSE
   llike <- rep(NA,maxit+1)
   iter <- 1
-  BuildAllTables(net,debug=iter>=debugNo)
+  if (iter >= debugNo) flog.threshold(DEBUG)
+  BuildAllTables(net)
   llike[iter] <- calcPnetLLike(net,cases)
-  if (trace) cat("Iteration ",iter,"; Log likelihood",llike[iter],"\n")
+  if (trace)
+    flog.info("Iteration %d; Log Likelihood %e.",iter,llike[iter])
 
   while(!converged && iter <= maxit) {
     ## E-step
@@ -16,20 +19,22 @@ GEMfit <- function (net, cases, tol=sqrt(.Machine$double.eps), maxit=100,
     #browser()
 
     ## M-step
-    maxAllTableParams(net, Mstepit=Mstepit, tol=tol,
-                      debug=iter>=debugNo)
+    maxAllTableParams(net, Mstepit=Mstepit, tol=tol)
     #browser()
     ## Update parameters & convergence test
     iter <- iter + 1
-    BuildAllTables(net,debug=iter>=debugNo)
-    
+    if (iter >= debugNo) flog.threshold(DEBUG)
+    BuildAllTables(net)
+
     #browser()
-    
+
     llike[iter] <- calcPnetLLike(net,cases)
-    if (trace) cat("Iteration ",iter,"; Log likelihood",llike[iter],"\n")
+    if (trace) flog.info("Iteration %d; Log likelihood %e.",iter,llike[iter])
     converged <- (abs(llike[iter]-llike[iter-1]) < tol)
   }
-
+  flog.info("GEMfit %s after %d iterations.",
+            ifelse(converged,"converged","did not converge"),iter)
+  flog.threshold(oldThreshold)
   list(converged=converged,iter=iter,
        llikes=llike[1:iter])
 }
@@ -60,22 +65,29 @@ calcExpTables <- function (net, cases, Estepit=1, tol=sqrt(.Machine$double.eps))
 }
 setGeneric("calcExpTables")
 
-maxAllTableParams <- function (net, Mstepit=5, tol=sqrt(.Machine$double.eps),
-                               debug=FALSE) {
-  UseMethod("maxAllTableParams")
-}
-setGeneric("maxAllTableParams")
 
-maxAllTableParams.default <- function (net, Mstepit=5,
+maxAllTableParams <- function (net, Mstepit=5,
                                        tol=sqrt(.Machine$double.eps),
                                        debug=FALSE) {
+  Errs <- list()
+  netnm <- PnetName(net)
   lapply(PnetPnodes(net),
          function (nd) {
-           if (debug) cat("Updating params for",PnodeName(nd),"\n")
-           maxCPTParam(nd,Mstepit,tol)
+           ndnm <- PnodeName(nd)
+           flog.debug("Updating params for node %s in net %s.",ndnm,netnm)
+           out <- flog.try(maxCPTParam(nd,Mstepit,tol),
+                           context=sprintf("Updating params for node %s in net %s.",
+                                           ndnm, netnm))
+           if (is(out,'try-error')) {
+             Errs <- c(Errs,out)
+             if (debug) recover()
+           }
          })
+  if (length(Errs) >0L)
+    stop("Errors encountered while updating parameters for ",netnm)
   invisible(net)
 }
+setGeneric("maxAllTableParams")
 
 maxCPTParam <- function (node, Mstepit=5, tol=sqrt(.Machine$double.eps)) {
   UseMethod("maxCPTParam")

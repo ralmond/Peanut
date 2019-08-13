@@ -30,10 +30,11 @@ GEMfit(net, cases, tol = sqrt(.Machine$double.eps),
   \item{Mstepit}{An integer scalar giving the number of steps that
     should be taken by \code{\link[CPTtools]{mapDPC}} during the M-step.}
   \item{trace}{A logical value which indicates whether or not cycle by
-    cycle information should be sent to standard output.}
-  \item{debugNo}{An integer scalar.  Node-by-node status updates will
-    start when this iteration is reached.  Default value provides no
-    debugging information.}
+    cycle information should be sent to to the
+    \code{\link[futile.logger]{flog.logger}}.}
+  \item{debugNo}{An integer scalar.  When this iteration is reached,
+    then the \code{\link[futile.logger]{flog.threshold}(DEBUG)} will be
+    set, so more debugging information will be provided.}
 
 }
 \details{
@@ -95,6 +96,30 @@ GEMfit(net, cases, tol = sqrt(.Machine$double.eps),
   to figure out when the error occurs.
   
 }
+\section{Logging and Debug Mode}{
+
+  As of version 0.6-2, the meaning of the \code{trace} and
+  \code{debugNo} has changed.  In the new version, the
+  \code{\link[futile.logger]{flog.logger}} mechanism is used for
+  progress reports, and error reporting.
+
+  Setting \code{trace} to true causes information about the steps of the
+  algoritm (incluing the log likelihood at each step) to be output to
+  the current appender (see \code{\link[futile.logger]{flog.appender}})
+  The logging is done at the \code{INFO} level.  As the default appender
+  is the console, and \code{INFO} is the default logging level, the
+  meaning of this parameter hasn't changed much.
+  
+  The meaning of \code{debugNo} has changed, howver.  Previously, it
+  would turn on extra debug information when the target iteration was
+  reached.  That information is now always logged at the \code{DEBUG}
+  level.  So now if the current iteration reached \code{debugNo}, then   
+  \code{GEMfit} calls \code{\link[futile.logger]{flog.threshold}(DEBUG)}
+  to provide more information.  This allows the more detailed
+  \code{DEBUG}-level messages to be turned on when the EM algorithm is
+  closer to convergence.
+  
+}
 \value{
 
   A list with three elements:
@@ -149,10 +174,13 @@ GEMfit(net, cases, tol = sqrt(.Machine$double.eps),
 \dontrun{
 
 library(PNetica) ## Need a specific implementation
+sess <- NeticaSession()
+startSession(sess)
 
 irt10.base <- ReadNetworks(paste(library(help="PNetica")$path,
                            "testnets","IRT10.2PL.base.dne",
-                           sep=.Platform$file.sep))
+                           sep=.Platform$file.sep),
+                           session=sess)
 irt10.base <- as.Pnet(irt10.base)  ## Flag as Pnet, fields already set.
 irt10.theta <- NetworkFindNode(irt10.base,"theta")
 irt10.items <- PnetPnodes(irt10.base)
@@ -179,7 +207,7 @@ priB <- PnodeBetas(item1)
 priA <- PnodeAlphas(item1)
 priCPT <- NodeProbs(item1)
 
-gemout <- GEMfit(irt10.base,casepath)
+gemout <- GEMfit(irt10.base,casepath,trace=TRUE)
 
 postB <- PnodeBetas(item1)
 postA <- PnodeAlphas(item1)

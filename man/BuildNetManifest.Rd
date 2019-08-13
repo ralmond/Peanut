@@ -45,6 +45,14 @@ BuildNetManifest(Pnetlist)
   question is meant to be a spoke, then this field points at the
   corresponding hub.
 }
+\section{Logging}{
+
+  \code{BuildNetManifest} uses the
+  \code{\link[futile.logger]{flog.logger}} mechanism to log progress.
+  To see progress messages, use
+  \code{\link[futile.logger]{flog.threshold}(DEBUG)} (or \code{TRACE}).
+
+}
 \value{
 
   An object of type \code{\link[base]{data.frame}} where the columns
@@ -100,10 +108,13 @@ library(PNetica)  ## Example requires PNetica
 sess <- NeticaSession()
 startSession(sess)
 
-setwd(file.path(library(help="PNetica")$path, "testnets"))
+netpath <- file.path(library(help="PNetica")$path, "testnets")
+netnames <- paste(c("miniPP-CM","PPcompEM","PPconjEM","PPtwostepEM",
+                  "PPdurAttEM"),"dne",sep=".")
 
-Nets <- ReadNetworks(c("miniPP-CM.dne", "PPcompEM.dne",
-                       "PPconjEM.dne", "PPtwostepEM.dne"), session=sess)
+
+Nets <- ReadNetworks(file.path(netpath,netnames),
+                     session=sess)
 
 netman <- BuildNetManifest(Nets)
 stopifnot(all.equal(netman,netman1))
@@ -111,7 +122,6 @@ stopifnot(all.equal(netman,netman1))
 ## BNWarehouse is the PNetica Net Warehouse.
 Nethouse <- BNWarehouse(manifest=netman1,session=sess,key="Name")
 
-setwd(curd)
 stopSession(sess)
 
 }

@@ -359,6 +359,10 @@ nodeman1 <- read.csv(paste(library(help="Peanut")$path, "auxdata",
                            "Mini-PP-Nodes.csv", sep=.Platform$file.sep),
                      row.names=1,stringsAsFactors=FALSE)
 
+omegamat <- read.csv(paste(library(help="Peanut")$path, "auxdata",
+                           "miniPP-omega.csv", sep=.Platform$file.sep),
+                     row.names=1,stringsAsFactors=FALSE)
+
 ## Insures we are building nets from scratch
 setwd(tempdir())
 ## Network and node warehouse, to create networks and nodes on demand.
@@ -370,18 +374,20 @@ Nodehouse <- NNWarehouse(manifest=nodeman1,
 
 ## Build the proficiency model first:
 CM <- WarehouseSupply(Nethouse,"miniPP_CM")
-CM1 <- Omega2Pnet(omegamat,CM,Nodehouse,override=TRUE,debug=TRUE)
+CM1 <- Omega2Pnet(omegamat,CM,Nodehouse,override=TRUE)
 
 ## Build the nets from the Qmat
 
-Qmat2Pnet(Q1, Nethouse,Nodehouse,debug=TRUE)
+Qmat2Pnet(Q1, Nethouse,Nodehouse)
+
 
 ## Build the Qmat from the nets
 ## Generate a list of nodes
-obs <-sapply(list(sess$nets$PPcompEM,sess$nets$PPconjEM,sess$nets$PPtwostepEM),
-             NetworkAllNodes)
+obs <-unlist(sapply(list(sess$nets$PPcompEM,sess$nets$PPconjEM,
+                  sess$nets$PPtwostepEM,sess$nets$PPdurAttEM),
+             NetworkAllNodes))
 
-Q2 <- Pnet2Qmat(obs,NetworkAllNodes(CM),debug=TRUE)
+Q2 <- Pnet2Qmat(obs,NetworkAllNodes(CM))
 
 
 stopSession(sess)

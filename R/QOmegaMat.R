@@ -61,11 +61,16 @@ Pnet2Qmat <- function (obs,prof,defaultRule="Compensatory",
   B <- rep(NA_real_,nrow)
   PriorWeight <- character(nrow)
 
+  ## Initialize error accumulator
+  Errs <- list()
+
   ## Now loop over vars, processing each one.
   irow <- 1
   for (nd in obs) {
-    tryCatch({
-      if (debug) cat("Processing node ",PnodeName(nd),".\n")
+    ndnm <- PnodeName(nd)
+    netnm <- PnetName(PnodeNet(nd))
+    flog.debug("Processing node %s in net %s",ndnm,netnm)
+    out <- tryCatch({
       ## first row
       NStates[irow] <- nstate <- PnodeNumStates(nd)
       State[irow:(irow+nstate-2)] <- PnodeStates(nd)[1:(nstate-1)]
@@ -199,18 +204,17 @@ Pnet2Qmat <- function (obs,prof,defaultRule="Compensatory",
       if (!is.null(wt)) {
         PriorWeight[irow] <- dputToString(wt)
       }
-    },
-    error = function (e) {
-      ## Resignal error with context information about the node.
-      ee <- simpleError(
-          paste("While processing node ",PnodeName(nd),":",
-                conditionMessage(e)),
-          conditionCall(e))
-      stop(ee)
-    })
+    }, context=sprintf("Processing node %s in net %s",ndnm,netnm))
+    if (is(out,'try-error')) {
+      Errs <- c(Errs,out)
+      if (debug) recover()
+    }
+
     ## Next node
     irow <- irow + nstate-1
   }
+  if (length(Errs) >0L)
+    stop("Errors encountered while building Q-matrix.")
   ## Finally, put this togehter into a data frame
   ## Fix colnames(A) so they are different from colnames(QQ)
   colnames(AA) <- paste("A",colnames(AA),sep=".")
@@ -230,6 +234,7 @@ Qmat.reqcol <- c("Model","Node","NStates","State","Link","LinkScale",
 Qmat2Pnet <- function (Qmat, nethouse,nodehouse,defaultRule="Compensatory",
                        defaultLink="partialCredit",defaultAlpha=1,
                        defaultBeta=NULL,defaultLinkScale=NULL,
+                       defaultPriorWeight=10,
                        debug=FALSE,override=FALSE) {
 
   if (!is.PnodeWarehouse(nodehouse)) {
@@ -253,33 +258,51 @@ Qmat2Pnet <- function (Qmat, nethouse,nodehouse,defaultRule="Compensatory",
   if (!all(paste("B",profnames,sep=".") %in% names(Qmat))) {
     stop("Expected B columns for proficiency variables:",profnames)
   }
+  ## Initialize error list.
+  Errs <- list()
 
+  Qmat$Model <- trimws(Qmat$Model)
+  Qmat$Node <- trimws(Qmat$Node)
   netnames <- unique(Qmat$Model)
   for (netname in netnames) {
-    if (debug) {
-      cat("Processing net ",netname,"\n")
+    if (nchar(netname) ==0L) {
+      flog.warn("Skipping Blank Row(s)")
+      next
     }
+    flog.info("Processing net %s",netname)
     net <- WarehouseSupply(nethouse,netname)
     if (is.null(net)) {
-      stop("Could not find/create network ",netname)
+      flog.error("Could not find/create network %s",netname)
+      Errs <- c(Errs,
+                simpleError(sprintf("Could not find/create network %s",
+                                    netname)))
+      next
     }
     hubname <- PnetHub(net)
     if (nchar(hubname)>0) {
+      flog.debug("Fetching hub network %s",hubname)
       hub <- WarehouseSupply(nethouse,hubname)
       if (is.null(hub)) {
-        stop("Could not find hub for network ",netname,",","hubname")
+        flog.error("Could not find hub (%s) for network %s", hubname,netname)
+        Errs <- c(Errs,
+                  simpleError(sprintf("Could not find hub (%s) for network %s",
+                                      hubname, netname)))
+        next
       }
     }
     nodenames <- unique(Qmat$Node[Qmat$Model==netname])
     for (nodename in nodenames) {
-      if (debug) {
-        cat("Processing node ",nodename,"\n")
-      }
+      flog.info("Processing node %s in net %s",nodename, netname)
       node <- WarehouseSupply(nodehouse,c(netname,nodename))
       if (is.null(node)) {
-        stop("Could not find/create node ",nodename, "in model",netname)
+        flog.error("Could not find/create node %s in model %s",
+                   nodename, netname)
+        Errs <- c(Errs,
+                  simpleError(sprintf("Could not find/create node %s in model %s",
+                                      nodename, netname)))
       }
-      tryCatch({
+      context <- sprintf("processing node %s in net %s", nodename, netname)
+      out <- flog.try({
         Qrows <- Qmat[Qmat$Model==netname & Qmat$Node==nodename,,drop=FALSE]
         nstates <- nrow(Qrows)
         if (nstates != Qrows[1,"NStates"] - 1L) {
@@ -287,39 +310,57 @@ Qmat2Pnet <- function (Qmat, nethouse,nodehouse,defaultRule="Compensatory",
         }
         ## Check/adjust structure
         stubs <- list()
-        parnames <- names(which(apply(Qrows[,profnames,drop=FALSE]==1,2,any)))
+        parnames <- profnames[which(apply(Qrows[,profnames,drop=FALSE]==1,2,any))]
         exparnames <- PnodeParentNames(node)
+        flog.trace("While %s:",context)
+        flog.trace("Node has parents: ", exparnames,capture=TRUE)
+        flog.trace("But Q matrix has parents: ", parnames,capture=TRUE)
         if (!setequal(parnames,exparnames)) {
-          if (debug) {
-            cat("Node has parents: ", exparnames,"\n")
-            cat("But Q matrix has parents: ", parnames,"\n")
-          }
           if (length(exparnames) > 0L) {
-            cat("While processing links for node: ",nodename," in network",
-                netname,"\n")
-            cat("Node has parents: ", exparnames,"\n")
-            cat("But Q matrix has parents: ", parnames,"\n")
+            flog.warn("While %s:",context)
+            flog.warn("Node has parents: ", exparnames,capture=TRUE)
+            cat("But Q matrix has parents: ", parnames,capture=TRUE)
             if (override) {
-              warning("Changing net to match Q matrix.")
+              flog.warn("Changing node %s to match Q matrix.", nodename)
             } else {
               stop("Graphical structure does not match Q matrix.  See console.")
             }
           }
           pars <- list()
-          for (pname in setdiff(parnames,exparnames)) {
-            pars[[pname]] <- WarehouseSupply(nodehouse,c(hubname,pname))
+          isStub <- rep(FALSE,length(parnames))
+          names(isStub) <- parnames
+          for (pname in parnames) {
+            ## Already existing node?
+            pars[[pname]] <- PnetFindNode(net,pname)
+            if (is.null(pars[[pname]])) {
+              ## Try to make stub node from hub.
+              isStub[pname] <- TRUE
+              pars[[pname]] <-
+                WarehouseSupply(nodehouse,c(hubname,pname))
+            }
+            if (is.null(pars[[pname]])) {
+              ## Try to make local node.
+              isStub[pname] <- FALSE
+              pars[[pname]] <-
+                WarehouseSupply(nodehouse,c(netname,pname))
+            }
+            if (is.null(pars[[pname]]))
+              stop("Could not find parent ",pname, "in net", hubname,
+                   "or ",netname)
           }
-          stubs <- PnetMakeStubNodes(net,pars)
-          PnodeParents(node) <- c(PnodeParents(node),stubs)
+          if (any(isStub)) {
+            stubs <- PnetMakeStubNodes(net,pars[isStub])
+            pars[isStub] <- stubs
+          }
+          PnodeParents(node) <- pars
         }
         ## Change order to match node. Even if nominally a match.
         parnames <- PnodeParentNames(node)
-        if (debug) {
-          cat("Final parents: ",paste(parnames,collapse=", "),".\n")
-        }
+        flog.debug("Final parents for node %s: %s ",nodename,
+                   paste(parnames,collapse=", "))
         ## Extract Parameters
         ## "Link","LinkScale",
-        ll <- Qrows[1,"Link"]
+        ll <- trimws(Qrows[1,"Link"])
         if (is.na(ll) || nchar(ll)==0L) ll <- defaultLink
         PnodeLink(node) <- ll
         lsc <- Qrows[1,"LinkScale"]
@@ -332,7 +373,9 @@ Qmat2Pnet <- function (Qmat, nethouse,nodehouse,defaultRule="Compensatory",
         }
 
         ## "Rules",
-        rules <- Qrows[,"Rules"]
+        rules <- trimws(Qrows[,"Rules"])
+        ## Fix fancy quotes added by some spreadsheets
+        rules <- gsub(intToUtf8(c(91,0x201C,0x201D,93)),"\"",rules)
         nrules <- sum(nchar(rules)>0L)  #Number of non-missing rules
         if (nrules == 0L) {
           rules <- defaultRule
@@ -340,9 +383,8 @@ Qmat2Pnet <- function (Qmat, nethouse,nodehouse,defaultRule="Compensatory",
         if (nrules!=1L && nrules !=nstates) {
           stop("Expected ",nstates," (or 1) rules but got ",nrules)
         }
-        if (debug) {
-          cat ("Rules: ",paste(rules,collapse=", "),".\n")
-        }
+        flog.debug("Rules for node %s: %s",nodename,
+                   paste(rules,collapse=", "))
         if (nrules==1L) {
           PnodeRules(node) <- dgetFromString(rules[[1]])
         }
@@ -369,12 +411,10 @@ Qmat2Pnet <- function (Qmat, nethouse,nodehouse,defaultRule="Compensatory",
             if (all(is.na(betas))) betas <- rep(defaultBeta,length(parnames))
             names(betas) <- parnames
             PnodeBetas(node) <- betas
-            if (debug) {
-              cat("Single Row offset: \n")
-              print(PnodeQ(node))
-              print(PnodeAlphas(node))
-              print(PnodeBetas(node))
-            }
+            flog.debug("Single Row offset: ")
+            flog.debug("PnodeQ:",PnodeQ(node), capture=TRUE)
+            flog.debug("PnodeAlphas:", PnodeAlphas(node), capture=TRUE)
+            flog.debug("PnodeBetas:", PnodeBetas(node), capture=TRUE)
           } else {
             ## Weighted Case (Compensatory)
             alphas <- as.numeric(QrowsA)
@@ -384,12 +424,10 @@ Qmat2Pnet <- function (Qmat, nethouse,nodehouse,defaultRule="Compensatory",
             betas <- Qrows[1,"B"]
             if (is.na(betas)) betas <- defaultBeta
             PnodeBetas(node) <- betas
-            if (debug) {
-              cat("Single Row weighted: \n")
-              print(PnodeQ(node))
-              print(PnodeAlphas(node))
-              print(PnodeBetas(node))
-            }
+            flog.debug("Single Row weighted:")
+            flog.debug("PnodeQ:", PnodeQ(node), capture=TRUE)
+            flog.debug("PnodeAlphas", PnodeAlphas(node), capture=TRUE)
+            flog.debug("PnodeBetas", PnodeBetas(node), capture=TRUE)
           }
         } else {
           QrowsQ <- as.matrix(QrowsQ)
@@ -411,12 +449,10 @@ Qmat2Pnet <- function (Qmat, nethouse,nodehouse,defaultRule="Compensatory",
             if (is.na(betas)) betas <- rep(defaultBeta,nstates)
             PnodeBetas(node) <- as.list(betas)
 
-            if (debug) {
-              cat("Multiple Row weighted: \n")
-              print(PnodeQ(node))
-              print(PnodeAlphas(node))
-              print(PnodeBetas(node))
-            }
+            flog.debug("Multiple Row weighted:")
+            flog.debug("PnodeQ", PnodeQ(node), capture=TRUE)
+            flog.debug("PnodeAlphas", PnodeAlphas(node), capture=TRUE)
+            flog.debug("PnodeBetas", PnodeBetas(node), capture=TRUE)
           } else {
             ## Offset or Mixed
             QrowsQ <- QrowsQ==1
@@ -451,45 +487,40 @@ Qmat2Pnet <- function (Qmat, nethouse,nodehouse,defaultRule="Compensatory",
             }
             PnodeAlphas(node) <- alphas
             PnodeBetas(node) <- betas
-            if (debug) {
-              cat("Multiple Row mixed: \n")
-              print(PnodeRules(node))
-              print(PnodeQ(node))
-              print(PnodeAlphas(node))
-              print(PnodeBetas(node))
-            }
+            flog.debug("Multiple Row mixed: \n")
+            flog.debug("PnodeRules", PnodeRules(node), capture=TRUE)
+            flog.debug("PnodeQ", PnodeQ(node), capture=TRUE)
+            flog.debug("PnodeAlphas", PnodeAlphas(node), capture=TRUE)
+            flog.debug("PnodeBetas", PnodeBetas(node), capture=TRUE)
           } ## End Mixed
         } ## End Multiple
 
         ## "PriorWeight"
         wt <- Qrows[1,"PriorWeight"]
+        pwt <- PnodePriorWeight(node)
         if (!is.na(wt) && nchar(wt)>=0L) {
-          PnodePriorWeight(node) <- dgetFromString(wt)
-          if (debug) {
-            cat ("Prior Weight: ",wt,".\n")
-          }
+          pwt <- dgetFromString(wt)
         }
-
+        if (is.null(pwt)) pwt <- defaultPriorWeight
+        flog.debug("Prior Weight: ",pwt, capture=TRUE)
+        PnodePriorWeight(node) <- pwt
         ## Build Table
-        ## This won't work until we figure out how to set the default
-        ## prior weight.
-        ##BuildTable(node)
+        BuildTable(node)
 
         ## Clean out stub nodes
         if (length(stubs)>0L)
           PnetRemoveStubNodes(net,stubs)
 
       }, ## End tryCatch
-      error = function(e) {
-        ## Resignal error with context information about the node.
-        ee <- simpleError(
-            paste("While processing node ",nodename, "in model ",netname,":",
-                  conditionMessage(e)),
-            conditionCall(e))
-      stop(ee)
-      })
+      context=context)
+      if (is(out,'try-error')) {
+        Errs <- c(Errs,out)
+        if (debug) recover()
+      }
     }  ## Next Node
   } ## Next Net
+  if (length(Errs) >0L)
+    stop("Errors encountered while building networks.")
   invisible(netnames)
 }
 
@@ -517,7 +548,7 @@ Pnet2Omega <- function(net,prof, defaultRule="Compensatory",
     }
     Omega[PnodeName(nd), PnodeParentNames(nd)] <- 1
   }
-  ord <- topsort(Omega,noisy=debug)
+  ord <- topsort(Omega)
   Omega <- Omega[ord,ord]
   profnames <- rownames(Omega)
 
@@ -533,31 +564,43 @@ Pnet2Omega <- function(net,prof, defaultRule="Compensatory",
   PriorWeight <- character(p)
   names(PriorWeight) <- profnames
 
+  ## Initialize Error list
+  Errs <- list()
+
   ## Loop throught the nodes, filling in fields
   for (nd in prof) {
     pname <- PnodeName(nd)
-    if (!is.null(PnodeRules(nd)))
-      Rules[pname] <- as.character(PnodeRules(nd))
-    if (!is.null(PnodeLink(nd)))
-      Link[pname] <- as.character(PnodeLink(nd))
-    if (!is.null(PnodeBetas(nd)))
-      Intercept[pname] <- as.numeric(PnodeBetas(nd))
-    if (!is.null(PnodeLinkScale(nd))) {
-      AOmega[pname,pname] <-as.numeric(PnodeLinkScale(nd))
+    context <- sprintf("processing node %s.",pname)
+    flog.debug(context)
+    out <- flog.try({
+      if (!is.null(PnodeRules(nd)))
+        Rules[pname] <- as.character(PnodeRules(nd))
+      if (!is.null(PnodeLink(nd)))
+        Link[pname] <- as.character(PnodeLink(nd))
+      if (!is.null(PnodeBetas(nd)))
+        Intercept[pname] <- as.numeric(PnodeBetas(nd))
+      if (!is.null(PnodeLinkScale(nd))) {
+        AOmega[pname,pname] <-as.numeric(PnodeLinkScale(nd))
+      }
+      parnames <- PnodeParentNames(nd)
+      if (is.null(PnodeAlphas(nd))) {
+        AOmega[pname,parnames] <- defaultAlpha
+      } else {
+        AOmega[pname,parnames] <- as.numeric(PnodeAlphas(nd))
+      }
+      wt <- PnodePriorWeight(nd)
+      if (!is.null(wt)) {
+        PriorWeight[pname] <- dputToString(wt)
+      }
+    }, context=context)
+    if (is(out,'try-error')) {
+      Errs <- c(Errs,out)
+      if (debug) recover()
     }
-    parnames <- PnodeParentNames(nd)
-    if (is.null(PnodeAlphas(nd))) {
-      AOmega[pname,parnames] <- defaultAlpha
-    } else {
-      AOmega[pname,parnames] <- as.numeric(PnodeAlphas(nd))
-    }
-    wt <- PnodePriorWeight(nd)
-    if (!is.null(wt)) {
-      PriorWeight[pname] <- dputToString(wt)
-    }
-
   }
 
+  if (length(Errs) >0L)
+    stop("Errors encountered while building omega matrix.")
   colnames(AOmega) <- paste("A",colnames(AOmega),sep=".")
   result <- data.frame(Node=profnames,Omega,
                        Link,Rules,AOmega,Intercept,PriorWeight,
@@ -570,6 +613,10 @@ Pnet2Omega <- function(net,prof, defaultRule="Compensatory",
 ## Takes an incidence matrix and produces a sorted ordering so that the parent
 ## value is always higher in the ordering than a child.
 topsort <- function (Omega,noisy=FALSE) {
+  if (noisy==TRUE)
+    warning("Noisy argument depricated for function topsort.
+             Use 'flog.threshold(TRACE)' instead.")
+
   if (nrow(Omega) != ncol(Omega)) {
     stop("Matrix must be square.")
   }
@@ -578,14 +625,11 @@ topsort <- function (Omega,noisy=FALSE) {
   if (!is.null(colnames(Omega))) {
     names(cols) <- colnames(Omega)
   }
-  while (nrow(Omega) > 0) {
+  while (nrow(Omega) > 0L) {
     rsum <- apply(Omega,1,sum)
     priors <- which(rsum==1)
-    if (noisy) {
-      print("Omega so far:")
-      print(Omega)
-    }
-    if (length(priors) == 0) {
+    flog.trace("Omega so far:", Omega, capture=TRUE)
+    if (length(priors) == 0L) {
       stop("Graph is cyclic.")
     }
     ord <- c(ord,cols[priors])
@@ -606,6 +650,7 @@ Omega2Pnet <- function(OmegaMat,pn,nodewarehouse,
                        defaultRule="Compensatory",
                        defaultLink="normalLink",defaultAlpha=1,
                        defaultBeta=0,defaultLinkScale=1,
+                       defaultPriorWeight=10,
                        debug=FALSE,override=FALSE) {
   if (!is.Pnet(pn)) {
     stop("Blank network must be provided.")
@@ -617,7 +662,7 @@ Omega2Pnet <- function(OmegaMat,pn,nodewarehouse,
     stop("Badly formed Omega matrix.")
   }
   ## First parse the Matrix
-  nodenames <- OmegaMat$Node
+  nodenames <- trimws(OmegaMat$Node)
   QQ <- OmegaMat[,nodenames]
   if (ncol(QQ) != length(nodenames)) {
     stop("There are not columns corresponding to every variable.")
@@ -636,84 +681,112 @@ Omega2Pnet <- function(OmegaMat,pn,nodewarehouse,
   rules <- OmegaMat$Rules
   names(rules) <- nodenames
 
+  Errs <- list()
   ## Buidling List of Nodes
-  if (debug) {
-    cat("\n Building list of nodes.\n")
-  }
+  flog.info("Building list of nodes.")
   nodes <- vector("list",length(nodenames))
   names(nodes) <- nodenames
   netname <- PnetName(pn)
   for (ndn in nodenames) {
+    flog.debug("Fetching node %s",ndn)
     nodes[[ndn]] <- WarehouseSupply(nodewarehouse,c(netname,ndn))
+    if (is.null(nodes[[ndn]])) {
+      msg <- sprintf("Could not find node %s in net %s.", ndn, netname)
+      flog.error(msg)
+      Errs <- c(Errs,simpleError(msg))
+    }
   }
-
+  if (length(Errs) >0L)
+    stop("Not all nodes could be created:  stopping.")
   ## Next build structure.
-  if (debug) {
-    cat("\n Processing links.\n")
-  }
+  flog.info("Processing links.")
 
   for (ndn in nodenames) {
-    if (debug) cat("Building links for node: ",ndn,"\n")
-    node <- nodes[[ndn]]
-    parnames <- setdiff(nodenames[QQ[ndn,]==1],ndn)
-    exparnames <- PnodeParentNames(node)
-    if (length(exparnames) > 0L) {
-      if (!setequal(parnames,exparnames)) {
-        cat("While processing links for node: ",ndn,"\n")
-        cat("Node has parents: ", exparnames,"\n")
-        cat("But Omega matrix has parents: ", parnames,"\n")
-        if (override) {
-          warning("Changing net to match Omega matrix.")
-        } else {
-          stop("Graphical structure does not match Omega matrix.  See console.")
+    context <- sprintf("Building links for node: %s.",ndn)
+    flog.debug(context)
+    out <- flog.try({
+      node <- nodes[[ndn]]
+      parnames <- nodenames[sapply(QQ[ndn,]==1,isTRUE)]
+      parnames <- setdiff(parnames,ndn)
+      exparnames <- PnodeParentNames(node)
+      if (length(exparnames) > 0L) {
+        if (!setequal(parnames,exparnames)) {
+          flog.warn("While processing links for node: %s",ndn)
+          flog.warn("Node has parents: ", exparnames, capture=TRUE)
+          flog.debug("But Omega matrix has parents: ", parnames, capture=TRUE)
+          if (override) {
+            flog.warn("Changing node %s to match Omega matrix.",ndn)
+          } else {
+            stop("Graphical structure does not match Omega matrix.  See console.")
+          }
         }
       }
+      ## Change order to match matrix. Even if nominally a match.
+      PnodeParents(node) <- nodes[parnames]
+    }, context=context)
+    if (is(out,'try-error')) {
+      Errs <- c(Errs,out)
+      if (debug) recover()
     }
-    # Change order to match matrix. Even if nominally a match.
-    PnodeParents(node) <- nodes[parnames]
   }
+  if (length(Errs) >0L)
+    stop("Graph structure could be created:  stopping.")
 
   ### Next build structure.
-  if (debug) {
-    cat("\n Processing CPTs.\n")
-  }
+  flog.info("Processing CPTs.")
 
   for (ndn in nodenames) {
-    if (debug) cat("Building links for node: ",ndn,"\n")
-    node <- nodes[[ndn]]
-    parnames <- setdiff(nodenames[QQ[ndn,]==1],ndn)
-    if (is.na(rules[ndn]) || nchar(rules[ndn]) == 0L) {
-      PnodeRules(node) <- defaultRule
-    } else {
-      PnodeRules(node) <- rules[ndn]
-    }
-    if (is.na(rules[ndn]) || nchar(links[ndn]) == 0L) {
-      PnodeLink(node) <- defaultLink
-    } else {
-      PnodeLink(node) <- links[ndn]
-    }
-    if (is.na(intercepts[ndn])) {
-      PnodeBetas(node) <- defaultBeta
-    } else {
-      PnodeBetas(node) <- intercepts[ndn]
-    }
-    if (is.na(AA[ndn,ndn])) {
-      PnodeLinkScale(node) <- defaultLinkScale
-    } else {
-      PnodeLinkScale(node) <- AA[ndn,ndn]
-    }
-    parnames <- PnodeParentNames(node)
-    alphas <- AA[ndn,parnames]
-    alphas[is.na(alphas)] <- defaultAlpha
-    names(alphas) <- parnames
-    PnodeAlphas(node) <- alphas
+    context <- sprintf("Building CPTs for node: %s",ndn)
+    flog.debug(context)
+    flog.try({
+      node <- nodes[[ndn]]
+      parnames <- setdiff(nodenames[QQ[ndn,]==1],ndn)
+      if (is.na(rules[ndn]) || nchar(rules[ndn]) == 0L) {
+        PnodeRules(node) <- defaultRule
+      } else {
+        PnodeRules(node) <- rules[ndn]
+      }
+      if (is.na(rules[ndn]) || nchar(links[ndn]) == 0L) {
+        PnodeLink(node) <- defaultLink
+      } else {
+        PnodeLink(node) <- links[ndn]
+      }
+      if (is.na(intercepts[ndn])) {
+        PnodeBetas(node) <- defaultBeta
+      } else {
+        PnodeBetas(node) <- intercepts[ndn]
+      }
+      if (is.na(AA[ndn,ndn])) {
+        PnodeLinkScale(node) <- defaultLinkScale
+      } else {
+        PnodeLinkScale(node) <- AA[ndn,ndn]
+      }
+      PnodeQ(node) <- TRUE               #This works as long as always normalLink
+      parnames <- PnodeParentNames(node)
+      alphas <- as.numeric(AA[ndn,parnames])
+      alphas[is.na(alphas)] <- defaultAlpha
+      names(alphas) <- parnames
+      PnodeAlphas(node) <- alphas
 
-    if (!is.na(weights[ndn]) && nchar(weights[ndn]) > 0L) {
-    PnodePriorWeight(node) <- dgetFromString(weights)
-    }
+      pwt <- PnodePriorWeight(node)
+      if (!is.na(weights[ndn]) && nchar(weights[ndn]) > 0L) {
+        pwt <- dgetFromString(weights[ndn])
+      }
+      if (is.null(pwt)) pwt <- defaultPriorWeight
+      flog.debug("Prior Weight: ",pwt, capture=TRUE)
+      PnodePriorWeight(node) <- pwt
 
+      ## Build Table
+      BuildTable(node)
+
+    },context=context)
+    if (is(out,'try-error')) {
+      Errs <- c(Errs,out)
+      if (debug) recover()
+    }
   }
+  if (length(Errs) >0L)
+    stop("Errors encountered while building network.")
   pn
-
 }
 

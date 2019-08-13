@@ -95,8 +95,10 @@ GetPriorWeight(node)
  \dontrun{
 
 library(PNetica)  ## Implementation of Peanut protocol
+sess <- NeticaSession()
+startSession(sess)
 ## Create network structure using RNetica calls
-IRT10.2PL <- CreateNetwork("IRT10_2PL")
+IRT10.2PL <- CreateNetwork("IRT10_2PL",session=sess)
 
 theta <- NewDiscreteNode(IRT10.2PL,"theta",
                          c("VH","High","Mid","Low","VL"))
@@ -113,7 +115,9 @@ for (j in 1:J) {
 }
 
 ## Convert into a Pnet
-IRT10.2PL <- Pnet(IRT10.2PL,priorWeight=10,pnodes=items)
+IRT10.2PL <- as.Pnet(IRT10.2PL)
+PnetPriorWeight(IRT10.2PL) <- 10
+
 
 ## Convert nodes to Pnodes
 for (j in 1:J) {

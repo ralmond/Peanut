@@ -20,6 +20,13 @@ WarehouseSupply <- function(warehouse,name)
   UseMethod("WarehouseSupply")
 setGeneric("WarehouseSupply")
 
+WarehouseInventory <- function(warehouse) {
+  UseMethod("WarehouseInventory")
+}
+setGeneric("WarehouseInventory")
+
+
+
 
 setMethod("WarehouseSupply", c("ANY"), function(warehouse,name) {
   val <- WarehouseFetch(warehouse,name)

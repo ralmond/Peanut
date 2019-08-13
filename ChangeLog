@@ -3,6 +3,24 @@
 	* R/Manifest.R (BuildNodeManifest): Changed the way continuous
 	nodes are handled.
 
+2019-07-31  Rusell Almond  <ralmond@Cherry>
+
+	* R/QOmegaMat.R (Pnet2Qmat): Changing the meaning of debug in the
+	same way.  added defaultPriorWeight.
+	(topsort): Depricating noisy argument.
+	(Omega2Pnet): Changed debug, and added defaultPriorWeight
+
+	* R/EM.R (maxAllTableParams.default): Same thing.
+
+	* R/Pnets.R (BuildAllTables): Changing the meaning of "debug"
+	option.  Now will cause the browser to open on table failure.
+
+2019-07-29  Rusell Almond  <ralmond@Cherry>
+
+	* R/QOmegaMat.R (Qmat2Pnet): Added some trimws() calls to try to
+	 avoid blank space bugs. 
+	 (Omega2Pnet): Treat blanks as 0 in Q matrix.
+
 2019-04-19  Rusell Almond  <ralmond@Cherry>
 
 	* R/Statistic.R (Statistic): Added Statistic Objects.  So far just

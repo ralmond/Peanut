@@ -41,25 +41,32 @@ setGeneric("PnetPnodes")
 setGeneric("PnetPnodes<-")
 
 Pnet <- function (net, priorWeight=10, pnodes=list()) {
-  UseMethod("Pnet")
-}
-setGeneric("Pnet")
-
-Pnet.default <- function (net, priorWeight=10, pnodes=list()) {
-  if (!("Pnet" %in% class(net)))
-    class(net) <- c(class(net),"Pnet")
+  net <- as.Pnet(net)
   PnetPriorWeight(net) <- priorWeight
   PnetPnodes(net) <- pnodes
   net
 }
+setGeneric("Pnet")
+
 
 
 BuildAllTables <- function (net, debug=FALSE) {
+  netnm <- PnetName(net)
+  Errs <- list()
   lapply(PnetPnodes(net),
          function (node) {
-           if (debug) cat("Building",PnodeName(node),"\n")
-           BuildTable(node)
-           })
+           ndnm <- PnodeName(node)
+           flog.debug("Building CPT for node %s in net %s", ndnm, netnm)
+           out<- flog.try(BuildTable(node),
+                          context=sprintf("Building CPT for node %s in net %s",
+                                          ndnm, netnm))
+           if (is(out,'try-error')) {
+             Errs <- c(Errs,out)
+             if (debug) recover()
+           }
+         })
+  if (length(Errs) >0L)
+    stop("Errors encountered while updating parameters for ",netnm)
   invisible(net)
 }
 
