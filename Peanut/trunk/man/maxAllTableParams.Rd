@@ -1,6 +1,6 @@
 \name{maxAllTableParams}
 \alias{maxAllTableParams}
-\alias{maxAllTableParams.default}
+%\alias{maxAllTableParams.default}
 \alias{maxCPTParam}
 \title{Find optimal parameters of Pnet or Pnode to match expected tables}
 \description{
@@ -16,7 +16,7 @@
 }
 \usage{
 maxAllTableParams(net, Mstepit = 5, tol = sqrt(.Machine$double.eps), debug=FALSE)
-\method{maxAllTableParams}{default}(net, Mstepit = 5, tol = sqrt(.Machine$double.eps), debug=FALSE)
+%\method{maxAllTableParams}{default}(net, Mstepit = 5, tol = sqrt(.Machine$double.eps), debug=FALSE)
 maxCPTParam(node, Mstepit = 5, tol = sqrt(.Machine$double.eps)) 
 }
 \arguments{
@@ -27,8 +27,9 @@ maxCPTParam(node, Mstepit = 5, tol = sqrt(.Machine$double.eps))
     to convergence.} 
   \item{tol}{A numeric scalar giving the stopping tolerance for the
     maximizer.}
-  \item{debug}{A logical scalar.  If true, information about which node
-    is being worked on is printed.}
+  \item{debug}{A logical scalar.  If true then
+    \code{\link[base]{recover}} is called after an error, so that the
+    node in question can be inspected.}
 }
 \details{
 
@@ -84,8 +85,21 @@ maxCPTParam(node, Mstepit = 5, tol = sqrt(.Machine$double.eps))
   application.  The tolerance is largely
   irrelevant (if \code{Mstepit} is small) as the outer EM algorithm does
   the tolerance test. 
-
                 
+}
+\section{Logging and Debug Mode}{
+
+  As of version 0.6-2, the meaning of the \code{debug} argument is
+  changed.  In the new version, the
+  \code{\link[futile.logger]{flog.logger}} mechanism is used for
+  progress reports, and error reporting.  In particular, setting
+  \code{\link[futile.logger]{flog.threshold}(DEBUG)} (or \code{TRACE})
+  will cause progress reports to be sent to the logging output.
+
+  The \code{debug} argument has been repurposed.  It now call
+  \code{\link{recover}} when the error occurs, so that the problem can
+  be debugged.
+  
 }
 \value{
 
@@ -134,10 +148,13 @@ maxCPTParam(node, Mstepit = 5, tol = sqrt(.Machine$double.eps))
 \dontrun{
 
 library(PNetica) ## Need a specific implementation
+sess <- NeticaSession()
+startSession(sess)
 
 irt10.base <- ReadNetworks(paste(library(help="PNetica")$path,
                            "testnets","IRT10.2PL.base.dne",
-                           sep=.Platform$file.sep))
+                           sep=.Platform$file.sep),
+                           session=sess)
 irt10.base <- as.Pnet(irt10.base)  ## Flag as Pnet, fields already set.
 irt10.theta <- NetworkFindNode(irt10.base,"theta")
 irt10.items <- PnetPnodes(irt10.base)
@@ -163,7 +180,7 @@ priB <- PnodeBetas(item1)
 priA <- PnodeAlphas(item1)
 priCPT <- NodeProbs(item1)
 
-gemout <- GEMfit(irt10.base,casepath)
+gemout <- GEMfit(irt10.base,casepath,trace=TRUE)
 
 calcExpTables(irt10.base,casepath)
 

@@ -5,6 +5,7 @@ importFrom(CPTtools,isOffsetRule)
 importFrom(CPTtools,calcDPCFrame,barchart.CPF)
 import(shiny)
 importFrom(shinyjs, useShinyjs, toggleState)
+import(futile.logger)
 
 ## Pnet and Pnode interfaces
 export(is.Pnet, as.Pnet, Pnet,
@@ -40,7 +41,7 @@ exportMethods(is.Pnet, as.Pnet, Pnet,
   )
 
 S3method(is.Pnet, default)
-S3method(Pnet, default)
+#S3method(Pnet, default)
 S3method(is.Pnode, default)
 S3method(PnodeAlphas, default)
 S3method("PnodeAlphas<-", default)
@@ -56,6 +57,7 @@ export(PnodeName, "PnodeName<-",
        PnodeStateTitles, "PnodeStateTitles<-",
        PnodeStateDescriptions, "PnodeStateDescriptions<-",
        PnodeStateValues, "PnodeStateValues<-",
+       PnodeStateBounds, "PnodeStateBounds<-",
        PnodeParents, "PnodeParents<-", PnodeParentNames, PnodeNumParents,
        isPnodeContinuous,
        PnetName, "PnetName<-",
@@ -76,6 +78,7 @@ exportMethods(PnodeName, "PnodeName<-",
        PnodeStateTitles, "PnodeStateTitles<-",
        PnodeStateDescriptions, "PnodeStateDescriptions<-",
        PnodeStateValues, "PnodeStateValues<-",
+       PnodeStateBounds, "PnodeStateBounds<-",
        PnodeParents, "PnodeParents<-", PnodeParentNames, PnodeNumParents,
        isPnodeContinuous,
        PnetName, "PnetName<-",
@@ -95,11 +98,13 @@ export(BuildNetManifest,BuildNodeManifest)
 export(ClearWarehouse,WarehouseManifest,"WarehouseManifest<-",
        WarehouseData,WarehouseSupply,WarehouseFetch,
        WarehouseMake,WarehouseFree, WarehouseUnpack,
+       WarehouseInventory,
        is.PnodeWarehouse,is.PnetWarehouse)
 exportMethods(ClearWarehouse,
               WarehouseManifest,"WarehouseManifest<-",
        WarehouseData,WarehouseFetch,WarehouseSupply,
        WarehouseMake,WarehouseFree,
+       WarehouseInventory,
        is.PnodeWarehouse,is.PnetWarehouse)
 
 
@@ -109,7 +114,7 @@ export(GEMfit, calcPnetLLike, calcExpTables,
        maxAllTableParams,maxCPTParam)
 exportMethods(calcPnetLLike, calcExpTables,
        maxAllTableParams,maxCPTParam)
-S3method("maxAllTableParams", default)
+#S3method("maxAllTableParams", default)
 
 
 ## Q and Omega matrixes
@@ -123,3 +128,5 @@ exportClass(Statistic)
 export(name, Statistic, calcStat, PnodeMargin, PnodeEAP, PnodeSD, PnodeMedian,
        PnodeMode)
 exportMethods(calcStat, name)
+
+export(flog.try)

@@ -73,8 +73,10 @@ PnodeNet(node)
  \dontrun{
 
 library(PNetica)  ## Implementation of Peanut protocol
+sess <- NeticaSession()
+startSession(sess)
 ## Create network structure using RNetica calls
-IRT10.2PL <- CreateNetwork("IRT10_2PL")
+IRT10.2PL <- CreateNetwork("IRT10_2PL",session=sess)
 
 theta <- NewDiscreteNode(IRT10.2PL,"theta",
                          c("VH","High","Mid","Low","VL"))
@@ -90,8 +92,8 @@ for (j in 1:J) {
   NodeSets(items[[j]]) <- c("observables")
 }
 ## Convert into a Pnet
-IRT10.2PL <- Pnet(IRT10.2PL,priorWeight=10,pnodes=items[2:J])
-for (j in 1:J) {
+IRT10.2PL <- Pnet(IRT10.2PL,priorWeight=10,pnode=items[2:J])
+for (j in 2:J) {
   items[[j]] <- Pnode(items[[j]])
 }
 

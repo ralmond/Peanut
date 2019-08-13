@@ -39,8 +39,9 @@ Omega2Pnet(OmegaMat, pn, nodewarehouse, defaultRule = "Compensatory", defaultLin
     difficulty (negative intercept)  parameters.}
   \item{defaultLinkScale}{A positive number which gives the default
     value for the link scale parameter.}
-  \item{debug}{A logical value.  If true, extra information will be
-    printed during process of building the Pnet.}
+  \item{debug}{A logical scalar.  If true then
+    \code{\link[base]{recover}} is called after an error, so that the
+    node in question can be inspected.}
   \item{override}{A logical value.  If false, differences between any
     exsiting structure in the graph and the Omega matrix will raise an
     error.  If true, the graph will be modified to conform to the matrix.
@@ -151,7 +152,7 @@ Omega2Pnet(OmegaMat, pn, nodewarehouse, defaultRule = "Compensatory", defaultLin
 }
 \section{Omega Matrix Structure}{
 
-  An Omega Matrix should be an object of class \code{\link[base]{data.frame}})
+  An Omega Matrix should be an object of class \code{\link[base]{data.frame}}
   with number of rows equal to the number of nodes.  Throughout let
   \var{node} stand for the name of a node.
   \describe{
@@ -175,7 +176,20 @@ Omega2Pnet(OmegaMat, pn, nodewarehouse, defaultRule = "Compensatory", defaultLin
       \code{\link{PnodePriorWeight}}.}
   }
 }
+\section{Logging and Debug Mode}{
 
+  As of version 0.6-2, the meaning of the \code{debug} argument is
+  changed.  In the new version, the
+  \code{\link[futile.logger]{flog.logger}} mechanism is used for
+  progress reports, and error reporting.  In particular, setting
+  \code{\link[futile.logger]{flog.threshold}(DEBUG)} (or \code{TRACE})
+  will cause progress reports to be sent to the logging output.
+
+  The \code{debug} argument has been repurposed.  It now call
+  \code{\link{recover}} when the error occurs, so that the problem can
+  be debugged.
+  
+}
 \value{
 
   The network \code{pnet} is returned.  Note that it is destructively

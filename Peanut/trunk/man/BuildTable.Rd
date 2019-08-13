@@ -20,9 +20,10 @@ BuildAllTables(net, debug=FALSE)
   \item{node}{A \code{\link{Pnode}} object whose table is to be built.}
   \item{net}{A \code{\link{Pnet}} object for whom the tables are needed
     to be built.}
-  \item{debug}{A logical scalar.  If true the names of the nodes are
-    printed as each one is built to help determine where errors are
-    occuring.}
+  \item{debug}{A logical scalar.  If true then
+    \code{\link[base]{recover}} is called after an error, so that the
+    node in question can be inspected.}
+
 }
 \details{
 
@@ -33,6 +34,19 @@ BuildAllTables(net, debug=FALSE)
   \code{\link{GetPriorWeight}} is used to set the weight that the prior
   table will be given in the EM algorithm.
 
+}
+\section{Logging and Debug Mode}{
+
+  As of version 0.6-2, the meaning of the \code{debug} argument is
+  changed.  In the new version, the
+  \code{\link[futile.logger]{flog.logger}} mechanism is used for
+  progress reports, and error reporting.  In particular, setting
+  \code{\link[futile.logger]{flog.threshold}(DEBUG)} (or \code{TRACE})
+  will cause progress reports to be sent to the logging output.
+
+  The \code{debug} argument has been repurposed.  It now call
+  \code{\link{recover}} when the error occurs, so that the problem can
+  be debugged.
   
 }
 \value{
@@ -70,7 +84,7 @@ BuildAllTables(net, debug=FALSE)
 
 \dontrun{
 
-## This is the implementation of BuildTable in Netica.  The [[<- and
+## This is the implementation of BuildTable in Netica.  The [<- and
 ## NodeExperience functions are part of the RNetica implementation.
 
 BuildTable.NeticaNode <- function (node) {
@@ -83,7 +97,8 @@ BuildTable.NeticaNode <- function (node) {
   invisible(node)
 }
 
-## This is the implementation of BuildAllTables
+## This is a simplified implementation of BuildAllTables
+## (The full implementation adds logging and error handling.)
 BuildAllTables <- function (net) {
   lapply(PnetPnodes(net),BuildTable)
   invisible(net)

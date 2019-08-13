@@ -1,6 +1,6 @@
 \name{PnetSerialize}
 \alias{PnetSerialize}
-\alias{PnetUnserialize}
+%\alias{PnetUnserialize}
 \alias{unserializePnet}
 \title{Writes/restores network from a string.}
 \description{
@@ -12,21 +12,24 @@
 }
 \usage{
 PnetSerialize(net)
-PnetUnserialize(serial)
+%PnetUnserialize(serial)
 unserializePnet(factory,data)
 }
 \arguments{
   \item{net}{A \code{\link{Pnet}} to be serialized.}
-  \item{serial}{A list containing at least three elements.  One is the
-    name of the network.  One is the \code{data} element which contains
-    the serialized data as a raw vector. The third 
-    is either a \code{factory} element containing the name of a global
-    symbol containing a factory for reading the object or a \code{type}
-    argument giving the name of the constructor.}
   \item{factory}{A character scalar containing the name of a global
     variable which contains a factory object capable of recreating the
     network from the data.}
-  \item{data}{A character scalar containing the serialized data.}
+  \item{serial}{A list containing at least three elements.  One is the
+     name of the network.  One is the \code{data} element which contains
+     the serialized data as a raw vector. The third 
+     is either a \code{factory} element containing the name of a global
+     symbol containing a factory for reading the object or a \code{type}
+     argument giving the name of the constructor.}
+  \item{data}{A list containing at least two elements.  One is the
+    name of the network.  One is the \code{data} element which contains
+    the serialized data as a raw vector.}
+{A character scalar containing the serialized data.}
 }
 \details{
 
@@ -122,25 +125,41 @@ unserializePnet(factory,data)
 }
 \examples{
 \dontrun{
-\library{mongolite}
-\library{jsonlite}
+library(mongolite)
+library(jsonlite)
+library(PNetica)
+sess <- NeticaSession()
+startSession(sess)
 
-collect <- new mongo("studentModels","test",
-                     "mogodb://user:pwd@127.0.0.1:27017/test")
+
+collect <- mongo("studentModels","test",
+                     "mongodb://127.0.0.1:27017/test")
+## Or "mongodb://user:pwd@127.0.0.1:27017/test"
+sm.net <- ReadNetworks(file.path(library(help="PNetica")$path, "testnets",
+     "miniPP-CM.dne"), session=sess)
+
 
 sm.ser <- PnetSerialize(sm.net)
 ## base 64 encode the data to make it easier to store.
 sm.ser$data <- base64_enc(sm.ser$data)
 
-collect$update(paste('{"name":"',sm.ser$name,'"}'),sm.ser)
+collect$replace(paste('{"name":"',sm.ser$name,'"}'),
+                toJSON(lapply(sm.ser,unbox)),
+                upsert=TRUE)
 
 ## Use iterator method to find, so we get in list rather than data frame
 ## representation. 
-it <- collect$iterate(paste('{"name":"',name1,'"}'),limit=1)
+
+it <- collect$iterate(sprintf('{"name":"%s"}',PnetName(sm.net)),limit=1)
 sm1.ser <- it$one()
 ## Decode back to the raw vector.
 sm1.ser$data <- base64_dec(sm1.ser$data)
-sm1 <- PnetUnserialize(sm1.ser)
+sm1 <- unserializePnet(sess,sm1.ser)
+
+sm1.ser$factory <- "sess"
+sm1a <- PnetUnserialize(sm1.ser)
+
+
 
 }
 }
