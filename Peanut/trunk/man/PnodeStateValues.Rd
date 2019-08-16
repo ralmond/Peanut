@@ -31,9 +31,18 @@ PnodeStateValues(node) <- value
 }
 \details{
 
+  This function behaves differently for discrete and continuous nodes
+  (see \code{\link{isPnodeContinuous}}).  For discrete nodes, the states
+  are numeric values associated with the states.  These are used in a
+  number of ways, most importantly, as \code{\link{PnodeParentTVals}}.
   Note that the first time the \code{PnodeStateValues()} are set, the entire
   vector must be set.  After that point individual values may be
-  changed. 
+  changed.
+
+  For continuous nodes, the state values are set by setting the
+  \code{\link{PnodeStateBounds}} for the node.  The value is the
+  midpoint of each interval.  (Note this produces an infinite state
+  value if one of the state bounds in infinite).
 
 }
 \value{
@@ -76,6 +85,20 @@ stopifnot(
 )
 
 PnodeStateValues(vnode)["Reverse"] <- -2
+
+## Continuous nodes get the state values from the bounds.
+theta0 <- NewContinuousNode(lnet,"theta0")
+stopifnot(length(PnodeStateValues(theta0))==0L)
+norm5 <- 
+   matrix(c(qnorm(c(.001,.2,.4,.6,.8)),
+            qnorm(c(.2,.4,.6,.8,.999))),5,2,
+          dimnames=list(c("VH","High","Mid","Low","VL"),
+                        c("LowerBound","UpperBound")))
+PnodeStateBounds(theta0) <- norm5
+PnodeStateValues(theta0)  ## Note these are medians not mean wrt normal!
+PnodeStateBounds(theta0)[1,1] <- -Inf
+PnodeStateValues(theta0)  ## Infinite value!
+
 
 DeleteNetwork(lnet)
 stopSession(sess)

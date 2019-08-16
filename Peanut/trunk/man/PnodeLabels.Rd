@@ -85,7 +85,7 @@ Ability <- NewDiscreteNode(nsnet,"Ability",c("High","Med","Low"))
 EssayScore <- NewDiscreteNode(nsnet,"EssayScore",paste("level",5:0,sep="_"))
 
 stopifnot(
-  length(PnodeLabels(Ability)) == 0, ## Nothing set yet
+  length(PnodeLabels(Ability)) == 0L ## Nothing set yet
 )
 
 PnodeLabels(Ability) <- "ReportingVariable"
@@ -105,7 +105,7 @@ stopifnot(
 ## Clear out the node set
 PnodeLabels(Ability) <- character()
 stopifnot(
-  length(PnodeLabels(Ability)) == 0
+  length(PnodeLabels(Ability)) == 0L
 )
 
 DeleteNetwork(nsnet)

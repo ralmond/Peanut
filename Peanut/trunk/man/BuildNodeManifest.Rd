@@ -212,6 +212,7 @@ for (n in 1:length(EMs)) {
 }
 ## Exclude node labels from this test, as they could appear in arbitrary order
 stopifnot(all.equal(nodeman[,-6],nodeman1[,-6]))
+## Note:  This test might fail because of node order.  Need to improve it.
 
 nl <- strsplit(nodeman$NodeLabels,",")
 nl1 <- strsplit(nodeman1$NodeLabels,",")

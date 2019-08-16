@@ -168,7 +168,7 @@ of persistent storage and object persistance and uniqueness necessary
 
 \dontrun{
 ## Requires PNetica package
-\library(PNetica)
+library(PNetica)
 sess <- NeticaSession()
 startSession(sess)
 

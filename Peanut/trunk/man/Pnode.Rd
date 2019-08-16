@@ -172,7 +172,8 @@ Pnode (node, lnAlphas, betas, rules="Compensatory",
        \code{\link{PnodeDescription}}, \code{\link{PnodeLabels}}, 
        \code{\link{PnodeStates}}, \code{\link{PnodeNumStates}},
        \code{\link{PnodeStateTitles}}, \code{\link{PnodeStateDescriptions}}, 
-       \code{\link{PnodeStateValues}}
+       \code{\link{PnodeStateValues}}, \code{\link{isPnodeContinuous}},
+       \code{\link{PnodeStateBounds}}
     
   Generic Functions:  \code{\link{BuildTable}},
   \code{\link{PnodeParentTvals}}, \code{\link{maxCPTParam}}

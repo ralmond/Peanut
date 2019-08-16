@@ -19,7 +19,7 @@ PnodeParentTvals(node)
 }
 \details{
 
-    Following the framework laid out in Almond (2015), the function
+  Following the framework laid out in Almond (2015), the function
   \code{\link[CPTtools]{calcDPCTable}} calculates a conditional
   probability table using the following steps:
   \enumerate{
@@ -68,6 +68,8 @@ PnodeParentTvals(node)
   thetas corresponding to a marginal distribution of (0.25, 0.5, 0.25)
   (note that each value is in the midpoint of the interval).
 
+  Continuous variables are handled
+
 }
 \value{
 
@@ -102,27 +104,34 @@ PnodeParentTvals(node)
   thetas with the parent variables and simply have
   \code{PnodeParentTvals} fetch them on demand.  Thus the
   implementation in \code{PNetica} is simply,
-  \code{lapply(NodeParents(node), NodeLevels)}.
+  \code{lapply(NodeParents(node), PnodeStateValues)}.
 
+  This is probably less than ideal, as the function
+  \code{\link{PnodeStateValues}} calculates midpoints wrt Lebesque
+  measure and not normal measure (used by \code{effectiveTheta}.
 
 }
 \seealso{
 
-       \code{\link{Pnode}}, \code{\link{PnodeQ}}, \code{\link{PnodeRules}}, 
-       \code{\link{PnodeLink}}, \code{\link{PnodeLnAlphas}}, 
-       \code{\link{PnodeBetas}}, \code{\link{BuildTable}},
-       \code{\link{PnodeParentTvals}}, \code{\link{maxCPTParam}}
-       \code{\link[CPTtools]{calcDPCTable}}, \code{\link[CPTtools]{mapDPC}}
-       \code{\link[CPTtools]{effectiveThetas}},
-       \code{\link[base]{expand.grid}}, \code{\link[stats]{qnorm}}
+  \code{\link{Pnode}}, \code{\link{PnodeStateValues}},
+  \code{\link{PnodeStateBounds}},
+  \code{\link[CPTtools]{effectiveThetas}},
+  \code{\link{PnodeQ}}, \code{\link{PnodeRules}}, 
+  \code{\link{PnodeLink}}, \code{\link{PnodeLnAlphas}}, 
+  \code{\link{PnodeBetas}}, \code{\link{BuildTable}},
+  \code{\link{maxCPTParam}}
+  \code{\link[CPTtools]{calcDPCTable}}, \code{\link[CPTtools]{mapDPC}}
+  \code{\link[base]{expand.grid}}, \code{\link[stats]{qnorm}}
 
 }
 \examples{
 
 \dontrun{
 library(PNetica) ## Requires implementation
+sess <- NeticaSession()
+startSession(sess)
 
-tNet <- CreateNetwork("TestNet")
+tNet <- CreateNetwork("TestNet",session=sess)
 
 theta1 <- NewDiscreteNode(tNet,"theta1",
                          c("VH","High","Mid","Low","VL"))
