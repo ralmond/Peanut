@@ -134,7 +134,6 @@ Nodehouse <- NNWarehouse(manifest=nodeman1,
 WarehouseData(Nodehouse,c("miniPP_CM","Physics"))
 
 
-setwd(curd)
 stopSession(sess)
 
 }

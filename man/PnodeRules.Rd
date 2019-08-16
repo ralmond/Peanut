@@ -130,8 +130,10 @@ PnodeRules(node) <- value
 
 \dontrun{
 library(PNetica) ## Requires implementation
+sess <- NeticaSession()
+startSession(sess)
 
-tNet <- CreateNetwork("TestNet")
+tNet <- CreateNetwork("TestNet",session=sess)
 
 theta1 <- NewDiscreteNode(tNet,"theta1",
                          c("VH","High","Mid","Low","VL"))
