@@ -28,7 +28,7 @@ maxCPTParam(node, Mstepit = 5, tol = sqrt(.Machine$double.eps))
   \item{tol}{A numeric scalar giving the stopping tolerance for the
     maximizer.}
   \item{debug}{A logical scalar.  If true then
-    \code{\link[base]{recover}} is called after an error, so that the
+    \code{\link[utils]{recover}} is called after an error, so that the
     node in question can be inspected.}
 }
 \details{

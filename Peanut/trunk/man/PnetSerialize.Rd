@@ -1,6 +1,6 @@
 \name{PnetSerialize}
 \alias{PnetSerialize}
-%\alias{PnetUnserialize}
+\alias{PnetUnserialize}
 \alias{unserializePnet}
 \title{Writes/restores network from a string.}
 \description{
@@ -12,7 +12,7 @@
 }
 \usage{
 PnetSerialize(net)
-%PnetUnserialize(serial)
+PnetUnserialize(serial)
 unserializePnet(factory,data)
 }
 \arguments{
@@ -29,7 +29,7 @@ unserializePnet(factory,data)
   \item{data}{A list containing at least two elements.  One is the
     name of the network.  One is the \code{data} element which contains
     the serialized data as a raw vector.}
-{A character scalar containing the serialized data.}
+  
 }
 \details{
 
@@ -131,13 +131,11 @@ library(PNetica)
 sess <- NeticaSession()
 startSession(sess)
 
-
 collect <- mongo("studentModels","test",
                      "mongodb://127.0.0.1:27017/test")
 ## Or "mongodb://user:pwd@127.0.0.1:27017/test"
 sm.net <- ReadNetworks(file.path(library(help="PNetica")$path, "testnets",
      "miniPP-CM.dne"), session=sess)
-
 
 sm.ser <- PnetSerialize(sm.net)
 ## base 64 encode the data to make it easier to store.
@@ -150,7 +148,7 @@ collect$replace(paste('{"name":"',sm.ser$name,'"}'),
 ## Use iterator method to find, so we get in list rather than data frame
 ## representation. 
 
-it <- collect$iterate(sprintf('{"name":"%s"}',PnetName(sm.net)),limit=1)
+it <- collect$iterate(sprintf('{"name":"\%s"}',PnetName(sm.net)),limit=1)
 sm1.ser <- it$one()
 ## Decode back to the raw vector.
 sm1.ser$data <- base64_dec(sm1.ser$data)
@@ -158,8 +156,6 @@ sm1 <- unserializePnet(sess,sm1.ser)
 
 sm1.ser$factory <- "sess"
 sm1a <- PnetUnserialize(sm1.ser)
-
-
 
 }
 }

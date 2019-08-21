@@ -12,7 +12,9 @@
 
 }
 \usage{
-Omega2Pnet(OmegaMat, pn, nodewarehouse, defaultRule = "Compensatory", defaultLink = "normalLink", defaultAlpha = 1, defaultBeta = 0, defaultLinkScale = 1, debug = FALSE, override = FALSE)
+Omega2Pnet(OmegaMat, pn, nodewarehouse, defaultRule = "Compensatory",
+defaultLink = "normalLink", defaultAlpha = 1, defaultBeta = 0,
+defaultLinkScale = 1, defaultPriorWeight=10, debug = FALSE, override = FALSE)
 }
 \arguments{
   \item{OmegaMat}{A data frame containing an Omega matrix (see values
@@ -39,8 +41,10 @@ Omega2Pnet(OmegaMat, pn, nodewarehouse, defaultRule = "Compensatory", defaultLin
     difficulty (negative intercept)  parameters.}
   \item{defaultLinkScale}{A positive number which gives the default
     value for the link scale parameter.}
+  \item{defaultPriorWeight}{A positive number which gives the default
+    value for the node prior weight hyper-parameter.}
   \item{debug}{A logical scalar.  If true then
-    \code{\link[base]{recover}} is called after an error, so that the
+    \code{\link[utils]{recover}} is called after an error, so that the
     node in question can be inspected.}
   \item{override}{A logical value.  If false, differences between any
     exsiting structure in the graph and the Omega matrix will raise an
