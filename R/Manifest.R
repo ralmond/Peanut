@@ -24,7 +24,7 @@ BuildNetManifest <- function (Pnetlist) {
       Hub <- c(Hub,PnetHub(net))
       Pathname <-c(Pathname,PnetPathname(net))
       Description <- c(Description,PnetDescription(net))
-    }, context=sprintf("Net: %s.",ndnm))
+    }, context=sprintf("Net: %s.",netnm))
     if (is(out,'try-error')) {
       Errs <- c(Errs,out)
     }

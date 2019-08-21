@@ -14,7 +14,7 @@
 is.Pnet(x)
 as.Pnet(x)
 Pnet(net, priorWeight=10, pnodes=list())
-\method{Pnet}{ANY}(net, priorWeight=10, pnodes=list())
+\S4method{Pnet}{ANY}(net, priorWeight=10, pnodes=list())
 
 
 }

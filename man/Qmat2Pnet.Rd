@@ -17,7 +17,7 @@
 
 }
 \usage{
-Qmat2Pnet(Qmat, nethouse, nodehouse, defaultRule = "Compensatory", defaultLink = "partialCredit", defaultAlpha = 1, defaultBeta = NULL, defaultLinkScale = NULL, debug = FALSE, override = FALSE)
+Qmat2Pnet(Qmat, nethouse, nodehouse, defaultRule = "Compensatory", defaultLink = "partialCredit", defaultAlpha = 1, defaultBeta = NULL, defaultLinkScale = NULL, defaultPriorWeight=10, debug = FALSE, override = FALSE)
 }
 \arguments{
   \item{Qmat}{A \code{\link[base]{data.frame}} containing an augmented
@@ -43,6 +43,8 @@ Qmat2Pnet(Qmat, nethouse, nodehouse, defaultRule = "Compensatory", defaultLink =
     difficulty (negative intercept) parameters.}
   \item{defaultLinkScale}{A positive number which gives the default
     value for the link scale parameter.}
+  \item{defaultPriorWeight}{A positive number which gives the default
+    value for the node prior weight hyper-parameter.}
   \item{debug}{A logical value.  If true, extra information will be
     printed during process of building the Pnet.}
   \item{override}{A logical value.  If false, differences between any

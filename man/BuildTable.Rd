@@ -21,7 +21,7 @@ BuildAllTables(net, debug=FALSE)
   \item{net}{A \code{\link{Pnet}} object for whom the tables are needed
     to be built.}
   \item{debug}{A logical scalar.  If true then
-    \code{\link[base]{recover}} is called after an error, so that the
+    \code{\link[utils]{recover}} is called after an error, so that the
     node in question can be inspected.}
 
 }
