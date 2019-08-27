@@ -33,7 +33,7 @@ calcStat(stat, net)
       \code{signature(net="Pnet", node)}, where \code{node} could be
       either a \code{\link{Pnode}} or a list of Pnodes.}
   \item{\dots}{Other optional arguments for later extension.}
-  \item{stat}{An object of class \code{\linkS4class{Statisitic}} which
+  \item{stat}{An object of class \code{\linkS4class{Statistic}} which
     will be applied to the \code{net}}
   \item{net}{A \code{Pnet} to which the statistic will be applied.}
 }
@@ -98,7 +98,7 @@ calcStat(stat, net)
   Class:
   \code{\linkS4class{Statistic}}
 
-  \code{\link{name}}
+  \code{\link{calcStat}}
   
   Avaliable Statistic functions:
   \code{\link{PnodeMargin}}, \code{\link{PnodeEAP}}, \code{\link{PnodeSD}}, 
