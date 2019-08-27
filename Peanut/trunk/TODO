@@ -1,8 +1,7 @@
 * checking for missing documentation entries ... WARNING
 Undocumented code objects:
-  ‘PnodeEAP’ ‘PnodeMargin’ ‘PnodeMedian’ ‘PnodeMode’
-  ‘PnodeSD’ ‘WarehouseInventory’ ‘WarehouseUnpack’
-  ‘calcStat’ ‘flog.try’ ‘name’
+  ‘WarehouseInventory’ ‘WarehouseUnpack’
+  ‘flog.try’ ‘name’
 Undocumented S4 methods:
   generic 'WarehouseSupply' and siglist 'ANY'
 Functions or methods with usage in documentation object 'Pnet' but not in code:

@@ -34,7 +34,7 @@ PnodeStateValues(node) <- value
   This function behaves differently for discrete and continuous nodes
   (see \code{\link{isPnodeContinuous}}).  For discrete nodes, the states
   are numeric values associated with the states.  These are used in a
-  number of ways, most importantly, as \code{\link{PnodeParentTVals}}.
+  number of ways, most importantly, as \code{\link{PnodeParentTvals}}.
   Note that the first time the \code{PnodeStateValues()} are set, the entire
   vector must be set.  After that point individual values may be
   changed.

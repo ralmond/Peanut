@@ -61,7 +61,7 @@ Objects are created using the function \code{\link{Statistic}(fun, node,
   Constructor function:
   \code{\link{Statistic}}
 
-  \code{\link{calcStat}}, \code{\link{name}}
+  \code{\link{calcStat}}
   
 
 }
