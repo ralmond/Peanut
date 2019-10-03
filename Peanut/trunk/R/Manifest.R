@@ -22,7 +22,8 @@ BuildNetManifest <- function (Pnetlist) {
     out <- flog.try({
       Title <- c(Title,PnetTitle(net))
       Hub <- c(Hub,PnetHub(net))
-      Pathname <-c(Pathname,PnetPathname(net))
+      Pathname <-c(Pathname,ifelse(is.null(PnetPathname(net)),
+                                   "",PnetPathname(net)))
       Description <- c(Description,PnetDescription(net))
     }, context=sprintf("Net: %s.",netnm))
     if (is(out,'try-error')) {

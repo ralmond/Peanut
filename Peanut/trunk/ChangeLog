@@ -1,3 +1,7 @@
+2019-10-03  Russell Almond  <ralmond@Limu>
+
+	* R/Manifest.R (BuildNetManifest): Fixed error with null pathnames.
+
 2019-07-23  Russell Almond  <ralmond@Limu>
 
 	* R/Manifest.R (BuildNodeManifest): Changed the way continuous
