@@ -38,6 +38,7 @@ Pnet2Qmat <- function (obs,prof,defaultRule="Compensatory",
   obsnames <- sapply(obs,PnodeName)
   modnames <- sapply(obs,function(nd) PnetName(PnodeNet(nd)))
   profnames <- sapply(prof,PnodeName)
+  flog.info("Proficiency variables are",profnames,capture=TRUE)
 
   ## Lay out node name row with proper repetition structure
   rowcounts <- statecounts-1
@@ -243,19 +244,27 @@ Qmat2Pnet <- function (Qmat, nethouse,nodehouse,defaultRule="Compensatory",
   if (!is.PnetWarehouse(nethouse)) {
     stop("Net warehouse must be supplied.")
   }
-
-  if (!all(Qmat.reqcol %in% names(Qmat))) {
-    stop("Badly formed Q matrix.")
+  foundCols <- (Qmat.reqcol %in% names(Qmat))
+  if (!all(foundCols)) {
+    flog.error("Q-matrix missing columns:", Qmat.reqcol[!foundCols],
+               capture=TRUE)
+    stop("Badly formed Q matrix, missing columns: ",
+         paste(Qmat.reqcol[!foundCols],collapse=", "))
   }
 
   ## Figure out names of proficiency variables.
   Anames <- names(Qmat)[grep("A\\..*",names(Qmat))]
   profnames <- sapply(strsplit(Anames,".",fixed=TRUE), function(x) x[2])
-
+  flog.info("Proficiency variables:",profnames,capture=TRUE)
   if (!all(profnames %in% names(Qmat))) {
+    flog.error("Missing proficiency variables:",
+              setdiff(profnames,names(Qmat)), capture=TRUE)
     stop("Expected columns for proficiency variables:",profnames)
   }
-  if (!all(paste("B",profnames,sep=".") %in% names(Qmat))) {
+  Bnames <- paste("B",profnames,sep=".")
+  if (!all(Bnames %in% names(Qmat))) {
+    flog.error("Missing B columns:",
+               setdiff(Bnames,names(Qmat)), capture=TRUE)
     stop("Expected B columns for proficiency variables:",profnames)
   }
   ## Initialize error list.
@@ -306,7 +315,7 @@ Qmat2Pnet <- function (Qmat, nethouse,nodehouse,defaultRule="Compensatory",
         Qrows <- Qmat[Qmat$Model==netname & Qmat$Node==nodename,,drop=FALSE]
         nstates <- nrow(Qrows)
         if (nstates != Qrows[1,"NStates"] - 1L) {
-          stop("Expected ",nstates != Qrows[1,"NStates"] - 1L,"got",nstates)
+          stop("Expected ", Qrows[1,"NStates"] - 1L,"got",nstates)
         }
         ## Check/adjust structure
         stubs <- list()
@@ -314,45 +323,54 @@ Qmat2Pnet <- function (Qmat, nethouse,nodehouse,defaultRule="Compensatory",
         exparnames <- PnodeParentNames(node)
         flog.trace("While %s:",context)
         flog.trace("Node has parents: ", exparnames,capture=TRUE)
-        flog.trace("But Q matrix has parents: ", parnames,capture=TRUE)
+        flog.trace("And Q matrix has parents: ", parnames,capture=TRUE)
         if (!setequal(parnames,exparnames)) {
           if (length(exparnames) > 0L) {
             flog.warn("While %s:",context)
             flog.warn("Node has parents: ", exparnames,capture=TRUE)
-            cat("But Q matrix has parents: ", parnames,capture=TRUE)
+            flog.warn("But Q matrix has parents: ", parnames,capture=TRUE)
             if (override) {
               flog.warn("Changing node %s to match Q matrix.", nodename)
             } else {
               stop("Graphical structure does not match Q matrix.  See console.")
             }
           }
-          pars <- list()
+          parents <- list()
           isStub <- rep(FALSE,length(parnames))
           names(isStub) <- parnames
           for (pname in parnames) {
+            flog.trace("Processing Parent %s",pname)
             ## Already existing node?
-            pars[[pname]] <- PnetFindNode(net,pname)
-            if (is.null(pars[[pname]])) {
+            parents[[pname]] <- PnetFindNode(net,pname)
+            if (is.null(parents[[pname]])) {
+              flog.trace("Parent %s not found, making stub node",pname)
               ## Try to make stub node from hub.
               isStub[pname] <- TRUE
-              pars[[pname]] <-
+              parents[[pname]] <-
                 WarehouseSupply(nodehouse,c(hubname,pname))
             }
-            if (is.null(pars[[pname]])) {
+            if (is.null(parents[[pname]])) {
+              flog.trace("Parent %s not found in hub, making local node",pname)
               ## Try to make local node.
               isStub[pname] <- FALSE
-              pars[[pname]] <-
+              parents[[pname]] <-
                 WarehouseSupply(nodehouse,c(netname,pname))
             }
-            if (is.null(pars[[pname]]))
+            if (is.null(parents[[pname]])) {
+              flog.error("While %s:",context)
+              flog.error("Could not find parent %s of %s in %s or %s",
+                         pname, nodename, hubname,netname)
               stop("Could not find parent ",pname, "in net", hubname,
                    "or ",netname)
+            }
           }
           if (any(isStub)) {
-            stubs <- PnetMakeStubNodes(net,pars[isStub])
-            pars[isStub] <- stubs
+            flog.trace("Making stub nodes for ",pname[isStub],
+                       capture=TRUE)
+            stubs <- PnetMakeStubNodes(net,parents[isStub])
+            parents[isStub] <- stubs
           }
-          PnodeParents(node) <- pars
+          PnodeParents(node) <- parents
         }
         ## Change order to match node. Even if nominally a match.
         parnames <- PnodeParentNames(node)
@@ -361,30 +379,40 @@ Qmat2Pnet <- function (Qmat, nethouse,nodehouse,defaultRule="Compensatory",
         ## Extract Parameters
         ## "Link","LinkScale",
         ll <- trimws(Qrows[1,"Link"])
-        if (is.na(ll) || nchar(ll)==0L) ll <- defaultLink
+        if (is.na(ll) || nchar(ll)==0L) {
+          flog.trace("No link for %s, using default link.", nodename)
+          ll <- defaultLink
+        }
         PnodeLink(node) <- ll
         lsc <- Qrows[1,"LinkScale"]
-        if (is.na(lsc) || nchar(lsc)==0L) lsc <- defaultLinkScale
+        if (is.na(lsc) || nchar(lsc)==0L) {
+          flog.trace("No link scale for %s, using default.", nodename)
+          lsc <- defaultLinkScale
+        }
         if (!is.null(lsc)) {
           PnodeLinkScale(node) <- lsc
         }
-        if (debug) {
-          cat ("Link: ",ll,"(",lsc,"). \n")
-        }
+        flog.debug("Link: ",ll,"(",lsc,"). \n")
+
 
         ## "Rules",
         rules <- trimws(Qrows[,"Rules"])
         ## Fix fancy quotes added by some spreadsheets
         rules <- gsub(intToUtf8(c(91,0x201C,0x201D,93)),"\"",rules)
         nrules <- sum(nchar(rules)>0L)  #Number of non-missing rules
+        ## Add back in quotes if missing.
+        rules <- ifelse(grepl('^".*"$',rules),rules,sprintf('"%s"',rules))
         if (nrules == 0L) {
+          flog.trace("No rule for %s, using default rule.", nodename)
           rules <- defaultRule
-        }
-        if (nrules!=1L && nrules !=nstates) {
-          stop("Expected ",nstates," (or 1) rules but got ",nrules)
         }
         flog.debug("Rules for node %s: %s",nodename,
                    paste(rules,collapse=", "))
+        if (nrules!=1L && nrules !=nstates) {
+          flog.error("Context",context)
+          flog.error("Expected ",nstates," (or 1) rules but got ",nrules)
+          stop("Expected ",nstates," (or 1) rules but got ",nrules)
+        }
         if (nrules==1L) {
           PnodeRules(node) <- dgetFromString(rules[[1]])
         }
@@ -536,6 +564,7 @@ Pnet2Omega <- function(net,prof, defaultRule="Compensatory",
                        debug=FALSE) {
   p <- length(prof)
   profnames <- sapply(prof,PnodeName)
+  flog.info("Proficiency variables are",profnames,capture=TRUE)
 
   ## Find a natural order so the Q matrix is lower triangular.
   Omega <- diag(p)
@@ -651,7 +680,8 @@ Omega2Pnet <- function(OmegaMat,pn,nodewarehouse,
                        defaultLink="normalLink",defaultAlpha=1,
                        defaultBeta=0,defaultLinkScale=1,
                        defaultPriorWeight=10,
-                       debug=FALSE,override=FALSE) {
+                       debug=FALSE,override=FALSE,
+                       addTvals=TRUE) {
   if (!is.Pnet(pn)) {
     stop("Blank network must be provided.")
   }
@@ -663,11 +693,21 @@ Omega2Pnet <- function(OmegaMat,pn,nodewarehouse,
   }
   ## First parse the Matrix
   nodenames <- trimws(OmegaMat$Node)
+  flog.info("Proficiency variables are",nodenames,capture=TRUE)
+  Qcol <- pmatch(nodenames, names(OmegaMat))
+  if (any(is.na(Qcol))) {
+    stop ("Could not find Q-matrix columns:",nodenames[is.na(Qcol)])
+  }
   QQ <- OmegaMat[,nodenames]
   if (ncol(QQ) != length(nodenames)) {
     stop("There are not columns corresponding to every variable.")
   }
-  AA <- OmegaMat[,paste("A",nodenames,sep=".")]
+  Anames <- paste("A",nodenames,sep=".")
+  Acol <- pmatch(Anames,names(OmegaMat))
+  if (any(is.na(Acol))) {
+    stop ("Could not find A-matrix columns:",nodenames[is.na(Acol)])
+  }
+  AA <- OmegaMat[,Anames]
   if (ncol(AA) != length(nodenames)) {
     stop("There are not A columns corresponding to every variable.")
   }
@@ -706,6 +746,13 @@ Omega2Pnet <- function(OmegaMat,pn,nodewarehouse,
     flog.debug(context)
     out <- flog.try({
       node <- nodes[[ndn]]
+      if (any(is.na(PnodeStateValues(node)))) {
+        flog.warn("Node %s does not have State Values set.",ndn)
+        if (addTvals) {
+          flog.info("Using normal rule to create State Values for %s.",ndn)
+          PnodeStateValues(node) <- effectiveThetas(PnodeNumStates(node))
+        }
+      }
       parnames <- nodenames[sapply(QQ[ndn,]==1,isTRUE)]
       parnames <- setdiff(parnames,ndn)
       exparnames <- PnodeParentNames(node)
@@ -777,6 +824,13 @@ Omega2Pnet <- function(OmegaMat,pn,nodewarehouse,
       PnodePriorWeight(node) <- pwt
 
       ## Build Table
+      napar <- sapply(PnodeParentTvals(node),function(x) any(is.na(x)))
+      if (any(napar)) {
+        flog.error("Parents %s of node %s don't have levels set.",
+                   paste(parnames[napar],collapse=", "),nodename)
+        stop("Parent",paste(parnames[napar],collapse=", "),
+             "of node", nodename, "don't have levels set.")
+      }
       BuildTable(node)
 
     },context=context)
