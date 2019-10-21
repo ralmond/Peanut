@@ -14,7 +14,8 @@
 \usage{
 Omega2Pnet(OmegaMat, pn, nodewarehouse, defaultRule = "Compensatory",
 defaultLink = "normalLink", defaultAlpha = 1, defaultBeta = 0,
-defaultLinkScale = 1, defaultPriorWeight=10, debug = FALSE, override = FALSE)
+defaultLinkScale = 1, defaultPriorWeight=10, debug = FALSE, override =FALSE,
+addTvals = TRUE)
 }
 \arguments{
   \item{OmegaMat}{A data frame containing an Omega matrix (see values
@@ -50,6 +51,9 @@ defaultLinkScale = 1, defaultPriorWeight=10, debug = FALSE, override = FALSE)
     exsiting structure in the graph and the Omega matrix will raise an
     error.  If true, the graph will be modified to conform to the matrix.
   }
+  \item{addTvals}{A logical value.  If true, nodes which do not have
+    state values set, will have those state values set using the
+    function \code{\link[CPTtools]{effectiveThetas}}.}
 }
 \details{
 

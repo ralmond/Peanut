@@ -8,3 +8,4 @@ Functions or methods with usage in documentation object 'Pnet' but not in code:
   Pnet.ANY
 
 
+https://docs.google.com/spreadsheets/d/{key}/gviz/tq?tqx=out:csv&sheet={sheet_name}
