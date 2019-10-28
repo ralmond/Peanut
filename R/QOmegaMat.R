@@ -392,13 +392,17 @@ Qmat2Pnet <- function (Qmat, nethouse,nodehouse,defaultRule="Compensatory",
         if (!is.null(lsc)) {
           PnodeLinkScale(node) <- lsc
         }
-        flog.debug("Link: ",ll,"(",lsc,"). \n")
+        flog.debug("Link: %s (%f)",ll,as.numeric(lsc))
 
 
         ## "Rules",
-        rules <- trimws(Qrows[,"Rules"])
+        rules <- trimws(Qrows$Rules)    #Need to use $ here to force
+                                        #in case Qmat is tibble not df
         ## Fix fancy quotes added by some spreadsheets
         rules <- gsub(intToUtf8(c(91,0x201C,0x201D,93)),"\"",rules)
+        ## Blanks are read as NAs, so fix
+        if (any(is.na(rules)))
+          rules[is.na(rules)] <- ""
         nrules <- sum(nchar(rules)>0L)  #Number of non-missing rules
         ## Add back in quotes if missing.
         rules <- ifelse(grepl('^".*"$',rules),rules,sprintf('"%s"',rules))
@@ -473,7 +477,8 @@ Qmat2Pnet <- function (Qmat, nethouse,nodehouse,defaultRule="Compensatory",
             if (all(is.na(alphas))) alphas <- rep(defaultAlpha,length(parnames))
             names(alphas) <- parnames
             PnodeAlphas(node) <- alphas
-            betas <- Qrows[,"B"]
+            betas <- Qrows$B            # Need $ her in case we have
+                                        # tibble instead of df.
             if (is.na(betas)) betas <- rep(defaultBeta,nstates)
             PnodeBetas(node) <- as.list(betas)
 
