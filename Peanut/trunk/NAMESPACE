@@ -41,6 +41,8 @@ exportMethods(is.Pnet, as.Pnet, Pnet,
        BuildTable,PnodeParentTvals
   )
 
+export(show)
+
 S3method(is.Pnet, default)
 #S3method(Pnet, default)
 S3method(is.Pnode, default)

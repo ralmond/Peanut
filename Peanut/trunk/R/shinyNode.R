@@ -765,3 +765,8 @@ DPCGadget <- function(pnode, color="steelblue") {
             viewer=dialogViewer(paste("Editor for node ",PnodeName(pnode)),
                                 800,800))
 }
+
+##########################################
+## Shiny breaks the show command
+
+show <- methods::show
