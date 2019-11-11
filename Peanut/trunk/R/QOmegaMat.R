@@ -66,6 +66,7 @@ Pnet2Qmat <- function (obs,prof,defaultRule="Compensatory",
   Errs <- list()
 
   ## Now loop over vars, processing each one.
+
   irow <- 1
   for (nd in obs) {
     ndnm <- PnodeName(nd)
@@ -315,7 +316,7 @@ Qmat2Pnet <- function (Qmat, nethouse,nodehouse,defaultRule="Compensatory",
         Qrows <- Qmat[Qmat$Model==netname & Qmat$Node==nodename,,drop=FALSE]
         nstates <- nrow(Qrows)
         if (nstates != Qrows[1,"NStates"] - 1L) {
-          stop("Expected ", Qrows[1,"NStates"] - 1L,"got",nstates)
+          stop("Expected ", Qrows[1,"NStates"] - 1L," rows got ",nstates)
         }
         ## Check/adjust structure
         stubs <- list()
@@ -528,12 +529,16 @@ Qmat2Pnet <- function (Qmat, nethouse,nodehouse,defaultRule="Compensatory",
           } ## End Mixed
         } ## End Multiple
 
-        ## "PriorWeight"
+        ## "PriorWeight" from table
         wt <- Qrows[1,"PriorWeight"]
-        pwt <- PnodePriorWeight(node)
-        if (!is.na(wt) && nchar(wt)>=0L) {
-          pwt <- dgetFromString(wt)
+        pwt <- NULL
+        if (!is.na(wt) && !is.null(wt)) {
+          if (isTRUE(is.numeric(wt)) && isTRUE(wt > 0)) pwt <- wt
+          if (isTRUE(is.character(wt)) && isTRUE(nchar(wt)>=0L)) {
+            pwt <- dgetFromString(wt)
+          }
         }
+        if (is.null(pwt)) pwt <- PnodePriorWeight(node)
         if (is.null(pwt)) pwt <- defaultPriorWeight
         flog.debug("Prior Weight: ",pwt, capture=TRUE)
         PnodePriorWeight(node) <- pwt
@@ -707,6 +712,8 @@ Omega2Pnet <- function(OmegaMat,pn,nodewarehouse,
   if (ncol(QQ) != length(nodenames)) {
     stop("There are not columns corresponding to every variable.")
   }
+  rownames(QQ) <- colnames(QQ)
+  flog.trace("Included Q-matrix:",QQ,capture=TRUE)
   Anames <- paste("A",nodenames,sep=".")
   Acol <- pmatch(Anames,names(OmegaMat))
   if (any(is.na(Acol))) {
@@ -717,6 +724,8 @@ Omega2Pnet <- function(OmegaMat,pn,nodewarehouse,
     stop("There are not A columns corresponding to every variable.")
   }
   colnames(AA) <- nodenames
+  rownames(AA) <- nodenames
+  flog.trace("Included A-matrix:",AA,capture=TRUE)
   intercepts <- OmegaMat$Intercept
   names(intercepts) <- nodenames
   weights <- OmegaMat$PriorWeight
@@ -761,11 +770,14 @@ Omega2Pnet <- function(OmegaMat,pn,nodewarehouse,
       parnames <- nodenames[sapply(QQ[ndn,]==1,isTRUE)]
       parnames <- setdiff(parnames,ndn)
       exparnames <- PnodeParentNames(node)
+      flog.trace("Processing links for node: %s",ndn)
+      flog.trace("Node has parents: ", exparnames, capture=TRUE)
+      flog.trace("Omega matrix has parents: ", parnames, capture=TRUE)
       if (length(exparnames) > 0L) {
         if (!setequal(parnames,exparnames)) {
           flog.warn("While processing links for node: %s",ndn)
           flog.warn("Node has parents: ", exparnames, capture=TRUE)
-          flog.debug("But Omega matrix has parents: ", parnames, capture=TRUE)
+          flog.warn("But Omega matrix has parents: ", parnames, capture=TRUE)
           if (override) {
             flog.warn("Changing node %s to match Omega matrix.",ndn)
           } else {
