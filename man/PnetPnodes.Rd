@@ -80,16 +80,16 @@ IRT10.2PL <- CreateNetwork("IRT10_2PL",session=sess)
 
 theta <- NewDiscreteNode(IRT10.2PL,"theta",
                          c("VH","High","Mid","Low","VL"))
-NodeLevels(theta) <- effectiveThetas(NodeNumStates(theta))
-NodeProbs(theta) <- rep(1/NodeNumStates(theta),NodeNumStates(theta))
+PnodeStateValues(theta) <- effectiveThetas(PnodeNumStates(theta))
+NodeProbs(theta) <- rep(1/PnodeNumStates(theta),PnodeNumStates(theta))
 
 J <- 10 ## Number of items
 items <- NewDiscreteNode(IRT10.2PL,paste("item",1:J,sep=""),
                          c("Correct","Incorrect"))
 for (j in 1:J) {
-  NodeParents(items[[j]]) <- list(theta)
-  NodeLevels(items[[j]]) <- c(1,0)
-  NodeSets(items[[j]]) <- c("observables")
+  PnodeParents(items[[j]]) <- list(theta)
+  PnodeStateValues(items[[j]]) <- c(1,0)
+  PnodeLabels(items[[j]]) <- c("observables")
 }
 ## Convert into a Pnet
 IRT10.2PL <- Pnet(IRT10.2PL,priorWeight=10,pnode=items[2:J])
@@ -109,6 +109,7 @@ stopifnot(
   length(PnetPnodes(IRT10.2PL)) == J
 )
 DeleteNetwork(IRT10.2PL)
+stopSession(sess)
 }
 }
 \keyword{ attrib }

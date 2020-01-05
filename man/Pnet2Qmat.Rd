@@ -389,6 +389,30 @@ obs <-unlist(sapply(list(sess$nets$PPcompEM,sess$nets$PPconjEM,
 
 Q2 <- Pnet2Qmat(obs,NetworkAllNodes(CM))
 
+## adjust Q1 to match Q2
+Q1 <- Q1[,-1]  ## Drop unused first column.
+class(Q1) <- c("Qmat", "data.frame")
+# Force them into the same order
+Q1 <- Q1[order(Q1$Model,Q1$Node),]
+Q2 <- Q2[order(Q2$Model,Q2$Node),]
+row.names(Q1) <- NULL
+row.names(Q2) <- NULL
+
+
+## Force all NA columns into the right type
+Q1$LinkScale <- as.numeric(Q1$LinkScale)
+Q1$A.Physics <- as.numeric(Q1$A.Physics)
+Q1$A.IterativeD <- as.numeric(Q1$A.IterativeD)
+Q1$B.Physics <- as.numeric(Q1$B.Physics)
+Q1$B.NTL <- as.numeric(Q1$B.NTL)
+
+## Fix fancy quotes added by some spreadsheets
+Q1$Rules <- gsub(intToUtf8(c(91,0x201C,0x201D,93)),"\"",Q1$Rules)
+
+## Insert Default Prior Weights
+Q1$PriorWeight <- ifelse(is.na(Q1$NStates),"","10")
+all.equal(Q1,Q2)
+
 
 stopSession(sess)
 setwd(curd)

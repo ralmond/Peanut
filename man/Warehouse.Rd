@@ -1,6 +1,7 @@
 \name{Warehouse}
 \alias{Warehouse}
 \alias{WarehouseSupply}
+\alias{WarehouseSupply,ANY-method}
 \alias{WarehouseFetch}
 \alias{WarehouseMake}
 \alias{WarehouseFree}
@@ -19,6 +20,7 @@
 }
 \usage{
 WarehouseSupply(warehouse, name)
+\S4method{WarehouseSupply}{ANY}(warehouse, name)
 WarehouseFetch(warehouse, name)
 WarehouseMake(warehouse, name)
 WarehouseFree(warehouse, name)
@@ -192,7 +194,7 @@ CM <- WarehouseSupply(Nethouse,"miniPP_CM")
 stopifnot(is.null(WarehouseFetch(Nethouse,"PPcompEM")))
 EM1 <- WarehouseMake(Nethouse,"PPcompEM")
 
-EMs <- lapply(c("PPcompEM","PPconjEM", "PPtwostepEM"),
+EMs <- lapply(c("PPcompEM","PPconjEM", "PPtwostepEM", "PPdurAttEM"),
               function(nm) WarehouseSupply(Nethouse,nm))
 
 ### Test Node Building with already loaded nets

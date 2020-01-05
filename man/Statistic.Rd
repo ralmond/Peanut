@@ -104,6 +104,8 @@ calcStat(stat, net)
   \code{\link{PnodeMargin}}, \code{\link{PnodeEAP}}, \code{\link{PnodeSD}}, 
   \code{\link{PnodeMedian}}, \code{\link{PnodeMode}}.
 
+  These statistics will likely produce errors unless
+  \code{\link{PnetCompile}} has been run first.
   
 
 }
@@ -119,7 +121,7 @@ irt10.base <- ReadNetworks(paste(library(help="PNetica")$path,
                            "testnets","IRT10.2PL.base.dne",
                            sep=.Platform$file.sep),session=sess)
 irt10.base <- as.Pnet(irt10.base)  ## Flag as Pnet, fields already set.
-irt10.theta <- NetworkFindNode(irt10.base,"theta")
+irt10.theta <- PnetFindNode(irt10.base,"theta")
 irt10.items <- PnetPnodes(irt10.base)
 ## Flag items as Pnodes
 for (i in 1:length(irt10.items)) {
@@ -144,6 +146,7 @@ calcStat(medianTheta,irt10.base)
 calcStat(modeTheta,irt10.base)
 
 DeleteNetwork(irt10.base)
+stopSession(sess)
 }
 }
 \keyword{classes}

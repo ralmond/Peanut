@@ -40,8 +40,29 @@ The name of the network as a character vector of length 1.
   The setter method returns the modified object.
 
 }
+\section{True Names}{
+
+  True names are the names in the secret ancient lanugage which hold
+  power over an object (Le Guin, 1968).
+
+  Actually, this is a difficulty with implementations that place
+  restrictions on the name of a network or node.  In particular, Netica
+  restricts node names to alphanumeric characters and limits the length.
+  This may make it difficult to match nodes by name with other parts of
+  the system which do not have this restriction.  In this case the
+  object may have both a \emph{true name}, which is returned by
+  \code{PnodeName} and an internal \emph{use name} which is used by the
+  implementation.
+  
+
+}
 \author{
   Russell Almond
+}
+\references{
+
+  Le Guin, U. K. (1968).  \emph{A Wizard of Earthsea.}  Parnassus Press.
+
 }
 \seealso{
   \code{\link{Pnet}}, \code{\link{PnetTitle}()} 
@@ -58,6 +79,8 @@ stopifnot(PnetName(net)=="funNet")
 PnetName(net)<-"SomethingElse"
 stopifnot(PnetName(net)=="SomethingElse")
 
+DeleteNetwork(net)
+stopSession(sess)
 }
 
 }

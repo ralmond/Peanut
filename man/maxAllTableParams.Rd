@@ -161,24 +161,23 @@ irt10.items <- PnetPnodes(irt10.base)
 ## Flag items as Pnodes
 for (i in 1:length(irt10.items)) {
   irt10.items[[i]] <- as.Pnode(irt10.items[[i]])
-  
+  ## Add node to list of observed nodes
+  PnodeLabels(irt10.items[[1]]) <-
+     union(PnodeLabels(irt10.items[[1]]),"onodes")
 }
 
 casepath <- paste(library(help="PNetica")$path,
                            "testdat","IRT10.2PL.200.items.cas",
                            sep=.Platform$file.sep)
-## Record which nodes in the casefile we should pay attention to
-NetworkNodesInSet(irt10.base,"onodes") <-
-   NetworkNodesInSet(irt10.base,"observables")
 
 
 BuildAllTables(irt10.base)
-CompileNetwork(irt10.base) ## Netica requirement
+PnetCompile(irt10.base) ## Netica requirement
 
 item1 <- irt10.items[[1]]
 priB <- PnodeBetas(item1)
 priA <- PnodeAlphas(item1)
-priCPT <- NodeProbs(item1)
+priCPT <- PnodeProbs(item1)
 
 gemout <- GEMfit(irt10.base,casepath,trace=TRUE)
 
@@ -189,7 +188,7 @@ maxAllTableParams(irt10.base)
 postB <- PnodeBetas(item1)
 postA <- PnodeAlphas(item1)
 BuildTable(item1)
-postCPT <- NodeProbs(item1)
+postCPT <- PnodeProbs(item1)
 
 ## Posterior should be different
 stopifnot(
@@ -198,6 +197,7 @@ stopifnot(
 
 
 DeleteNetwork(irt10.base)
+stopSession(sess)
 
 }
 }

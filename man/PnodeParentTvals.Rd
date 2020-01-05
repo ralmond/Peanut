@@ -136,17 +136,17 @@ tNet <- CreateNetwork("TestNet",session=sess)
 theta1 <- NewDiscreteNode(tNet,"theta1",
                          c("VH","High","Mid","Low","VL"))
 ## This next function sets the effective thetas for theta1
-NodeLevels(theta1) <- effectiveThetas(NodeNumStates(theta1))
-NodeProbs(theta1) <- rep(1/NodeNumStates(theta1),NodeNumStates(theta1))
+PnodeStateValues(theta1) <- effectiveThetas(PnodeNumStates(theta1))
+PnodeProbs(theta1) <- rep(1/PnodeNumStates(theta1),PnodeNumStates(theta1))
 theta2 <- NewDiscreteNode(tNet,"theta2",
                          c("High","Mid","Low"))
 ## This next function sets the effective thetas for theta2
-NodeLevels(theta2) <- effectiveThetas(NodeNumStates(theta2))
-NodeProbs(theta2) <- rep(1/NodeNumStates(theta2),NodeNumStates(theta2))
+PnodeStateValues(theta2) <- effectiveThetas(PnodeNumStates(theta2))
+PnodeProbs(theta2) <- rep(1/PnodeNumStates(theta2),PnodeNumStates(theta2))
 
 partial3 <- NewDiscreteNode(tNet,"partial3",
                             c("FullCredit","PartialCredit","NoCredit"))
-NodeParents(partial3) <- list(theta1,theta2)
+PnodeParents(partial3) <- list(theta1,theta2)
 
 ## Usual way to set rules is in constructor
 partial3 <- Pnode(partial3,rules="Compensatory", link="partialCredit")
@@ -156,6 +156,7 @@ do.call("expand.grid",PnodeParentTvals(partial3))
 
 
 DeleteNetwork(tNet)
+stopSession(sess)
 }
 }
 \keyword{ attrib }

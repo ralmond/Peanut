@@ -844,7 +844,7 @@ Omega2Pnet <- function(OmegaMat,pn,nodewarehouse,
       napar <- sapply(PnodeParentTvals(node),function(x) any(is.na(x)))
       if (any(napar)) {
         flog.error("Parents %s of node %s don't have levels set.",
-                   paste(parnames[napar],collapse=", "),nodename)
+                   paste(parnames[napar],collapse=", "),ndn)
         stop("Parent",paste(parnames[napar],collapse=", "),
              "of node", nodename, "don't have levels set.")
       }

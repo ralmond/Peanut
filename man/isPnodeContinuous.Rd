@@ -61,6 +61,10 @@ PnodeStateBounds(node) <- value
   Right now, the value is the midpoint of the interval.  This cause
   problems when converting to T-values.
 
+  The setter function is very strict about the upper and lower bounds
+  matching.  Even a mismatch at the least significant digit will cause a
+  problem. 
+
 }
 \value{
 
@@ -89,7 +93,7 @@ tNet <- CreateNetwork("TestNet",session=sess)
 
 theta1 <- NewDiscreteNode(tNet,"theta1",
                          c("VH","High","Mid","Low","VL"))
-NodeLevels(theta1) <- effectiveThetas(NodeNumStates(theta1))
+PnodeStateValues(theta1) <- effectiveThetas(NodeNumStates(theta1))
 stopifnot (!isPnodeContinuous(theta1))
 
 ## This gives an error
@@ -108,6 +112,9 @@ PnodeStateBounds(theta0) <- norm5
 PnodeStates(theta0)
 PnodeStateBounds(theta0)
 PnodeStateValues(theta0)  ## Note these are medians not mean wrt normal!
+
+DeleteNetwork(tNet)
+stopSession(sess)
 
 }
 }

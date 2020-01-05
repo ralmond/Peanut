@@ -101,7 +101,7 @@ BuildNodeManifest <- function (Pnodelist) {
       if (isPnodeContinuous(nd)) {
         StateValue <- c(StateValue,rep(NA_real_,k))
         bnds <- PnodeStateBounds(nd)
-        LowerBound <- c(UpperBound,bnds[,1L])
+        LowerBound <- c(LowerBound,bnds[,1L])
         UpperBound <- c(UpperBound,bnds[,2L])
       } else {
         if (!is.null(PnodeStateValues(nd))) {

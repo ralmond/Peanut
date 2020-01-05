@@ -2,6 +2,7 @@
 \alias{PnetSerialize}
 \alias{PnetUnserialize}
 \alias{unserializePnet}
+\alias{WarehouseUnpack}
 \title{Writes/restores network from a string.}
 \description{
   The \code{PnetSerialize} method writes the network to a string and
@@ -14,12 +15,16 @@
 PnetSerialize(net)
 PnetUnserialize(serial)
 unserializePnet(factory,data)
+WarehouseUnpack(warehouse, serial)
 }
 \arguments{
   \item{net}{A \code{\link{Pnet}} to be serialized.}
   \item{factory}{A character scalar containing the name of a global
     variable which contains a factory object capable of recreating the
     network from the data.}
+  \item{warehouse}{A object of the type
+    \code{\linkS4class{PnetWarehouse}} which will contain a link to the
+    appropriate factory.}
   \item{serial}{A list containing at least three elements.  One is the
      name of the network.  One is the \code{data} element which contains
      the serialized data as a raw vector. The third 
@@ -29,7 +34,6 @@ unserializePnet(factory,data)
   \item{data}{A list containing at least two elements.  One is the
     name of the network.  One is the \code{data} element which contains
     the serialized data as a raw vector.}
-  
 }
 \details{
 
@@ -134,8 +138,18 @@ startSession(sess)
 collect <- mongo("studentModels","test",
                      "mongodb://127.0.0.1:27017/test")
 ## Or "mongodb://user:pwd@127.0.0.1:27017/test"
-sm.net <- ReadNetworks(file.path(library(help="PNetica")$path, "testnets",
-     "miniPP-CM.dne"), session=sess)
+
+## An example network manifest.
+netman1 <- read.csv(paste(library(help="Peanut")$path, "auxdata",
+                          "Mini-PP-Nets.csv", sep=.Platform$file.sep),
+                    row.names=1, stringsAsFactors=FALSE)
+netpath <- file.path(library(help="PNetica")$path, "testnets")
+netman1$Pathname <- file.path(netpath,netman1$Pathname)
+
+Nethouse <- BNWarehouse(manifest=netman1,session=sess,key="Name")
+
+pm.net <- WarehouseSupply(Nethouse, "miniPP_CM")
+sm.net <- CopyNetworks(pm.net,"Student1")
 
 sm.ser <- PnetSerialize(sm.net)
 ## base 64 encode the data to make it easier to store.
@@ -148,15 +162,26 @@ collect$replace(paste('{"name":"',sm.ser$name,'"}'),
 ## Use iterator method to find, so we get in list rather than data frame
 ## representation. 
 
-it <- collect$iterate(sprintf('{"name":"\%s"}',PnetName(sm.net)),limit=1)
+it <- collect$iterate(sprintf('{"name":"\%s"}',"Student1"),limit=1)
 sm1.ser <- it$one()
 ## Decode back to the raw vector.
 sm1.ser$data <- base64_dec(sm1.ser$data)
-sm1 <- unserializePnet(sess,sm1.ser)
 
+DeleteNetwork(sm.net)
+sm1 <- WarehouseUnpack(Nethouse,sm1.ser)
+stopifnot(PnetName(sm1)=="Student1")
+
+DeleteNetwork(sm1)
+sm1a <- unserializePnet(sess,sm1.ser)
+stopifnot(PnetName(sm1a)=="Student1")
+
+DeleteNetwork(sm1a)
+#Unserialize needs a reference to the "factory" (in this case session.).
 sm1.ser$factory <- "sess"
-sm1a <- PnetUnserialize(sm1.ser)
+sm1b <- PnetUnserialize(sm1.ser)
+stopifnot(PnetName(sm1b)=="Student1")
 
+stopSession(sess)
 }
 }
 \keyword{ IO }

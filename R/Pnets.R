@@ -262,6 +262,21 @@ setGeneric("PnodePriorWeight")
 }
 setGeneric("PnodePriorWeight<-")
 
+PnodePostWeight <- function (node) {
+  UseMethod("PnodePostWeight")
+}
+setGeneric("PnodePostWeight")
+
+PnodeProbs <- function (node) {
+  UseMethod("PnodeProbs")
+}
+setGeneric("PnodeProbs")
+
+"PnodeProbs<-" <- function (node,value) {
+  UseMethod("PnodeProbs<-")
+}
+setGeneric("PnodeProbs<-")
+
 PnodeParentTvals <- function (node) {
   UseMethod("PnodeParentTvals")
 }
