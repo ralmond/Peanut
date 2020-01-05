@@ -182,36 +182,34 @@ irt10.base <- ReadNetworks(paste(library(help="PNetica")$path,
                            sep=.Platform$file.sep),
                            session=sess)
 irt10.base <- as.Pnet(irt10.base)  ## Flag as Pnet, fields already set.
-irt10.theta <- NetworkFindNode(irt10.base,"theta")
+irt10.theta <- PnetFindNode(irt10.base,"theta")
 irt10.items <- PnetPnodes(irt10.base)
 ## Flag items as Pnodes
 for (i in 1:length(irt10.items)) {
   irt10.items[[i]] <- as.Pnode(irt10.items[[i]])
-  
+  ## Add node to list of observed nodes
+  PnodeLabels(irt10.items[[1]]) <-
+     union(PnodeLabels(irt10.items[[1]]),"onodes")
 }
 
 
 casepath <- paste(library(help="PNetica")$path,
                            "testdat","IRT10.2PL.200.items.cas",
                            sep=.Platform$file.sep)
-## Record which nodes in the casefile we should pay attention to
-NetworkNodesInSet(irt10.base,"onodes") <-
-   NetworkNodesInSet(irt10.base,"observables")
-
 
 BuildAllTables(irt10.base)
-CompileNetwork(irt10.base) ## Netica requirement
+PnetCompile(irt10.base) ## Netica requirement
 
 item1 <- irt10.items[[1]]
 priB <- PnodeBetas(item1)
 priA <- PnodeAlphas(item1)
-priCPT <- NodeProbs(item1)
+priCPT <- PnodeProbs(item1)
 
 gemout <- GEMfit(irt10.base,casepath,trace=TRUE)
 
 postB <- PnodeBetas(item1)
 postA <- PnodeAlphas(item1)
-postCPT <- NodeProbs(item1)
+postCPT <- PnodeProbs(item1)
 
 ## Posterior should be different
 stopifnot(
@@ -222,21 +220,30 @@ stopifnot(
 ### The network that was used for data generation.
 irt10.true <- ReadNetworks(paste(library(help="PNetica")$path,
                            "testnets","IRT10.2PL.true.dne",
-                           sep=.Platform$file.sep))
+                           sep=.Platform$file.sep),
+                           session=sess)
 irt10.true <- as.Pnet(irt10.true)  ## Flag as Pnet, fields already set.
-irt10.ttheta <- NetworkFindNode(irt10.true,"theta")
+irt10.ttheta <- PnetFindNode(irt10.true,"theta")
 irt10.titems <- PnetPnodes(irt10.true)
 ## Flag titems as Pnodes
 for (i in 1:length(irt10.titems)) {
   irt10.titems[[i]] <- as.Pnode(irt10.titems[[i]])
+  ## Add node to list of observed nodes
+  PnodeLabels(irt10.titems[[1]]) <-
+     union(PnodeLabels(irt10.titems[[1]]),"onodes")
 }
-NetworkNodesInSet(irt10.true,"onodes") <-
-   NetworkNodesInSet(irt10.true,"observables")
+
 
 BuildAllTables(irt10.true)
-CompileNetwork(irt10.true) ## Netica requirement
+PnetCompile(irt10.true) ## Netica requirement
 
-
+## See how close we are.
+for (j in 1:length(irt10.titems)) {
+  cat("diff[",j,"] = ",
+      sum(abs(PnodeProbs(irt10.items[[j]])-
+              PnodeProbs(irt10.titems[[j]])))/
+      length(PnodeProbs(irt10.items[[j]])), "\n")
+}
 
 
 DeleteNetwork(irt10.base)

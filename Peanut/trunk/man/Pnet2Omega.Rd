@@ -249,6 +249,13 @@ CM1 <- Omega2Pnet(omegamat,CM,Nodehouse,override=TRUE,debug=TRUE)
 
 Om2 <- Pnet2Omega(CM1,NetworkAllNodes(CM1))
 
+class(omegamat) <- c("OmegMat","data.frame") # To match Pnet2Omega output.
+omegamat$PriorWeight <- rep("10",nrow(omegamat))
+
+stopifnot(all.equal(omegamat,Om2))
+
+
+DeleteNetwork(CM)
 stopSession(sess)
 setwd(curd)
 

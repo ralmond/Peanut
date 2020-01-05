@@ -287,6 +287,7 @@ omegamat <- read.csv(paste(library(help="Peanut")$path, "auxdata",
 library(PNetica) ## Needs PNetica
 sess <- NeticaSession()
 startSession(sess)
+
 curd <- getwd()
 
 netman1 <- read.csv(paste(library(help="Peanut")$path, "auxdata",
@@ -310,6 +311,7 @@ CM1 <- Omega2Pnet(omegamat,CM,Nodehouse,override=TRUE,debug=TRUE)
 
 Om2 <- Pnet2Omega(CM1,NetworkAllNodes(CM1))
 
+DeleteNetwork(CM)
 stopSession(sess)
 setwd(curd)
 

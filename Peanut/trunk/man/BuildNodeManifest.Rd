@@ -125,13 +125,13 @@ BuildNodeManifest(Pnodelist)
     are used instead.}
   \item{LowerBound}{This servers as the lower bound for each partition
     of the continuous variagle. \code{-Inf} is a legal value for the
-    first row.}
+    first or last row.}
   \item{UpperBound}{This is only used for continuous variables, and the
     value only is needed for one of the states.  This servers as the
     upper bound of range each state.  Note the upper
     bound needs to match the lower bounds of the next state. \code{Inf}
-    is a legal value for the last row.}
-  
+    is a legal value for the first or last row.}
+
 }
 \section{Continuous Variables}{
 
@@ -192,6 +192,8 @@ nodeman1 <- read.csv(file.path(library(help="Peanut")$path, "auxdata",
 
 \dontrun{
 library(PNetica) ## Requires PNetica
+sess <- NeticaSession()
+startSession(sess)
 
 netpath <- file.path(library(help="PNetica")$path, "testnets")
 netnames <- paste(c("miniPP-CM","PPcompEM","PPconjEM","PPtwostepEM",
@@ -210,13 +212,15 @@ for (n in 1:length(EMs)) {
                     BuildNodeManifest(lapply(NetworkAllNodes(EMs[[n]]),
                                              as.Pnode)))
 }
-## Exclude node labels from this test, as they could appear in arbitrary order
-stopifnot(all.equal(nodeman[,-6],nodeman1[,-6]))
-## Note:  This test might fail because of node order.  Need to improve it.
 
-nl <- strsplit(nodeman$NodeLabels,",")
-nl1 <- strsplit(nodeman1$NodeLabels,",")
-stopifnot(all(mapply(setequal,nl,nl1)))
+## Need to ensure that labels are in cannonical order only for the
+## purpose of testing
+nodeman[,6] <- sapply(strsplit(nodeman[,6],","),
+      function(l) paste(sort(l),collapse=","))
+nodeman1[,6] <- sapply(strsplit(nodeman1[,6],","),
+      function(l) paste(sort(l),collapse=","))
+
+stopifnot(all.equal(nodeman,nodeman1))
 
 ## This is the node warehouse for PNetica
 Nodehouse <- NNWarehouse(manifest=nodeman1,

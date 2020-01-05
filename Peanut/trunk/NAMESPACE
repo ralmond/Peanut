@@ -15,7 +15,9 @@ export(is.Pnet, as.Pnet, Pnet,
        BuildAllTables,
        is.Pnode, as.Pnode, Pnode, PnodeNet,
        PnodeQ, "PnodeQ<-",
+       PnodeProbs, "PnodeProbs<-",
        PnodePriorWeight, "PnodePriorWeight<-",
+       PnodePostWeight,
        PnodeRules, "PnodeRules<-",
        PnodeLink, "PnodeLink<-",
        PnodeLnAlphas, "PnodeLnAlphas<-",
@@ -52,6 +54,7 @@ S3method(PnodeParentTvals, default)
 
 
 ## BN generics.
+exportClasses(Pnet,Pnode)
 export(PnodeName, "PnodeName<-",
        PnodeTitle, "PnodeTitle<-",
        PnodeDescription, "PnodeDescription<-",
@@ -70,7 +73,7 @@ export(PnodeName, "PnodeName<-",
        PnetDescription, "PnetDescription<-",
        PnetFindNode,
        PnetMakeStubNodes, PnetRemoveStubNodes,PnetAdjoin,
-       PnetDetach,
+       PnetDetach, PnetCompile,
        PnetSerialize, PnetUnserialize, unserializePnet
        )
 exportMethods(PnodeName, "PnodeName<-",
@@ -84,13 +87,14 @@ exportMethods(PnodeName, "PnodeName<-",
        PnodeStateBounds, "PnodeStateBounds<-",
        PnodeParents, "PnodeParents<-", PnodeParentNames, PnodeNumParents,
        isPnodeContinuous,
+       PnodeEvidence,"PnodeEvidence<-",
        PnetName, "PnetName<-",
        PnetTitle, "PnetTitle<-",
        PnetHub, "PnetHub<-",
        PnetPathname, "PnetPathname<-",
        PnetDescription, "PnetDescription<-",
        PnetMakeStubNodes, PnetRemoveStubNodes,
-       PnetAdjoin, PnetDetach,
+       PnetAdjoin, PnetDetach, PnetCompile,
        PnetFindNode)
 
 ## Manifests
@@ -98,6 +102,7 @@ exportMethods(PnodeName, "PnodeName<-",
 export(BuildNetManifest,BuildNodeManifest)
 
 ## Warehouses
+exportClasses(PnetWarehouse,PnodeWarehouse)
 export(ClearWarehouse,WarehouseManifest,"WarehouseManifest<-",
        WarehouseData,WarehouseSupply,WarehouseFetch,
        WarehouseMake,WarehouseFree, WarehouseUnpack,

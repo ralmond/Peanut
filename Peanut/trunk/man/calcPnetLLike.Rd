@@ -78,25 +78,25 @@ irt10.base <- ReadNetworks(paste(library(help="PNetica")$path,
                            sep=.Platform$file.sep),
                            session=sess)
 irt10.base <- as.Pnet(irt10.base)  ## Flag as Pnet, fields already set.
-irt10.theta <- NetworkFindNode(irt10.base,"theta")
+irt10.theta <- PnetFindNode(irt10.base,"theta")
 irt10.items <- PnetPnodes(irt10.base)
 ## Flag items as Pnodes
 for (i in 1:length(irt10.items)) {
   irt10.items[[i]] <- as.Pnode(irt10.items[[i]])
+  ## Add node to list of observed nodes
+  PnodeLabels(irt10.items[[1]]) <-
+     union(PnodeLabels(irt10.items[[1]]),"onodes")
 }
-CompileNetwork(irt10.base) ## Netica requirement
+PnetCompile(irt10.base) ## Netica requirement
 
 casepath <- paste(library(help="PNetica")$path,
                            "testdat","IRT10.2PL.200.items.cas",
                            sep=.Platform$file.sep)
-## Record which nodes in the casefile we should pay attention to
-NetworkNodesInSet(irt10.base,"onodes") <-
-   NetworkNodesInSet(irt10.base,"observables")
 
 llike <- calcPnetLLike(irt10.base,casepath)
 
 DeleteNetwork(irt10.base)
-
+stopSession(sess)
 }
 }
 \keyword{ graphs }

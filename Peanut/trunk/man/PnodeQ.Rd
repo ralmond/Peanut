@@ -103,16 +103,16 @@ tNet <- CreateNetwork("TestNet",session=sess)
 
 theta1 <- NewDiscreteNode(tNet,"theta1",
                          c("VH","High","Mid","Low","VL"))
-NodeLevels(theta1) <- effectiveThetas(NodeNumStates(theta1))
-NodeProbs(theta1) <- rep(1/NodeNumStates(theta1),NodeNumStates(theta1))
+PnodeStateValues(theta1) <- effectiveThetas(PnodeNumStates(theta1))
+PnodeProbs(theta1) <- rep(1/PnodeNumStates(theta1),PnodeNumStates(theta1))
 theta2 <- NewDiscreteNode(tNet,"theta2",
                          c("VH","High","Mid","Low","VL"))
-NodeLevels(theta2) <- effectiveThetas(NodeNumStates(theta2))
-NodeProbs(theta2) <- rep(1/NodeNumStates(theta2),NodeNumStates(theta2))
+PnodeStateValues(theta2) <- effectiveThetas(PnodeNumStates(theta2))
+PnodeProbs(theta2) <- rep(1/PnodeNumStates(theta2),PnodeNumStates(theta2))
 
 partial3 <- NewDiscreteNode(tNet,"partial3",
                             c("FullCredit","PartialCredit","NoCredit"))
-NodeParents(partial3) <- list(theta1,theta2)
+PnodeParents(partial3) <- list(theta1,theta2)
 
 partial3 <- Pnode(partial3,Q=TRUE, link="partialCredit")
 PnodePriorWeight(partial3) <- 10
@@ -135,7 +135,7 @@ BuildTable(partial3)
 
 partial4 <- NewDiscreteNode(tNet,"partial4",
                             c("Score4","Score3","Score2","Score1"))
-NodeParents(partial4) <- list(theta1,theta2)
+PnodeParents(partial4) <- list(theta1,theta2)
 partial4 <- Pnode(partial4, link="partialCredit")
 PnodePriorWeight(partial4) <- 10
 
@@ -151,7 +151,7 @@ PnodeLnAlphas(partial4) <- list(Score4=c(.25,.25),
 BuildTable(partial4)
 
 DeleteNetwork(tNet)
-
+stopSession(sess)
 }}
 \keyword{ attrib }
 

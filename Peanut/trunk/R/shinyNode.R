@@ -767,6 +767,6 @@ DPCGadget <- function(pnode, color="steelblue") {
 }
 
 ##########################################
-## Shiny breaks the show command
+## Shinyjs breaks the show command
 
 show <- methods::show

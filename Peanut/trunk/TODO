@@ -1,13 +1,8 @@
 * checking for missing documentation entries ... WARNING
 Undocumented code objects:
-  ‘WarehouseInventory’ ‘WarehouseUnpack’
-  ‘flog.try’ ‘name’
-Undocumented S4 methods:
-  generic 'WarehouseSupply' and siglist 'ANY'
-Functions or methods with usage in documentation object 'Pnet' but not in code:
-  Pnet.ANY
+  PnodePostWeight ‘name’
 
-
+   
 https://docs.google.com/spreadsheets/d/{key}/gviz/tq?tqx=out:csv&sheet={sheet_name}
 
 https://docs.google.com/spreadsheets/d/1UoIfFQn5TUwDBDWqxBEQxkwJbUHHjlo7WDCebvzx9j8/edit?usp=sharing

@@ -1,3 +1,5 @@
+setClassUnion("PnodeWarehouse","NULL")
+setClassUnion("PnetWarehouse","NULL")
 
 
 ClearWarehouse <- function (warehouse)

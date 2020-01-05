@@ -66,6 +66,9 @@ PnodeMode(net, node)
   \code{\link{Statistic}}
 
   \code{\link{calcStat}}
+
+  These statistics will likely produce errors unless
+  \code{\link{PnetCompile}} has been run first.
 }
 \examples{
 \dontrun{
@@ -78,7 +81,7 @@ irt10.base <- ReadNetworks(paste(library(help="PNetica")$path,
                            "testnets","IRT10.2PL.base.dne",
                            sep=.Platform$file.sep),session=sess)
 irt10.base <- as.Pnet(irt10.base)  ## Flag as Pnet, fields already set.
-irt10.theta <- NetworkFindNode(irt10.base,"theta")
+irt10.theta <- PnetFindNode(irt10.base,"theta")
 irt10.items <- PnetPnodes(irt10.base)
 ## Flag items as Pnodes
 for (i in 1:length(irt10.items)) {
@@ -94,7 +97,7 @@ modeTheta <- Statistic("PnodeMedian","theta","Mode(theta)")
 
 
 BuildAllTables(irt10.base)
-CompileNetwork(irt10.base) ## Netica requirement
+PnetCompile(irt10.base) ## Netica requirement
 
 calcStat(marginTheta,irt10.base)
 calcStat(meanTheta,irt10.base)
@@ -103,6 +106,7 @@ calcStat(medianTheta,irt10.base)
 calcStat(modeTheta,irt10.base)
 
 DeleteNetwork(irt10.base)
+stopSession(sess)
 }
 }
 \keyword{ graphs }

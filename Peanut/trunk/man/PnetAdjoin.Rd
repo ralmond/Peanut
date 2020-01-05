@@ -127,25 +127,25 @@ EM1 <- ReadNetworks(file.path(library(help="PNetica")$path, "testnets",
 Phys <- PnetFindNode(PM,"Physics")
 
 ## Prior probability for high level node
-CompileNetwork(PM)
-bel1 <- NodeBeliefs(Phys)
+PnetCompile(PM)
+bel1 <- PnodeMargin(PM, Phys)
 
 ## Adjoin the networks.
 EM1.obs <- PnetAdjoin(PM,EM1)
-CompileNetwork(PM)
+PnetCompile(PM)
 
 ## Enter a finding
-NodeFinding(EM1.obs[[1]]) <- "Right"
+PnodeEvidence(EM1.obs[[1]]) <- "Right"
 ## Posterior probability for high level node
 
-bel2 <- NodeBeliefs(Phys)
+bel2 <- PnodeMargin(PM,Phys)
 
 PnetDetach(PM,EM1)
-CompileNetwork(PM)
+PnetCompile(PM)
 
 ## Findings are unchanged
-bel2a <- NodeBeliefs(Phys)
-stopifnot(all.equal(bel2,bel2a))
+bel2a <- PnodeMargin(PM,Phys)
+stopifnot(all.equal(bel2,bel2a,tol=1e-6))
 
 DeleteNetwork(list(PM,EM1))
 stopSession(sess)

@@ -42,6 +42,8 @@ Objects are created using the function \code{\link{Statistic}(fun, node,
       \code{fun} (using \code{do.call} to \code{net} and the actual nodes.}
     \item{name}{\code{signature(x = "Statistic")}: Returns the name of
       the statistic.}
+    \item{show}{\code{signature(objet = "Statistic")}: Returns a
+      printable representation of the statistic.}
   }
 }
 \references{
@@ -102,6 +104,7 @@ calcStat(medianTheta,irt10.base)
 calcStat(modeTheta,irt10.base)
 
 DeleteNetwork(irt10.base)
+stopSession(sess)
 }
 }
 \keyword{classes}

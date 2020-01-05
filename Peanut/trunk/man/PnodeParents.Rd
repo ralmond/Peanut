@@ -1,6 +1,8 @@
 \name{PnodeParents}
 \alias{PnodeParents}
 \alias{PnodeParents<-}
+\alias{PnodeNumParents}
+\alias{PnodeParentNames}
 \title{ Gets or sets the parents of a parameterized node.}
 \description{
 
@@ -13,6 +15,8 @@
 \usage{
 PnodeParents(node)
 PnodeParents(node) <- value
+PnodeNumParents(node)
+PnodeParentNames(node)
 }
 \arguments{
   \item{node}{
@@ -44,11 +48,17 @@ PnodeParents(node) <- value
 }
 \value{
 
-  A list of \code{\link{Pnode}} objects representing the
+  \code{PnodeParents} list of \code{\link{Pnode}} objects representing the
   parents in the order that they will be used to establish dimensions
   for the conditional probability table.  
 
   The setting variant returns the modified \var{child} object.
+
+  The expression \code{PnodeNumParents(node)} returns an integer scalar giving
+  the number of parents of \code{node}.
+
+  The expression \code{PnodeParentNames(node)} is a shortcut fo
+  \code{sapply(PnodeParents(node), PnodeName)}.
 
 }
 \author{

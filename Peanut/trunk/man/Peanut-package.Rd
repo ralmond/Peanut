@@ -74,24 +74,25 @@ Maintainer: \packageMaintainer{Peanut}
 
 \dontrun{
 library(PNetica) ## Requires implementation
-
+sess <- NeticaSession()
+startSession(sess)
 
 ## Building CPTs
-tNet <- CreateNetwork("TestNet")
+tNet <- CreateNetwork("TestNet",session=sess)
 
 
 theta1 <- NewDiscreteNode(tNet,"theta1",
                          c("VH","High","Mid","Low","VL"))
-NodeLevels(theta1) <- effectiveThetas(NodeNumStates(theta1))
+PnodeStateValues(theta1) <- effectiveThetas(NodeNumStates(theta1))
 NodeProbs(theta1) <- rep(1/NodeNumStates(theta1),NodeNumStates(theta1))
 theta2 <- NewDiscreteNode(tNet,"theta2",
                          c("VH","High","Mid","Low","VL"))
-NodeLevels(theta2) <- effectiveThetas(NodeNumStates(theta2))
+PnodeStateValues(theta2) <- effectiveThetas(NodeNumStates(theta2))
 NodeProbs(theta2) <- rep(1/NodeNumStates(theta2),NodeNumStates(theta2))
 
 partial3 <- NewDiscreteNode(tNet,"partial3",
                             c("FullCredit","PartialCredit","NoCredit"))
-NodeParents(partial3) <- list(theta1,theta2)
+PnodeParents(partial3) <- list(theta1,theta2)
 
 partial3 <- Pnode(partial3,Q=TRUE, link="partialCredit")
 PnodePriorWeight(partial3) <- 10
@@ -125,27 +126,27 @@ BuildTable(partial4)
 
 irt10.base <- ReadNetworks(paste(library(help="PNetica")$path,
                            "testnets","IRT10.2PL.base.dne",
-                           sep=.Platform$file.sep))
+                           sep=.Platform$file.sep),
+                           session=sess)
 irt10.base <- as.Pnet(irt10.base)  ## Flag as Pnet, fields already set.
-irt10.theta <- NetworkFindNode(irt10.base,"theta")
+irt10.theta <- PnetFindNode(irt10.base,"theta")
 irt10.items <- PnetPnodes(irt10.base)
 ## Flag items as Pnodes
 for (i in 1:length(irt10.items)) {
   irt10.items[[i]] <- as.Pnode(irt10.items[[i]])
-  
+  ## Add node to list of observed nodes
+  PnodeLabels(irt10.items[[1]]) <-
+     union(PnodeLabels(irt10.items[[1]]),"onodes")
+
 }
 
 
 casepath <- paste(library(help="PNetica")$path,
                            "testdat","IRT10.2PL.200.items.cas",
                            sep=.Platform$file.sep)
-## Record which nodes in the casefile we should pay attention to
-NetworkNodesInSet(irt10.base,"onodes") <-
-   NetworkNodesInSet(irt10.base,"observables")
-
 
 BuildAllTables(irt10.base)
-CompileNetwork(irt10.base) ## Netica requirement
+PnetCompile(irt10.base) ## Netica requirement
 
 item1 <- irt10.items[[1]]
 priB <- PnodeBetas(item1)
@@ -157,4 +158,5 @@ gemout <- GEMfit(irt10.base,casepath)
 
 DeleteNetwork(irt10.base)
 DeleteNetwork(tNet)
+stopSession(sess)
 }}

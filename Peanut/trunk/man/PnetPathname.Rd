@@ -42,7 +42,7 @@ stopifnot(PnetPathname(PM)=="miniPP-CM.dne")
 PnetPathname(PM) <- "StudentModel1.dne"
 stopifnot(PnetPathname(PM)=="StudentModel1.dne")
 
-
+DeleteNetwork(PM)
 
 stopSession(sess)
 setwd(curd)

@@ -2,6 +2,7 @@
 \alias{WarehouseManifest}
 \alias{WarehouseManifest<-}
 \alias{WarehouseData}
+\alias{WarehouseInventory}
 \title{Manipulates the manifest for a warehouse}
 \description{
 
@@ -11,12 +12,15 @@
   the objects managed by the warehouse on demand.  The function
   \code{WarehouseManifest} access the entire manifest and
   \code{WarehouseData} extracts the warehouse data for a single item.
+  \code{WarehouseInventory} returns a list of objects which have already
+  been built.
 
 }
 \usage{
 WarehouseManifest(warehouse)
 WarehouseManifest(warehouse) <- value
 WarehouseData(warehouse, name)
+WarehouseInventory(warehouse)
 }
 \arguments{
   \item{warehouse}{A \code{\link{Warehouse}} object}
@@ -73,6 +77,8 @@ WarehouseData(warehouse, name)
 
   The setter function returns the \code{warehouse} object.
 
+  The function \code{WarehouseInventory} returns a data frame where each
+  row corresponds to the key of an object which has been built.
 }
 \references{
 Almond, R. G. (presented 2017, August). Tabular views of Bayesian

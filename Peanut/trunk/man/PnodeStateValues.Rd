@@ -69,7 +69,7 @@ lnet <- CreateNetwork("LeveledNet", session=sess)
 vnode <- NewDiscreteNode(lnet,"volt_switch",c("Off","Reverse","Forwards"))
 stopifnot(
   length(PnodeStateValues(vnode))==3,
-  names(PnodeStateValues(vnode)) == NodeStates(vnode),
+  names(PnodeStateValues(vnode)) == PnodeStates(vnode),
   all(is.na(PnodeStateValues(vnode)))
 )
 

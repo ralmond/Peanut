@@ -35,10 +35,30 @@ PnodeName(node)<- value
 
   The setter method returns the \code{node} argument.
 }
+\section{True Names}{
+
+  True names are the names in the secret ancient lanugage which hold
+  power over an object (Le Guin, 1968).
+
+  Actually, this is a difficulty with implementations that place
+  restrictions on the name of a network or node.  In particular, Netica
+  restricts node names to alphanumeric characters and limits the length.
+  This may make it difficult to match nodes by name with other parts of
+  the system which do not have this restriction.  In this case the
+  object may have both a \emph{true name}, which is returned by
+  \code{PnodeName} and an internal \emph{use name} which is used by the
+  implementation.
+  
+
+}
 \author{
   Russell Almond
 }
+\references{
 
+  Le Guin, U. K. (1968).  \emph{A Wizard of Earthsea.}  Parnassus Press.
+
+}
 \seealso{
   \code{\link{Pnode}}, \code{\link{PnetFindNode}()},
   \code{\link{PnodeTitle}()},
@@ -55,8 +75,11 @@ pnode <- NewDiscreteNode(net,"play")
 stopifnot(PnodeName(pnode)=="play")
 stopifnot(PnetFindNode(net,"play")==pnode)
 
-NodeName(pnode)<-"work"
+PnodeName(pnode)<-"work"
 stopifnot(PnetFindNode(net,"work")==pnode)
+
+PnodeName(pnode) <- "Non-Netica Name"
+stopifnot(PnetFindNode(net,"Non-Netica Name")==pnode)
 
 DeleteNetwork(net)
 stopSession(sess)

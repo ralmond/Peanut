@@ -1,6 +1,7 @@
 \name{PnodeStates}
 \alias{PnodeStates}
 \alias{PnodeStates<-}
+\alias{PnodeNumStates}
 \title{ Accessor for states of a parameterized node.
 }
 \description{
@@ -15,6 +16,7 @@
 \usage{
 PnodeStates(node)
 PnodeStates(node) <- value
+PnodeNumStates(node)
 }
 \arguments{
   \item{node}{
@@ -45,6 +47,9 @@ PnodeStates(node) <- value
   values and names are both set to the state names.  The setter version
   of this function invisibly returns the 
   \var{node} object.
+
+  The expression \code{PnodeNumStates(node)} returns an integer scalar giving
+  the number of states of \code{node}.
 
 }
 \note{
@@ -77,12 +82,15 @@ stopifnot(
 
 PnodeStates(nodel2) <- c("True","False")
 stopifnot(
+  PnodeNumStates(nodel2) == 2L,
   PnodeStates(nodel2)==c("True","False")
 )
 
 
+
 nodel3 <- NewDiscreteNode(anet,"ThreeLevelNode",c("High","Med","Low"))
 stopifnot(
+  PnodeNumStates(nodel3) == 3L,
   PnodeStates(nodel3)==c("High","Med","Low"),
   PnodeStates(nodel3)[2]=="Med"
 )

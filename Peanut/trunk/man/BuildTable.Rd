@@ -73,12 +73,15 @@ BuildAllTables(net, debug=FALSE)
 }
 
 \seealso{
-  \code{\link{Pnode}}, \code{\link{PnodeQ}},
+  \code{\link{Pnode}}, \code{\link{PnodeProbs}}, \code{\link{PnodeQ}},
   \code{\link{PnodePriorWeight}}, \code{\link{PnodeRules}}, 
   \code{\link{PnodeLink}}, \code{\link{PnodeLnAlphas}}, 
   \code{\link{PnodeAlphas}}, \code{\link{PnodeBetas}}, 
   \code{\link{PnodeLinkScale}},\code{\link{GetPriorWeight}},
   \code{\link[CPTtools]{calcDPCTable}}
+
+  In many implementations, it will be necessary to run
+  \code{\link{PnetCompile}} after building the tables.
 }
 \examples{
 
@@ -88,7 +91,7 @@ BuildAllTables(net, debug=FALSE)
 ## NodeExperience functions are part of the RNetica implementation.
 
 BuildTable.NeticaNode <- function (node) {
-  node[] <- calcDPCFrame(ParentStates(node),NodeStates(node),
+  node[] <- calcDPCFrame(ParentStates(node),PnodeStates(node),
                           PnodeLnAlphas(node), PnodeBetas(node),
                           PnodeRules(node),PnodeLink(node),
                           PnodeLinkScale(node),PnodeQ(node),

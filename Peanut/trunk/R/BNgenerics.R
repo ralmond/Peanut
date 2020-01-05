@@ -1,3 +1,11 @@
+################################
+## Generic objects.  These are implemented as class unions, so that
+## they can added to by implementing classes.
+
+setClassUnion("Pnode","NULL")
+setClassUnion("Pnet","NULL")
+
+
 ###
 ## These are functions which it is pretty safe to assume that every
 ## Bayes net package has.  We can put them here to make generics so
@@ -89,6 +97,14 @@ isPnodeContinuous <- function (node)
   UseMethod("isPnodeContinuous")
 setGeneric("isPnodeContinuous")
 
+PnodeEvidence <- function (node)
+  UseMethod("PnodeEvidence")
+setGeneric("PnodeEvidence")
+
+"PnodeEvidence<-" <- function (node,value)
+  UseMethod("PnodeEvidence<-")
+setGeneric("PnodeEvidence<-")
+
 
 #### Parents
 
@@ -108,6 +124,8 @@ PnodeNumParents <- function (node)
   UseMethod("PnodeNumParents")
 setGeneric("PnodeNumParents")
 
+
+###############################################################
 ## Pnets
 PnetName <- function (net)
   UseMethod("PnetName")
@@ -177,6 +195,10 @@ PnetUnserialize <- function (serial) {
   }
   unserializePnet(factory,serial)
 }
+
+PnetCompile <- function(net)
+  UseMethod("PnetCompile")
+setGeneric("PnetCompile")
 
 
 
