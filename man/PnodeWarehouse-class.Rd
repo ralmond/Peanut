@@ -2,6 +2,7 @@
 \Rdversion{1.1}
 \docType{class}
 \alias{PnodeWarehouse-class}
+\alias{PnodeWarehouse}
 
 \title{Class \code{"PnodeWarehouse"}}
 \description{

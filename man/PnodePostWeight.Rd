@@ -23,7 +23,7 @@ PnodePostWeight(node)
   (\code{\link{PnodeProbs}(node)}).  Let \eqn{\bold{p}_s = (p_{s,1},
   \ldots, p_{s,K})} be the corresponding row of the conditional
   probability table and let \eqn{n_s} be the corresponding prior weight
-  (an element of code{\link{NodePriorWeight}(node)}).  The corresponding
+  (an element of code{\link{PnodePriorWeight}(node)}).  The corresponding
   row of the effective Dirichlet prior for that row is \eqn{\alpha_s =
   (\alpha_{s,1}, \ldots, \alpha_{s,K})}, where
   \eqn{\alpha_{s,1}=p_{s,1}n_s}. Note that the matrix \eqn{\bold{P}} and
@@ -72,7 +72,7 @@ PnodePostWeight(node)
 \author{Russell Almond}
 \seealso{
   \code{\link{PnodePriorWeight}}, \code{\link{GEMfit}},
-  \code{\link{calcExpTables}}, \code{\link{maxAllTablesParams}}
+  \code{\link{calcExpTables}}, \code{\link{maxAllTableParams}}
 
 }
 \examples{

@@ -27,7 +27,7 @@ PnodeEvidence(node) <- value
 
   Currently, \code{Peanut} supports two ways of representing nodes,
   discrete and continuous (see \code{\link{isPnodeContinuous}}).
-  The current \code{\link[PNetica]{Pnetica-package}} implemenation
+  The current \code{\link[PNetica]{PNetica-package}} implemenation
   discritizes continuous nodes, using the \code{\link{PnodeStateBounds}}
   to map real numbers to states of the observables.  Functions
   implementing these generic functions may treat these values

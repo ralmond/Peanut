@@ -15,8 +15,8 @@ setMethod("show","Statistic",function(object) {
   cat(toString(object),"\n")
 })
 
-setGeneric("name",function(x) standardGeneric("name"))
-setMethod("name","Statistic", function(x) x@name)
+setGeneric("StatName",function(x) standardGeneric("StatName"))
+setMethod("StatName","Statistic", function(x) x@name)
 
 setGeneric("calcStat",function (stat,net) standardGeneric("calcStat"))
 setMethod("calcStat",c("Statistic"),
