@@ -106,14 +106,16 @@ exportClasses(PnetWarehouse,PnodeWarehouse)
 export(ClearWarehouse,WarehouseManifest,"WarehouseManifest<-",
        WarehouseData,WarehouseSupply,WarehouseFetch,
        WarehouseMake,WarehouseFree, WarehouseUnpack,
-       WarehouseInventory,
-       is.PnodeWarehouse,is.PnetWarehouse)
+       WarehouseInventory,WarehouseCopy,
+       is.PnodeWarehouse,is.PnetWarehouse,
+       is.legal.name,as.legal.name,is.valid)
 exportMethods(ClearWarehouse,
               WarehouseManifest,"WarehouseManifest<-",
        WarehouseData,WarehouseFetch,WarehouseSupply,
-       WarehouseMake,WarehouseFree,
+       WarehouseMake,WarehouseFree,WarehouseCopy,
        WarehouseInventory,
-       is.PnodeWarehouse,is.PnetWarehouse)
+       is.PnodeWarehouse,is.PnetWarehouse,
+       is.legal.name,as.legal.name,is.valid)
 
 
 
@@ -133,8 +135,8 @@ export(CompensatoryGadget,OffsetGadget,RegressionGadget,DPCGadget)
 
 ## Statistics
 exportClass(Statistic)
-export(name, Statistic, calcStat, PnodeMargin, PnodeEAP, PnodeSD, PnodeMedian,
-       PnodeMode)
-exportMethods(calcStat, name)
+export(StatName, Statistic, calcStat, PnodeMargin, PnodeEAP, PnodeSD,
+       PnodeMedian, PnodeMode)
+exportMethods(calcStat, StatName)
 
 export(flog.try)

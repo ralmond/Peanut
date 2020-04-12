@@ -1,3 +1,14 @@
+2020-03-08  Russell Almond  <ralmond@Cherry>
+
+	* R/Warehouses.R (WarehouseCopy, is.legal.name, as.legal.name)
+	(is.valid): Added these methods, to support independence form
+	RNetica in EABN.  
+
+2020-02-24  Russell Almond  <ralmond@Cherry>
+
+	* R/Statistic.R (StatName): Changed name from name, so as to not
+	clash with Proc4::name.
+
 2019-10-03  Russell Almond  <ralmond@Limu>
 
 	* R/Manifest.R (BuildNetManifest): Fixed error with null pathnames.

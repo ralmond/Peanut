@@ -2,11 +2,12 @@
 \Rdversion{1.1}
 \docType{class}
 \alias{PnetWarehouse-class}
+\alias{PnetWarehouse}
 
 \title{Class \code{"PnetWarehouse"}}
 \description{
 
-  A \code{\link{Warehouse}} objects which holds and builds
+  A \code{\link{Warehouse}} object which holds and builds
   \code{\linkS4class{Pnet}} objects.  In particular, its
   \code{\link{WarehouseManifest}} contains a network manifest (see
   \code{\link{BuildNetManifest}}) which contains information about how
@@ -164,6 +165,8 @@ Nethouse <- BNWarehouse(manifest=netman1,session=sess,key="Name")
 
 CM <- WarehouseSupply(Nethouse, "miniPP_CM")
 EM <- WarehouseSupply(Nethouse, "PPcompEM")
+
+
 
 DeleteNetwork(list(CM,EM))
 stopSession(sess)

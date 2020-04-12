@@ -6,6 +6,7 @@
 \alias{WarehouseMake}
 \alias{WarehouseFree}
 \alias{ClearWarehouse}
+\alias{is.valid}
 \alias{is.PnodeWarehouse}
 \alias{is.PnetWarehouse}
 \title{
@@ -25,6 +26,7 @@ WarehouseFetch(warehouse, name)
 WarehouseMake(warehouse, name)
 WarehouseFree(warehouse, name)
 ClearWarehouse(warehouse)
+is.valid(warehouse,object)
 is.PnetWarehouse(obj)
 is.PnodeWarehouse(obj)
 }
@@ -36,8 +38,9 @@ is.PnodeWarehouse(obj)
     that for net warehouses, the key is usually has length one, but for
     node warehouses, this usuall has the form (\var{model},\var{node}). 
   }
-  \item{obj}{An object whose type is to be determined.
-  }
+  \item{obj}{An object whose type is to be determined.}
+  \item{object}{An object to be tested to see if it a valid object from
+    this warehouse.}
 }
 \details{
 
@@ -64,7 +67,7 @@ is.PnodeWarehouse(obj)
   from the cache, and clear the cache.  Note that these may our may not
   make sense with the implementation.  (In the current
   \link[PNetica]{PNetica-package} implementation, the cache is
-  maintained by the underlying \link[RNetica]{RNetica-package} objects,
+  maintained by the underlying \link[RNetica]{RNetica} objects,
   and hence it doesn't make sense to free an object without deleting
   it.)
 
@@ -93,11 +96,23 @@ is.PnodeWarehouse(obj)
   A Pnode warehouse should return true when the generic function
   \code{is.PnodeWarehouse()} is called.
 
+  The function \code{is.valid} checks to see if the object is of a type
+  mananged by the warehouse, and that it has valid data.  In particular,
+  the \code{\link[RNetica]{RNetica}} package uses pointers to objects in Netica
+  space (as might other implementations).  The \code{is.valid()}
+  function checks that the current \code{\link{Pnet}} and
+  \code{\link{Pnode}} object point to valid objects in the external heap
+  if this is applicable to the application.
+
+
   The warehouse object is an abstract class, and implementing classes
   need to provide methods for the generic functions
   \code{WarehouseFetch()}, \code{WarehouseMake()},
   \code{WarehouseFree()}, \code{WarehouseData()},
-  \code{WarehouseManifest()}, and \code{ClearWarehouse()} as well as one
+  \code{WarehouseManifest()}, \code{\link{WarehouseCopy}()},
+  \code{\link{is.legal.name}()},\code{\link{as.legal.name}()},
+  \code{is.valid()}
+  and \code{ClearWarehouse()} as well as one
   of the generic functions \code{is.PnetWarehouse} or
   \code{is.PnodeWarehouse}.
 
@@ -105,11 +120,13 @@ is.PnodeWarehouse(obj)
   \code{\link[PNetica]{BNWarehouse}} and
   \code{\link[PNetica]{NNWarehouse}} (network and node warehouses
   respectively).  Both of these take advantage of the fact that the
-  session and network objects in \code{\link[RNetica]{RNetica-package}}
+  session and network objects in \code{\link[RNetica]{RNetica}}
   have built in environments which cache the networks and nodes
   respectively.  The \code{\link[RGAutils]{Warehouse-class}} object is a
   generic implementation that also may be of some use to potential
   implementors. 
+
+
   
 }
 \value{
@@ -155,6 +172,9 @@ of persistent storage and object persistance and uniqueness necessary
 
 }
 \seealso{
+
+  Other warehouse functions:
+  \code{\link{WarehouseCopy}}, \code{\link{is.legal.name}}
 
   These functions support the manifest process.
   \code{\link{WarehouseManifest}()}, \code{\link{WarehouseData}()} 
@@ -218,6 +238,11 @@ for (n in 1:nrow(nodeman1)) {
     WarehouseSupply(Nodehouse,name)
   }
 }
+
+WarehouseFree(Nethouse,PnetName(EM1))
+stopifnot(!is.valid(Nethouse,EM1))
+
+
 
 stopSession(sess)
 

@@ -64,3 +64,21 @@ is.PnetWarehouse <- function (obj) {
   is(obj,"PnetWarehouse")
 }
 setGeneric("is.PnetWarehouse")
+
+WarehouseCopy <- function (warehouse,obj,newname)
+    UseMethod("WarehouseCopy")
+setGeneric("WarehouseCopy")
+
+is.legal.name <- function (warehouse,name)
+  UseMethod("is.legal.name")
+setGeneric("is.legal.name")
+
+as.legal.name <- function (warehouse,name)
+  UseMethod("as.legal.name")
+setGeneric("as.legal.name")
+
+is.valid <- function (warehouse,object)
+  UseMethod("is.valid")
+setGeneric("is.valid")
+
+

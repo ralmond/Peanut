@@ -3,8 +3,9 @@
 \docType{class}
 \alias{Statistic-class}
 \alias{calcStat,Statistic-method}
-\alias{name,Statistic-method}
-
+\alias{StatName}
+\alias{StatName,Statistic-method}
+\alias{show,Statistic-method}
 \title{Class \code{"Statistic"}}
 \description{
 
@@ -40,7 +41,7 @@ Objects are created using the function \code{\link{Statistic}(fun, node,
     \item{calcStat}{\code{signature(stat = "Statistic", net)}: This method
       (a) finds the nodes referenced in \code{node}, (b) applies
       \code{fun} (using \code{do.call} to \code{net} and the actual nodes.}
-    \item{name}{\code{signature(x = "Statistic")}: Returns the name of
+    \item{StatName}{\code{signature(x = "Statistic")}: Returns the name of
       the statistic.}
     \item{show}{\code{signature(objet = "Statistic")}: Returns a
       printable representation of the statistic.}

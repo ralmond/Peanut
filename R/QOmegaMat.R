@@ -846,7 +846,7 @@ Omega2Pnet <- function(OmegaMat,pn,nodewarehouse,
         flog.error("Parents %s of node %s don't have levels set.",
                    paste(parnames[napar],collapse=", "),ndn)
         stop("Parent",paste(parnames[napar],collapse=", "),
-             "of node", nodename, "don't have levels set.")
+             "of node", ndn, "don't have levels set.")
       }
       BuildTable(node)
 

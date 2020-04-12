@@ -94,6 +94,16 @@
   }
   
 }
+\section{Pwned}{
+
+  R really doesn't want me to do this.  I'm just having a lot of
+  difficulty creating a class that extends something from a different
+  package.
+
+  For now, need to use \code{"ANY"} instead of \code{"Pnet"} and then do
+  explicit type checking with  \code{\link{is.Pnet}}.
+
+}
 \author{
   Russell Almond
 }
