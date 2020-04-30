@@ -136,7 +136,7 @@ export(CompensatoryGadget,OffsetGadget,RegressionGadget,DPCGadget)
 ## Statistics
 exportClass(Statistic)
 export(StatName, Statistic, calcStat, PnodeMargin, PnodeEAP, PnodeSD,
-       PnodeMedian, PnodeMode)
+       PnodeMedian, PnodeMode, flattenStats)
 exportMethods(calcStat, StatName)
 
 export(flog.try)
