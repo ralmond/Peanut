@@ -106,14 +106,14 @@ exportClasses(PnetWarehouse,PnodeWarehouse)
 export(ClearWarehouse,WarehouseManifest,"WarehouseManifest<-",
        WarehouseData,WarehouseSupply,WarehouseFetch,
        WarehouseMake,WarehouseFree, WarehouseUnpack,
-       WarehouseInventory,WarehouseCopy,
+       WarehouseInventory,WarehouseCopy,WarehouseSave,
        is.PnodeWarehouse,is.PnetWarehouse,
        is.legal.name,as.legal.name,is.valid)
 exportMethods(ClearWarehouse,
               WarehouseManifest,"WarehouseManifest<-",
        WarehouseData,WarehouseFetch,WarehouseSupply,
        WarehouseMake,WarehouseFree,WarehouseCopy,
-       WarehouseInventory,
+       WarehouseInventory,WarehouseSave,
        is.PnodeWarehouse,is.PnetWarehouse,
        is.legal.name,as.legal.name,is.valid)
 

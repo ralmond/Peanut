@@ -5,6 +5,7 @@
 \alias{WarehouseFetch}
 \alias{WarehouseMake}
 \alias{WarehouseFree}
+\alias{WarehouseSave}
 \alias{ClearWarehouse}
 \alias{is.valid}
 \alias{is.PnodeWarehouse}
@@ -25,6 +26,7 @@ WarehouseSupply(warehouse, name)
 WarehouseFetch(warehouse, name)
 WarehouseMake(warehouse, name)
 WarehouseFree(warehouse, name)
+WarehouseSave(warehouse, obj)
 ClearWarehouse(warehouse)
 is.valid(warehouse,object)
 is.PnetWarehouse(obj)
@@ -38,7 +40,8 @@ is.PnodeWarehouse(obj)
     that for net warehouses, the key is usually has length one, but for
     node warehouses, this usuall has the form (\var{model},\var{node}). 
   }
-  \item{obj}{An object whose type is to be determined.}
+  \item{obj}{An object whose type is to be determined, or a network to
+    be saved.}
   \item{object}{An object to be tested to see if it a valid object from
     this warehouse.}
 }
@@ -61,6 +64,10 @@ is.PnodeWarehouse(obj)
   returns it if it exists or returns \code{NULL} if it does not.  The
   generic function \code{WarehouseMake(\var{warehouse},\var{name})}
   creates the object using the data in the manifest.
+
+  The function \code{WarehouseSave} saves the object back out to long
+  term storage.  This is particularly used for networks which are often
+  prebuilt and then loaded when needed.
 
   The \code{WarehouseFree} and \code{WarehouseClear} functions complete
   the Warehouse prototocl.  These respectively remove the named object
