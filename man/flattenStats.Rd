@@ -32,7 +32,7 @@ flattenStats(statlist)
   character vector.
 
 }
-\author{Russell Almond
+\author{Russell Almond}
 \seealso{
 
   \code{\link{PnodeMargin}}, \code{\link{PnodeEAP}}, \code{\link{PnodeMode}},
