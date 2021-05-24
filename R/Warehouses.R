@@ -69,6 +69,10 @@ WarehouseCopy <- function (warehouse,obj,newname)
     UseMethod("WarehouseCopy")
 setGeneric("WarehouseCopy")
 
+WarehouseSave <- function (warehouse,obj)
+    UseMethod("WarehouseSave")
+setGeneric("WarehouseSave")
+
 is.legal.name <- function (warehouse,name)
   UseMethod("is.legal.name")
 setGeneric("is.legal.name")

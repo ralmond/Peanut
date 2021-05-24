@@ -699,6 +699,8 @@ Omega2Pnet <- function(OmegaMat,pn,nodewarehouse,
     stop("Node warehouse must be supplied.")
   }
   if (!all(Omega.reqcol %in% names(OmegaMat))) {
+      flog.error("Omega matrix missing columns %s.",
+                 paste(setdiff(Omega.reqcol,names(OmegaMat)),collapse=", "))
     stop("Badly formed Omega matrix.")
   }
   ## First parse the Matrix

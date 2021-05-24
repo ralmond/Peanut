@@ -33,3 +33,7 @@ setGeneric("PnodeMedian",function(net,node) standardGeneric("PnodeMedian"))
 setGeneric("PnodeMode",function(net,node) standardGeneric("PnodeMode"))
 
 
+
+flattenStats <- function(statlist) {
+    do.call("c",statlist)
+}
