@@ -129,7 +129,7 @@ is.PnodeWarehouse(obj)
   respectively).  Both of these take advantage of the fact that the
   session and network objects in \code{\link[RNetica]{RNetica}}
   have built in environments which cache the networks and nodes
-  respectively.  The \code{\link[RGAutils]{Warehouse-class}} object is a
+  respectively.  The \code{RGAutils::Warehouse-class} object is a
   generic implementation that also may be of some use to potential
   implementors. 
 
