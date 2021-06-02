@@ -1,6 +1,5 @@
 \name{maxAllTableParams}
 \alias{maxAllTableParams}
-%\alias{maxAllTableParams.default}
 \alias{maxCPTParam}
 \title{Find optimal parameters of Pnet or Pnode to match expected tables}
 \description{
@@ -16,7 +15,6 @@
 }
 \usage{
 maxAllTableParams(net, Mstepit = 5, tol = sqrt(.Machine$double.eps), debug=FALSE)
-%\method{maxAllTableParams}{default}(net, Mstepit = 5, tol = sqrt(.Machine$double.eps), debug=FALSE)
 maxCPTParam(node, Mstepit = 5, tol = sqrt(.Machine$double.eps)) 
 }
 \arguments{

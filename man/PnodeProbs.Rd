@@ -1,7 +1,6 @@
 \name{PnodeProbs}
 \alias{PnodeProbs}
 \alias{PnodeProbs<-}
-%- Also NEED an '\alias' for EACH other topic documented here.
 \title{  Gets or sets the conditional probability table associated with a
   Netica node.
 }
