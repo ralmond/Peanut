@@ -13,7 +13,8 @@
 
 }
 \usage{
-CompensatoryGadget(pnode, color="firebrick")
+MakeCompensatoryGadget(pnode, color="firebrick")
+CompensatoryGadget(pnode, color="firebrick",viewer=shiny::paneViewer())
 OffsetGadget(pnode, color="plum")
 RegressionGadget(pnode, useR2 = PnodeNumParents(pnode)>0L,
          color="sienna")
@@ -27,25 +28,12 @@ DPCGadget(pnode, color="steelblue")
   \item{color}{A base color to use for barcharts (see
     \code{\link[CPTtools]{barchart.CPF}}).  Execute \code{colors()} for
     a list of choices.}
+  \item{viewer}{This is passed to the \code{viewer} argument of \code{shiny::\link[shiny]{runGadget}}.}
 }
 \details{
 
   Each function puts limits on the number of parameters.
 
-  The \code{CompensatoryGadget} assumes that:
-  \itemize{
-    \item{The link function is \code{\link[CPTtools]{partialCredit}} or
-      \code{\link[CPTtools]{gradedResponse}}.}
-    \item{There is a single rule for all states, and 
-      \code{\link{PnodeQ}(pnode)=TRUE}.}
-    \item{One of the multiple-\emph{a} rules:
-      \code{\link[CPTtools]{Compensatory}}, \code{Conjunctive} or
-      \code{Disjunctive} is used, so that there is one alpha for each
-      parent.}
-    \item{There is one beta for each state except the last, which is a
-      reference state.}
-  }
-  It is most useful for compensatory models.
 
   The \code{OffsetGadget} assumes that:
   \itemize{
@@ -82,18 +70,22 @@ DPCGadget(pnode, color="steelblue")
   works for variables with no parents (the others all assume at least
   one parent).
 
+  The function \code{CompensatoryGadget} opens a shiny application in a
+  viewer pane.  If the user presses \dQuote{OK} on the interface, then the
+  \code{shinny::runApp} function returns a modified version of the final
+  \code{pnode} argument.  If the user presses \dQuote{Cancel} a
+  \sQuote{Cancel-Error} is raised, and \code{pnode} is not modified
+  (even if \code{pnode} is a reference class object).
   
-
 }
 \value{
-  
-  If the user presses \dQuote{Done} on the interface, the result is a
-  modified version of the final \code{pnode} argument.
 
-  If the user presses \dQuote{Cancel} a \sQuote{Cancel-Error} is raised,
-  and \code{pnode} is not modified (even if \code{pnode} is a reference
-  class object).
-  
+  The function \code{MakeCompensatoryGadget} returns a list of two
+  functions, \code{ui} and \code{server}.  These are meant to be passed
+  to \code{shiny::\link[shiny]{runApp}} to generate the actual app.
+
+  The function \code{CompensatoryGadget} will return the \code{pnode}
+  object or throw a \sQuote{Cancel-Error}.
 }
 \references{
 

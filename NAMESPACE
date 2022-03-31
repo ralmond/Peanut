@@ -132,6 +132,8 @@ export(Pnet2Omega,Pnet2Qmat,topsort,Omega2Pnet,Qmat2Pnet)
 
 ## Gadgets
 export(CompensatoryGadget,OffsetGadget,RegressionGadget,DPCGadget)
+export(MakeCompensatoryGadget,MakeOffsetGadget,MakeRegressionGadget,
+       MakeDPCGadget)
 
 ## Statistics
 exportClass(Statistic)
