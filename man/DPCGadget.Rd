@@ -61,21 +61,6 @@ CompensatoryGadget(pnode, color="firebrick",viewer=shiny::paneViewer())
   Workshop at the Uncertainty in Artificial Intelligence Conference.
 
 }
-\note{
-
-  Although the addition of the `MakeCompensatoryGadget` was specifically
-  designed to allow the embedding of the gadget in Rmarkdown shiny
-  documents, the default Rmarkdown layout algorithms do not work
-  properly.
-
-  Adding the following markdown code:
-  \preformatted{```{css, echo = FALSE}
-.shiny-frame{height: 1000px;}
-```  
-   } will adjust the space allocated for the gadget to 1000 pixels,
-  allowing for sufficient room for display.
-
-}
 \author{
 \author{Russell Almond}
 \seealso{
