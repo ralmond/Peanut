@@ -1,7 +1,7 @@
-\name{CompensatoryGadget}
-\alias{CompensatoryGadget}
-\alias{MakeCompensatoryGadget}
-\title{Shiny gadget for editinging compensatory pnodes}
+\name{OffsetGadget}
+\alias{OffsetGadget}
+\alias{MakeOffsetGadget}
+\title{Shiny gadget for editing offset conjuctive and disjunctive pnodes}
 \description{
 
   These functions open a shiny application (in a browser window or other
@@ -9,7 +9,7 @@
   complexity, the display assumes that \code{\link{PnodeLink}(pnode)} is
   \code{\link[CPTtools]{partialCredit}} or
   \code{\link[CPTtools]{gradedResponse}}, and that
-  \code{\link{PnodeLink}(pnode)} is \link[CPTtools]{Compensatory}}
+  \code{\link{PnodeLink}(pnode)} is \code{\link[CPTtools]{Compensatory}}
   (\code{Conjunctive} or \code{Disjunctive} are also possibilities, but
   usually, the \code{\link{OffsetGadget}} is a better parameterization
   for these rules).
@@ -17,8 +17,8 @@
 
 }
 \usage{
-MakeCompensatoryGadget(pnode, color = "firebrick")
-CompensatoryGadget(pnode, color="firebrick",viewer=shiny::paneViewer())
+MakeOffsetGadget(pnode, color = "plum")
+OffsetGadget(pnode, color="plum",viewer=shiny::paneViewer())
 }
 \arguments{
   \item{pnode}{A \code{\link{Pnode}} object to be modified.}
@@ -61,7 +61,6 @@ CompensatoryGadget(pnode, color="firebrick",viewer=shiny::paneViewer())
   Workshop at the Uncertainty in Artificial Intelligence Conference.
 
 }
-\author{
 \author{Russell Almond}
 \seealso{
 
