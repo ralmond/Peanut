@@ -9,7 +9,7 @@
   complexity, the display assumes that \code{\link{PnodeLink}(pnode)} is
   \code{\link[CPTtools]{partialCredit}} or
   \code{\link[CPTtools]{gradedResponse}}, and that
-  \code{\link{PnodeLink}(pnode)} is \code{\link[CPTtools]{Compensatory}}
+  \code{\link{PnodeRules}(pnode)} is \code{\link[CPTtools]{Compensatory}}
   (\code{Conjunctive} or \code{Disjunctive} are also possibilities, but
   usually, the \code{\link{OffsetGadget}} is a better parameterization
   for these rules).

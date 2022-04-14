@@ -2,6 +2,10 @@
 Undocumented code objects:
   PnodePostWeight ‘name’
 
+
+Fix Regression Gadget
+
+Refactor using modular shiny procedures.
    
 https://docs.google.com/spreadsheets/d/{key}/gviz/tq?tqx=out:csv&sheet={sheet_name}
 

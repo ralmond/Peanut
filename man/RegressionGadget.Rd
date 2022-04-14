@@ -7,9 +7,8 @@
   These functions open a shiny application (in a browser window or other
   location) for editing a \code{\link{Pnode}} object.  To reduce the
   complexity, the display assumes that \code{\link{PnodeLink}(pnode)} is
-  \code{\link[CPTtools]{partialCredit}} or
-  \code{\link[CPTtools]{gradedResponse}}, and that
-  \code{\link{PnodeLink}(pnode)} is \code{\link[CPTtools]{Compensatory}}
+  \code{\link[CPTtools]{normalLink}} and that
+  \code{\link{PnodeRules}(pnode)} is \code{\link[CPTtools]{Compensatory}}
   (\code{Conjunctive} or \code{Disjunctive} are also possibilities, but
   usually, the \code{\link{OffsetGadget}} is a better parameterization
   for these rules).
@@ -17,12 +16,16 @@
 
 }
 \usage{
-MakeRegressionGadget(pnode, color = "sienna")
+MakeRegressionGadget(pnode, useR2 = PnodeNumParents(pnode) > 0L,
+                     color = "sienna")
 RegressionGadget(pnode, useR2 = PnodeNumParents(pnode) > 0L,
                  color="sienna",viewer=shiny::paneViewer())
 }
 \arguments{
   \item{pnode}{A \code{\link{Pnode}} object to be modified.}
+  \item{useR2}{Logical value indicating if the link scale parameter be
+    should elicited by using a slider for \eqn{R^2}.  Default is true
+    unless there are no parent variables.}
   \item{color}{A base color to use for barcharts (see
     \code{\link[CPTtools]{barchart.CPF}}).  Execute \code{colors()} for
     a list of choices.}
@@ -30,14 +33,13 @@ RegressionGadget(pnode, useR2 = PnodeNumParents(pnode) > 0L,
 }
 \details{
 
-    The \code{CompensatoryGadget} assumes that:
+    The \code{NormalGadget} assumes that:
     \itemize{
-    \item{The link function is \code{\link[CPTtools]{partialCredit}} or
-      \code{\link[CPTtools]{gradedResponse}}.}
+    \item{The link function is \code{\link[CPTtools]{normalLink}}.}
     \item{There is a single rule for all states, and 
       \code{\link{PnodeQ}(pnode)=TRUE}.}
-    \item{One of the multiple-\emph{a} rules:
-      \code{\link[CPTtools]{Compensatory}}, \code{Conjunctive} or
+    \item{The rule is \code{\link[CPTtools]{Compensatory}},
+    \code{Conjunctive} or 
       \code{Disjunctive} is used, so that there is one alpha for each
       parent.}
     \item{There is one beta for each state except the last, which is a
@@ -89,7 +91,7 @@ theta2 <- NewDiscreteNode(tNet,"theta2",
 PnodeStateValues(theta2) <- effectiveThetas(PnodeNumStates(theta2))
 PnodeProbs(theta2) <- rep(1/PnodeNumStates(theta1),PnodeNumStates(theta2))
 
-## CompensatoryGadget
+## Regression Gadget
 
 partial3 <- NewDiscreteNode(tNet,"partial3",
                             c("FullCredit","PartialCredit","NoCredit"))
@@ -98,13 +100,28 @@ PnodeParents(partial3) <- list(theta1,theta2)
 ## Usual way to set rules is in constructor
 partial3 <- Pnode(partial3,rules="Compensatory", link="partialCredit")
 PnodePriorWeight(partial3) <- 10
-BuildTable(partial3)
 
-partial3 <- CompensatoryGadget(partial3)
+PnodeRules(partial3) <- "Compensatory"
+PnodeLink(partial3) <- "normalLink"
+PnodeLinkScale(partial3) <- 1.0
+
+\dontrun{
+partial3 <- RegressionGadget(partial3)
+}
+
+## Single parent case
+theta2 <- Pnode(theta2,c(),0,link="normalLink",linkScale=1)
+\dontrun{
+theta2 <- RegressionGadget(theta2)
+}
+
 
 ## This expression can be used inside an Rmarkdown document
-gadget <- MakeCompensatoryGadget(partial3)
+\dontrun{
+gadget <- MakeRegressionGadget(partial3)
 shinyApp(gadget$ui,gadget$server,options(height=2000))
+}
+
 
 DeleteNetwork(tNet)
 stopSession(sess)

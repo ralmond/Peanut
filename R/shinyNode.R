@@ -471,7 +471,7 @@ MakeRegressionGadget <- function(pnode, useR2=PnodeNumParents(pnode)>0L,
 RegressionGadget <- function(pnode, useR2=PnodeNumParents(pnode)>0L,
                              color = "sienna",
                              viewer=shiny::paneViewer()) {
-  gadget=MakeRegressionGadget(pnode,userR2,color)
+  gadget=MakeRegressionGadget(pnode,useR2,color)
   runGadget(gadget$ui,gadget$server,
             viewer=viewer)
 }
