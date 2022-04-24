@@ -130,4 +130,6 @@ stopSession(sess)
 \keyword{ interface }
 \concept{ CPT }
 \concept{ Compensatory }
+\concept{ partialCredit }
+\concept{ gradedResponse }
 
