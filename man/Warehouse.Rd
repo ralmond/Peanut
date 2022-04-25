@@ -203,20 +203,19 @@ startSession(sess)
 
 ### This tests the manifest and factory protocols.
 
-nodeman1 <- read.csv(paste(library(help="Peanut")$path, "auxdata",
-                           "Mini-PP-Nodes.csv", sep=.Platform$file.sep),
-                     row.names=1,stringsAsFactors=FALSE)
+netman1 <- read.csv(system.file("auxdata", "Mini-PP-Nets.csv", 
+                                package="PNetica"),
+                    row.names=1,stringsAsFactors=FALSE)
 
-netman1 <- read.csv(paste(library(help="Peanut")$path, "auxdata",
-                          "Mini-PP-Nets.csv", sep=.Platform$file.sep),
-                    row.names=1, stringsAsFactors=FALSE)
-
+nodeman1 <- read.csv(system.file("auxdata", "Mini-PP-Nodes.csv", 
+                                package="PNetica"),
+                     stringsAsFactors=FALSE)
 
 ### Test Net building
 Nethouse <- BNWarehouse(manifest=netman1,session=sess,key="Name")
 stopifnot(is.PnetWarehouse(Nethouse))
 
-setwd(paste(library(help="PNetica")$path, "testnets",sep=.Platform$file.sep))
+curd <- setwd(system.file("testnets",package="PNetica"))
 CM <- WarehouseSupply(Nethouse,"miniPP_CM")
 stopifnot(is.null(WarehouseFetch(Nethouse,"PPcompEM")))
 EM1 <- WarehouseMake(Nethouse,"PPcompEM")
@@ -250,7 +249,7 @@ WarehouseFree(Nethouse,PnetName(EM1))
 stopifnot(!is.valid(Nethouse,EM1))
 
 
-
+setwd(curd)
 stopSession(sess)
 
 }}

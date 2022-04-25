@@ -379,7 +379,7 @@ MakeRegressionGadget <- function(pnode, useR2=PnodeNumParents(pnode)>0L,
                        fluidRow(column(width=1,h4("Scale Parameter")),
                                 column(width=3,
                                        sliderInput("pls",
-                                                   "Residual Standard Error",
+                                                   "Residual Variance",
                                                    min=0.01,max=2,value=pls)))),
       ## Resulting CPT
       fluidRow(
@@ -471,7 +471,7 @@ MakeRegressionGadget <- function(pnode, useR2=PnodeNumParents(pnode)>0L,
 RegressionGadget <- function(pnode, useR2=PnodeNumParents(pnode)>0L,
                              color = "sienna",
                              viewer=shiny::paneViewer()) {
-  gadget=MakeRegressionGadget(pnode,userR2,color)
+  gadget=MakeRegressionGadget(pnode,useR2,color)
   runGadget(gadget$ui,gadget$server,
             viewer=viewer)
 }

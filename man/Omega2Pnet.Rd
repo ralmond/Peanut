@@ -279,8 +279,8 @@ While the Omega matrix allows the user to specify both link function
 \examples{
 
 ## Sample Omega matrix.
-omegamat <- read.csv(paste(library(help="Peanut")$path, "auxdata",
-                           "miniPP-omega.csv", sep=.Platform$file.sep),
+omegamat <- read.csv(system.file("auxdata", "miniPP-omega.csv",
+                                package="Peanut"),
                      row.names=1,stringsAsFactors=FALSE)
 
 \dontrun{
@@ -290,13 +290,13 @@ startSession(sess)
 
 curd <- getwd()
 
-netman1 <- read.csv(paste(library(help="Peanut")$path, "auxdata",
-                          "Mini-PP-Nets.csv", sep=.Platform$file.sep),
+netman1 <- read.csv(system.file("auxdata", "Mini-PP-Nets.csv", 
+                                package="Peanut"),
                     row.names=1,stringsAsFactors=FALSE)
 
-nodeman1 <- read.csv(paste(library(help="Peanut")$path, "auxdata",
-                           "Mini-PP-Nodes.csv", sep=.Platform$file.sep),
-                     row.names=1,stringsAsFactors=FALSE)
+nodeman1 <- read.csv(system.file("auxdata", "Mini-PP-Nodes.csv", 
+                                package="Peanut"),
+                     stringsAsFactors=FALSE)
 
 ## Insures we are building nets from scratch
 setwd(tempdir())

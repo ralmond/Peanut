@@ -12,9 +12,9 @@
   \code{\link[CPTtools]{partialCredit}}).  In particular, it allows 
   specification of different combination rules for each state
   transition.  The rules can be either the multiple-\emph{a} type (e.g.,
-  \code{\link[CPTTools]{Compensatory}}) or muliptle-\emph{b} type (e.g.,
-  \code{\link[CPTTools]{OffsetConjunctive}} or
-  \code{\link[CPTTools]{OffsetDisjunctive}}).  It even allows for a
+  \code{\link[CPTtools]{Compensatory}}) or muliptle-\emph{b} type (e.g.,
+  \code{\link[CPTtools]{OffsetConjunctive}} or
+  \code{\link[CPTtools]{OffsetDisjunctive}}).  It even allows for a
   subset of parents to be used in each transition by specifying an inner
   \emph{Q}-matrix (though \code{\link{PnodeQ}}).  To manage this
   complexity, each transition is displayed on a separate tab of the
@@ -86,7 +86,6 @@ DPCGadget(pnode, color="steelblue",viewer=shiny::paneViewer())
   Workshop at the Uncertainty in Artificial Intelligence Conference.
 
 }
-\author{
 \author{Russell Almond}
 \seealso{
 
@@ -94,7 +93,7 @@ DPCGadget(pnode, color="steelblue",viewer=shiny::paneViewer())
   \code{\link[CPTtools]{barchart.CPF}}
 
   \code{\link{OffsetGadget}}, \code{\link{RegressionGadget}},
-  \code{\link{Compensatoryadget}}
+  \code{\link{CompensatoryGadget}}
 
 }
 \examples{

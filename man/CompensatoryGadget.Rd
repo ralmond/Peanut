@@ -9,7 +9,7 @@
   complexity, the display assumes that \code{\link{PnodeLink}(pnode)} is
   \code{\link[CPTtools]{partialCredit}} or
   \code{\link[CPTtools]{gradedResponse}}, and that
-  \code{\link{PnodeLink}(pnode)} is \link[CPTtools]{Compensatory}}
+  \code{\link{PnodeLink}(pnode)} is \code{\link[CPTtools]{Compensatory}}
   (\code{Conjunctive} or \code{Disjunctive} are also possibilities, but
   usually, the \code{\link{OffsetGadget}} is a better parameterization
   for these rules).
@@ -72,11 +72,11 @@ CompensatoryGadget(pnode, color="firebrick",viewer=shiny::paneViewer())
   \preformatted{```{css, echo = FALSE}
 .shiny-frame{height: 1000px;}
 ```  
-   } will adjust the space allocated for the gadget to 1000 pixels,
+   } 
+  will adjust the space allocated for the gadget to 1000 pixels,
   allowing for sufficient room for display.
 
 }
-\author{
 \author{Russell Almond}
 \seealso{
 

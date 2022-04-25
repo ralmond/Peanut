@@ -193,20 +193,20 @@
   \code{\link[PNetica]{MakePnode.NeticaNode}}
 }
 \examples{
-showClass("PnodeWarehouse")
+## This expression provides an example Node manifest
+nodeman1 <- read.csv(system.file("auxdata", "Mini-PP-Nodes.csv", 
+                                package="Peanut"),
+                     stringsAsFactors=FALSE)
+
 \dontrun{
 library(PNetica) ## Requires PNetica
 sess <- NeticaSession()
 startSession(sess)
 
 ## This expression provides an example Node manifest
-nodeman1 <- read.csv(file.path(library(help="Peanut")$path, "auxdata",
-                           "Mini-PP-Nodes.csv"),
-                     row.names=1,stringsAsFactors=FALSE)
-
-nodeman1 <- read.csv(paste(library(help="Peanut")$path, "auxdata",
-                           "Mini-PP-Nodes.csv", sep=.Platform$file.sep),
-                     row.names=1,stringsAsFactors=FALSE)
+netman1 <- read.csv(system.file("auxdata", "Mini-PP-Nets.csv", 
+                                package="PNetica"),
+                    row.names=1,stringsAsFactors=FALSE)
 
 ## Network and node warehouse, to create networks and nodes on demand.
 Nethouse <- BNWarehouse(manifest=netman1,session=sess,key="Name")

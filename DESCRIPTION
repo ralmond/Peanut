@@ -4,6 +4,12 @@ Date: 2022/04/22
 Title: Parameterized Bayesian Networks, Abstract Classes
 Author: Russell Almond
 Maintainer: Russell Almond <ralmond@fsu.edu>
+Authors@R: 
+    person(given = "Russell",
+           family = "Almond",
+           role = c("aut", "cre"),
+           email = "ralmond@fsu.edu",
+           comment = c(ORCID = "0000-0002-8876-9337"))
 Depends: R (>= 3.0), CPTtools (>= 0.5), methods
 Imports: shiny (>= 1.1), shinyjs, utils, futile.logger
 Suggests:  PNetica

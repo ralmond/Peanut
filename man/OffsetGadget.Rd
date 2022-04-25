@@ -9,11 +9,10 @@
   complexity, the display assumes that \code{\link{PnodeLink}(pnode)} is
   \code{\link[CPTtools]{partialCredit}} or
   \code{\link[CPTtools]{gradedResponse}}, and that
-  \code{\link{PnodeLink}(pnode)} is \link[CPTtools]{Compensatory}}
+  \code{\link{PnodeLink}(pnode)} is \code{\link[CPTtools]{Compensatory}}
   (\code{Conjunctive} or \code{Disjunctive} are also possibilities, but
   usually, the \code{\link{OffsetGadget}} is a better parameterization
   for these rules).
-  
 
 }
 \usage{
@@ -61,7 +60,6 @@ OffsetGadget(pnode, color="plum",viewer=shiny::paneViewer())
   Workshop at the Uncertainty in Artificial Intelligence Conference.
 
 }
-\author{
 \author{Russell Almond}
 \seealso{
 

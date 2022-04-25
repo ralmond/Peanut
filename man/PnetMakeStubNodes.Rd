@@ -102,10 +102,10 @@ library(PNetica) ## Needs PNetica
 sess <- NeticaSession()
 startSession(sess)
 
-PM <- ReadNetworks(file.path(library(help="PNetica")$path, "testnets",
-     "miniPP-CM.dne"), session=sess)
-EM1 <- ReadNetworks(file.path(library(help="PNetica")$path, "testnets",
-      "PPcompEM.dne"), session=sess)
+PM <- ReadNetworks(system.file("testnets", "miniPP-CM.dne",
+                               package="PNetica"), session=sess)
+EM1 <- ReadNetworks(system.file("testnets", "PPcompEM.dne",
+                                package="PNetica"), session=sess)
 
 ## Find the target node and its parents.
 obs <- PnetFindNode(EM1,"CompensatoryObs")
