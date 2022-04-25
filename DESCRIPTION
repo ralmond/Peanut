@@ -12,7 +12,11 @@ Authors@R:
            comment = c(ORCID = "0000-0002-8876-9337"))
 Depends: R (>= 3.0), CPTtools (>= 0.5), methods
 Imports: shiny (>= 1.1), shinyjs, utils, futile.logger
-Suggests:  PNetica
+Suggests:  PNetica,
+    knitr,
+    rmarkdown,
+    tidyr
+VignetteBuilder: knitr
 Description: This provides support of learning conditional probability tables parameterized using CPTtools. 
 License: Artistic-2.0 
 URL: http://pluto.coe.fsu.edu/RNetica
