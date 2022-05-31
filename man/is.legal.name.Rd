@@ -46,8 +46,8 @@ startSession(sess)
 
 ## BNWarehouse is the PNetica Net Warehouse.
 ## This provides an example network manifest.
-table.dir <- file.path(library(help="Peanut")$path, "auxdata")
-net.dir <- file.path(library(help="PNetica")$path, "testnets")
+table.dir <- system.file("auxdata", package="Peanut")
+net.dir <- system.file("testnets", package="PNetica")
 
 netman1 <- read.csv(file.path(table.dir,"Mini-PP-Nets.csv"),
                     row.names=1, stringsAsFactors=FALSE)

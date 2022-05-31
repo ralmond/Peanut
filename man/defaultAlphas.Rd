@@ -48,10 +48,12 @@ sess <- NeticaSession()
 startSession(sess)
 
 
-EM1 <- ReadNetworks(file.path(library(help="PNetica")$path, "testnets",
-      "PPcompEM.dne"), session=sess)
-EM2 <- ReadNetworks(file.path(library(help="PNetica")$path, "testnets",
-      "PPconjEM.dne"), session=sess)
+EM1 <- ReadNetworks(system.file("testnets", "PPcompEM.dne",
+                                package="PNetica"),
+                    session=sess)
+EM2 <- ReadNetworks(system.file("testnets", "PPconjEM.dne",
+                                package="PNetica"),
+                    session=sess)
 
 comp <- PnetFindNode(EM1,"CompensatoryObs")
 conj <- PnetFindNode(EM2,"ConjunctiveObs")

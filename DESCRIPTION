@@ -1,11 +1,22 @@
 Package: Peanut
-Version: 0.8-4
-Date: 2021/06/01
+Version: 0.9-1
+Date: 2022/04/22
 Title: Parameterized Bayesian Networks, Abstract Classes
 Author: Russell Almond
 Maintainer: Russell Almond <ralmond@fsu.edu>
-Depends: R (>= 3.0), CPTtools (>= 0.5), methods, futile.logger
-Imports: shiny (>= 1.1), shinyjs, utils
+Authors@R: 
+    person(given = "Russell",
+           family = "Almond",
+           role = c("aut", "cre"),
+           email = "ralmond@fsu.edu",
+           comment = c(ORCID = "0000-0002-8876-9337"))
+Depends: R (>= 3.0), CPTtools (>= 0.5), methods
+Imports: shiny (>= 1.1), shinyjs, utils, futile.logger
+Suggests:  PNetica,
+    knitr,
+    rmarkdown,
+    tidyr
+VignetteBuilder: knitr
 Description: This provides support of learning conditional probability
     tables parameterized using CPTtools. This provides and object oriented
     layer on top of a CPTtools, to facilitate calculations with
@@ -14,7 +25,6 @@ Description: This provides support of learning conditional probability
     intent that the protocol can be implemented  with different Bayes net
     engines.  The companion pacakge PNetica provides an implementation
     using Netica and RNetica. 
-
 License: Artistic-2.0 
 URL: http://pluto.coe.fsu.edu/RNetica
 

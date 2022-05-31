@@ -1,6 +1,6 @@
-\name{CompensatoryGadget}
-\alias{CompensatoryGadget}
-\alias{MakeCompensatoryGadget}
+\name{RegressionGadget}
+\alias{RegressionGadget}
+\alias{MakeRegressionGadget}
 \title{Shiny gadget for editinging compensatory pnodes}
 \description{
 
@@ -9,7 +9,7 @@
   complexity, the display assumes that \code{\link{PnodeLink}(pnode)} is
   \code{\link[CPTtools]{partialCredit}} or
   \code{\link[CPTtools]{gradedResponse}}, and that
-  \code{\link{PnodeLink}(pnode)} is \link[CPTtools]{Compensatory}}
+  \code{\link{PnodeLink}(pnode)} is \code{\link[CPTtools]{Compensatory}}
   (\code{Conjunctive} or \code{Disjunctive} are also possibilities, but
   usually, the \code{\link{OffsetGadget}} is a better parameterization
   for these rules).
@@ -17,41 +17,49 @@
 
 }
 \usage{
-MakeCompensatoryGadget(pnode, color = "firebrick")
-CompensatoryGadget(pnode, color="firebrick",viewer=shiny::paneViewer())
+MakeRegressionGadget(pnode, useR2 = PnodeNumParents(pnode) > 0L,
+color = "sienna")
+RegressionGadget(pnode, useR2 = PnodeNumParents(pnode) > 0L,
+color="sienna",viewer=shiny::paneViewer())
 }
 \arguments{
   \item{pnode}{A \code{\link{Pnode}} object to be modified.}
   \item{color}{A base color to use for barcharts (see
     \code{\link[CPTtools]{barchart.CPF}}).  Execute \code{colors()} for
     a list of choices.}
+  \item{useR2}{A logical value.  If true, the link scale parameter is
+    convered to an \eqn{R^2} parameter in the gadget.}
   \item{viewer}{This is passed to the \code{viewer} argument of \code{shiny::\link[shiny]{runGadget}}.}
 }
 \details{
 
-    The \code{CompensatoryGadget} assumes that:
+    The \code{RegressionGadget} assumes that:
     \itemize{
-    \item{The link function is \code{\link[CPTtools]{partialCredit}} or
-      \code{\link[CPTtools]{gradedResponse}}.}
-    \item{There is a single rule for all states, and 
-      \code{\link{PnodeQ}(pnode)=TRUE}.}
-    \item{One of the multiple-\emph{a} rules:
-      \code{\link[CPTtools]{Compensatory}}, \code{Conjunctive} or
-      \code{Disjunctive} is used, so that there is one alpha for each
-      parent.}
-    \item{There is one beta for each state except the last, which is a
-      reference state.}
+    \item{The link function is \code{\link[CPTtools]{normalLink}}.}
+    \item{There is a single rule for all states, and that rule is
+      \code{\link[CPTtools]{Compensatory}}.}
+    \item{There is no inner Q-matrix, i.e., \code{\link{PnodeQ}(pnode)=TRUE}.}
+    \item{There is a single beta value.}
+    \item{That \code{\link{PnodeLinkScale}(pnode)} has a positive value.}
   }
-  It is most useful for compensatory models.
+
+  This model is essentially a latent regression of the effective thetas
+  onto the latent theta of the child space.  The link scale parameter
+  gives the residual variance (see \code{\link[CPTtools]{normalLink}}).
+
+  An alternative parameterization, often more familiar to experts, uses
+  the multiple \eqn{R^2} instead of the residual variance.  The
+  \code{useR2} flag determines how the link scale parameter is conveyed
+  on the gadget.
 
 
 }
 \value{
-  The function \code{MakeCompensatoryGadget} returns a list of two
+  The function \code{MakeRegressionGadget} returns a list of two
   functions, \code{ui} and \code{server}.  These are meant to be passed
   to \code{shiny::\link[shiny]{runApp}} to generate the actual app.
 
-  The function \code{CompensatoryGadget} will return the \code{pnode}
+  The function \code{RegressionGadget} will return the \code{pnode}
   object or throw a \sQuote{Cancel-Error}.
 
 }
@@ -61,14 +69,13 @@ CompensatoryGadget(pnode, color="firebrick",viewer=shiny::paneViewer())
   Workshop at the Uncertainty in Artificial Intelligence Conference.
 
 }
-\author{
 \author{Russell Almond}
 \seealso{
 
   \code{\link{Pnode}}, \code{\link[CPTtools]{calcDPCFrame}},
   \code{\link[CPTtools]{barchart.CPF}}
 
-  \code{\link{OffsetGadget}}, \code{\link{RegressionGadget}},
+  \code{\link{OffsetGadget}}, \code{\link{CompensatoryGadget}},
   \code{\link{DPCGadget}}
 
 }
@@ -89,22 +96,29 @@ theta2 <- NewDiscreteNode(tNet,"theta2",
 PnodeStateValues(theta2) <- effectiveThetas(PnodeNumStates(theta2))
 PnodeProbs(theta2) <- rep(1/PnodeNumStates(theta1),PnodeNumStates(theta2))
 
-## CompensatoryGadget
+## RegressionGadget
 
 partial3 <- NewDiscreteNode(tNet,"partial3",
                             c("FullCredit","PartialCredit","NoCredit"))
 PnodeParents(partial3) <- list(theta1,theta2)
 
 ## Usual way to set rules is in constructor
-partial3 <- Pnode(partial3,rules="Compensatory", link="partialCredit")
+partial3 <- Pnode(partial3,rules="Compensatory", link="normalLink")
 PnodePriorWeight(partial3) <- 10
+PnodeLinkScale(partial3) <- 1.0
 BuildTable(partial3)
 
-partial3 <- CompensatoryGadget(partial3)
+partial3 <- RegressionGadget(partial3)
+partial3 <- RegressionGadget(partial3,useR2=FALSE)
 
 ## This expression can be used inside an Rmarkdown document
-gadget <- MakeCompensatoryGadget(partial3)
+gadget <- MakeRegressionGadget(partial3)
 shinyApp(gadget$ui,gadget$server,options(height=2000))
+
+## No parent case
+theta2 <- Pnode(theta2,link="normalLink",linkScale=1)
+theta2 <- RegressionGadget(theta2)
+
 
 DeleteNetwork(tNet)
 stopSession(sess)
@@ -114,5 +128,6 @@ stopSession(sess)
 \keyword{ manip }
 \keyword{ interface }
 \concept{ CPT }
+\concept{ normalLink}
 \concept{ Compensatory }
 

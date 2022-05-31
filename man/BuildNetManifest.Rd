@@ -98,8 +98,8 @@ Sydney, Australia. (International) Retrieved from \url{http://bmaw2017.azurewebs
 }
 \examples{
 ## This provides an example network manifest.
-netman1 <- read.csv(paste(library(help="Peanut")$path, "auxdata",
-                          "Mini-PP-Nets.csv", sep=.Platform$file.sep),
+netman1 <- read.csv(system.file("auxdata", "Mini-PP-Nets.csv", 
+                                package="Peanut"),
                     row.names=1, stringsAsFactors=FALSE)
 
 \dontrun{
@@ -108,7 +108,7 @@ library(PNetica)  ## Example requires PNetica
 sess <- NeticaSession()
 startSession(sess)
 
-netpath <- file.path(library(help="PNetica")$path, "testnets")
+netpath <- System.file("testnets",package="PNetica")
 netnames <- paste(c("miniPP-CM","PPcompEM","PPconjEM","PPtwostepEM",
                   "PPdurAttEM"),"dne",sep=".")
 

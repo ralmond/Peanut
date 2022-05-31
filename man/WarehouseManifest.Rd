@@ -103,13 +103,14 @@ Sydney, Australia. (International) Retrieved from \url{http://bmaw2017.azurewebs
 }
 \examples{
 ## This provides an example network manifest.
-netman1 <- read.csv(paste(library(help="Peanut")$path, "auxdata",
-                          "Mini-PP-Nets.csv", sep=.Platform$file.sep),
-                    row.names=1, stringsAsFactors=FALSE)
+netman1 <- read.csv(system.file("auxdata", "Mini-PP-Nets.csv", 
+                                package="Peanut"),
+                    row.names=1,stringsAsFactors=FALSE)
+
 
 ## This provides an example node manifest
-nodeman1 <- read.csv(paste(library(help="Peanut")$path, "auxdata",
-                           "Mini-PP-Nodes.csv", sep=.Platform$file.sep),
+nodeman1 <- read.csv(system.file("auxdata", "Mini-PP-Nodes.csv", 
+                                package="Peanut"),
                      row.names=1,stringsAsFactors=FALSE)
 
 \dontrun{
