@@ -55,6 +55,8 @@ PnodeStateValues(node) <- value
   Russell Almond
 }
 \seealso{
+
+  \code{\link{PnodeStateBounds}},
   \code{\link{Pnode}},   \code{\link{PnodeStates}()}, 
   \code{\link{PnodeName}()}, \code{\link{PnodeStateTitles}()},
   \code{\link{PnodeParentTvals}()}

@@ -140,10 +140,10 @@ collect <- mongo("studentModels","test",
 ## Or "mongodb://user:pwd@127.0.0.1:27017/test"
 
 ## An example network manifest.
-netman1 <- read.csv(paste(library(help="Peanut")$path, "auxdata",
-                          "Mini-PP-Nets.csv", sep=.Platform$file.sep),
+netman1 <- read.csv(system.file("auxdata", "Mini-PP-Nets.csv",
+                                package="PNetica"),
                     row.names=1, stringsAsFactors=FALSE)
-netpath <- file.path(library(help="PNetica")$path, "testnets")
+netpath <- system.file("testnets", package="PNetica")
 netman1$Pathname <- file.path(netpath,netman1$Pathname)
 
 Nethouse <- BNWarehouse(manifest=netman1,session=sess,key="Name")

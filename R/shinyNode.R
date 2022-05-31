@@ -1,7 +1,7 @@
 ########
 ## Shiny editor for a node.
 
-CompensatoryGadget <- function(pnode, color="firebrick") {
+MakeCompensatoryGadget <- function(pnode, color="firebrick") {
 
   ## Node Structure
   pstates <- PnodeStates(pnode)
@@ -139,12 +139,18 @@ CompensatoryGadget <- function(pnode, color="firebrick") {
       stopApp(reassembleNode())
     })
   }
-  runGadget(ui,server,
-            viewer=dialogViewer(paste("Editor for node ",PnodeName(pnode)),
-                                800,800))
+  list(ui=ui,server=server)
 }
 
-OffsetGadget <- function(pnode, color="plum") {
+CompensatoryGadget <- function(pnode, color="firebrick",
+                               viewer=shiny::paneViewer()) {
+  gadget=MakeCompensatoryGadget(pnode,color)
+  runGadget(gadget$ui,gadget$server,
+            viewer=viewer)
+}
+
+MakeOffsetGadget <- function(pnode, color="plum"){
+
 
   ## Node Structure
   pstates <- PnodeStates(pnode)
@@ -295,13 +301,18 @@ OffsetGadget <- function(pnode, color="plum") {
       stopApp(reassembleNode())
     })
   }
-  runGadget(ui,server,
-            viewer=dialogViewer(paste("Editor for node ",PnodeName(pnode)),
-                                800,800))
+  list(ui=ui,server=server)
+}
+
+OffsetGadget <- function(pnode, color="plum",
+                         viewer=shiny::paneViewer()) {
+  gadget=MakeOffsetGadget(pnode,color)
+  runGadget(gadget$ui,gadget$server,
+            viewer=viewer)
 }
 
 
-RegressionGadget <- function(pnode, useR2=PnodeNumParents(pnode)>0L,
+MakeRegressionGadget <- function(pnode, useR2=PnodeNumParents(pnode)>0L,
                              color = "sienna") {
 
   ## Node Structure
@@ -368,7 +379,7 @@ RegressionGadget <- function(pnode, useR2=PnodeNumParents(pnode)>0L,
                        fluidRow(column(width=1,h4("Scale Parameter")),
                                 column(width=3,
                                        sliderInput("pls",
-                                                   "Residual Standard Error",
+                                                   "Residual Variance",
                                                    min=0.01,max=2,value=pls)))),
       ## Resulting CPT
       fluidRow(
@@ -454,12 +465,19 @@ RegressionGadget <- function(pnode, useR2=PnodeNumParents(pnode)>0L,
       stopApp(reassembleNode())
     })
   }
-  runGadget(ui,server,
-            viewer=dialogViewer(paste("Editor for node ",PnodeName(pnode)),
-                                800,800))
+  list(ui=ui,server=server)
 }
 
-DPCGadget <- function(pnode, color="steelblue") {
+RegressionGadget <- function(pnode, useR2=PnodeNumParents(pnode)>0L,
+                             color = "sienna",
+                             viewer=shiny::paneViewer()) {
+  gadget=MakeRegressionGadget(pnode,useR2,color)
+  runGadget(gadget$ui,gadget$server,
+            viewer=viewer)
+}
+
+
+MakeDPCGadget <- function(pnode, color="steelblue"){
 
   ## Node Structure
   pstates <- PnodeStates(pnode)
@@ -761,10 +779,16 @@ DPCGadget <- function(pnode, color="steelblue") {
       }
     })
   }
-  runGadget(ui,server,
-            viewer=dialogViewer(paste("Editor for node ",PnodeName(pnode)),
-                                800,800))
+  list(ui=ui,server=server)
 }
+
+DPCGadget <- function(pnode, color="steelblue",
+                      viewer=shiny::paneViewer()) {
+  gadget=MakeDPCGadget(pnode,color)
+  runGadget(gadget$ui,gadget$server,
+            viewer=viewer)
+}
+
 
 ##########################################
 ## Shinyjs breaks the show command

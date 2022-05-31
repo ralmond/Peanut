@@ -81,10 +81,10 @@ library(PNetica) ## Need a specific implementation
 sess <- NeticaSession()
 startSession(sess)
 
-irt10.base <- ReadNetworks(paste(library(help="PNetica")$path,
-                           "testnets","IRT10.2PL.base.dne",
-                           sep=.Platform$file.sep),
+irt10.base <- ReadNetworks(system.file("testnets", "IRT10.2PL.base.dne",
+                                        package="PNetica"),
                            session=sess)
+
 irt10.base <- as.Pnet(irt10.base)  ## Flag as Pnet, fields already set.
 irt10.theta <- PnetFindNode(irt10.base,"theta")
 irt10.items <- PnetPnodes(irt10.base)
@@ -97,9 +97,7 @@ for (i in 1:length(irt10.items)) {
 }
 PnetCompile(irt10.base) ## Netica requirement
 
-casepath <- paste(library(help="PNetica")$path,
-                           "testdat","IRT10.2PL.200.items.cas",
-                           sep=.Platform$file.sep)
+casepath <- system.file("testdat", "IRT10.2PL.200.items.cas", package="PNetica")
 
 item1 <- irt10.items[[1]]
 
