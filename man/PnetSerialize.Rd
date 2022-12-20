@@ -141,7 +141,7 @@ collect <- mongo("studentModels","test",
 
 ## An example network manifest.
 netman1 <- read.csv(system.file("auxdata", "Mini-PP-Nets.csv",
-                                package="PNetica"),
+                                package="Peanut"),
                     row.names=1, stringsAsFactors=FALSE)
 netpath <- system.file("testnets", package="PNetica")
 netman1$Pathname <- file.path(netpath,netman1$Pathname)

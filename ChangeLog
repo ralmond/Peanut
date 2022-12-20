@@ -1,3 +1,7 @@
+2022-10-28  Russell Almond  <ralmond@cherry.local>
+
+	* R/BNgenerics.R (PnetName): Added a NULL method to PnetName as it appears to often happen that we get a NULL where we expect an Net during debugging. 
+
 2022-02-14  Russell Almond  <ralmond@cherry.local>
 
 	* R/shinyNode.R (CompensatoryGadget): Exposed viewer argument.

@@ -130,6 +130,8 @@ setGeneric("PnodeNumParents")
 PnetName <- function (net)
   UseMethod("PnetName")
 setGeneric("PnetName")
+setMethod("PnetName","NULL",function(net) return("NULL"))
+
 
 "PnetName<-" <- function (net, value)
   UseMethod("PnetName<-")
