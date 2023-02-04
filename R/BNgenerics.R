@@ -59,6 +59,8 @@ PnodeNumStates <- function (node)
   UseMethod("PnodeNumStates")
 setGeneric("PnodeNumStates")
 
+PnodeNumStates.default <- function (node) length(PnodeStates(node))
+
 PnodeStateTitles <- function (node)
   UseMethod("PnodeStateTitles")
 setGeneric("PnodeStateTitles")
@@ -124,6 +126,7 @@ PnodeNumParents <- function (node)
   UseMethod("PnodeNumParents")
 setGeneric("PnodeNumParents")
 
+PnodeNumParents.default <- function (node) length(PnodeParents)
 
 ###############################################################
 ## Pnets

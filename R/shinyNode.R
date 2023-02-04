@@ -35,59 +35,64 @@ MakeCompensatoryGadget <- function(pnode, color="firebrick") {
   }
   if (is.null(names(pb))) names(pb) <- pstates[1L:(nps-1L)]
 
-  ui <- fluidPage(
+  ui <- shiny::fluidPage(
       title=(paste("Editor for node ",PnodeName(pnode))),
-      wellPanel(h1(paste("Editor for node ",PnodeName(pnode))),
-                actionButton("cancel","Cancel"),
-                actionButton("done","OK")),
+      shiny::wellPanel(
+                 htmltools::h1(paste("Editor for node ",PnodeName(pnode))),
+                 shiny::actionButton("cancel","Cancel"),
+                 shiny::actionButton("done","OK")),
       ## Structure and Link
-      fluidRow(column(width=4,
-                      selectInput("link","Link Function:",
-                                  c("Partial Credit"="partialCredit",
-                                    "Graded Response"="gradedResponse"),
-                                  selected=pLink)),
-               column(width=6,
-                      selectInput("rules","Structure Function (Rule):",
-                                  c("Compensatory","Conjunctive",
-                                    "Disjunctive"),
-                                  selected=pRules))
-               ),
-      fluidRow(column(width=1,h4("Alphas:")),
+      shiny::fluidRow(
+                 shiny::column(width=4,
+                       shiny::selectInput("link","Link Function:",
+                                          c("Partial Credit"="partialCredit",
+                                            "Graded Response"="gradedResponse"),
+                                          selected=pLink)),
+                 shiny::column(width=6,
+                      shiny::selectInput("rules","Structure Function (Rule):",
+                                         c("Compensatory","Conjunctive",
+                                           "Disjunctive"),
+                                         selected=pRules))
+             ),
+      shiny::fluidRow(shiny::column(width=1,htmltools::h4("Alphas:")),
                lapply(names(pa),function(par) {
-                 column(width=3,
-                        sliderInput(paste("a",par,sep="."),par,
+                 shiny::column(width=3,
+                        shiny::sliderInput(paste("a",par,sep="."),par,
                                     min=0.01,max=2,value=pa[par])
                         )})),
-      fluidRow(column(width=1,h4("Betas:")),
+      shiny::fluidRow(shiny::column(width=1,htmltools::h4("Betas:")),
                lapply(names(pb),function(st) {
-                 column(width=3,
-                        sliderInput(paste("b",st,sep="."),st,
+                 shiny::column(width=3,
+                        shiny::sliderInput(paste("b",st,sep="."),st,
                                     min=-3,max=3,value=pb[[st]])
                         )})),
       ## conditionalPanel("input.link == normalLink",
       ##                  sliderInput(lsp,"Link Scale Parameter:",
       ##                              min=0.01,max=1,value=lsp)),
       ## Resulting CPT
-      fluidRow(
+      shiny::fluidRow(
           column(width=12,
-                 tabsetPanel(
-                     tabPanel("Plot",plotOutput("barchart")),
-                     tabPanel("Table",tableOutput("cptFrame")),
-                     tabPanel("Effective Thetas",tableOutput("etFrame")))))
+                 shiny::tabsetPanel(
+                            shiny::tabPanel("Plot",
+                                            shiny::plotOutput("barchart")),
+                            shiny::tabPanel("Table",
+                                            shiny::tableOutput("cptFrame")),
+                            shiny::tabPanel("Effective Thetas",
+                                            shiny::tableOutput("etFrame")))))
 
   )
 
   server <-  function (input, output, session) {
 
     ## Reassemble vectors
-    newpa <- reactive({
+    newpa <- shiny::reactive({
       newa <- lapply(names(pa),function(par) input[[paste("a",par,sep=".")]])
       newa <- as.numeric(newa)
       names(newa) <- names(pa)
       newa
     })
 
-    newpb <- reactive({
+    newpb <- shiny::reactive({
       newb <- lapply(names(pb),function(st) input[[paste("b",st,sep=".")]])
       newb <- as.list(newb)
       names(newb) <- names(pb)
@@ -96,7 +101,7 @@ MakeCompensatoryGadget <- function(pnode, color="firebrick") {
 
 
     ## Reassemble Node
-    reassembleNode <- reactive( {
+    reassembleNode <- shiny::reactive( {
       PnodeQ(pnode) <- pQ
       PnodeRules(pnode) <- input$rules
       PnodeLink(pnode) <- input$link
@@ -105,13 +110,13 @@ MakeCompensatoryGadget <- function(pnode, color="firebrick") {
       pnode
     })
     ## Build CPF
-    buildCPF <- reactive({
+    buildCPF <- shiny::reactive({
       calcDPCFrame(parStates,pstates,log(newpa()),newpb(),
                    input$rules,input$link,NULL,pQ)
     })
 
     ## Effective Thetas table
-    eThetasFrame <- reactive({
+    eThetasFrame <- shiny::reactive({
       rules <- input$rules
       newa <- newpa()
       newb <- newpb()
@@ -128,15 +133,15 @@ MakeCompensatoryGadget <- function(pnode, color="firebrick") {
     })
 
 
-    output$barchart <- renderPlot({
+    output$barchart <- shiny::renderPlot({
       barchart.CPF(buildCPF(),baseCol=color)
     })
 
-    output$cptFrame <- renderTable(buildCPF(),striped=TRUE,digits=3)
-    output$etFrame <- renderTable(eThetasFrame(),striped=TRUE,digits=3)
+    output$cptFrame <- shiny::renderTable(buildCPF(),striped=TRUE,digits=3)
+    output$etFrame <- shiny::renderTable(eThetasFrame(),striped=TRUE,digits=3)
 
-    observeEvent(input$done, {
-      stopApp(reassembleNode())
+    shiny::observeEvent(input$done, {
+      shiny::stopApp(reassembleNode())
     })
   }
   list(ui=ui,server=server)
@@ -145,7 +150,7 @@ MakeCompensatoryGadget <- function(pnode, color="firebrick") {
 CompensatoryGadget <- function(pnode, color="firebrick",
                                viewer=shiny::paneViewer()) {
   gadget=MakeCompensatoryGadget(pnode,color)
-  runGadget(gadget$ui,gadget$server,
+  shiny::runGadget(gadget$ui,gadget$server,
             viewer=viewer)
 }
 
@@ -186,61 +191,65 @@ MakeOffsetGadget <- function(pnode, color="plum"){
   }
   if (is.null(names(pb))) names(pb) <- parnames
 
-  ui <- fluidPage(
+  ui <- shiny::fluidPage(
       title=(paste("Editor for node ",PnodeName(pnode))),
-      wellPanel(h1(paste("Editor for node ",PnodeName(pnode))),
-                actionButton("cancel","Cancel"),
-                actionButton("done","OK")),
+      shiny::wellPanel(
+                 htmltools::h1(paste("Editor for node ",PnodeName(pnode))),
+                 shiny::actionButton("cancel","Cancel"),
+                 shiny::actionButton("done","OK")),
       ## Structure and Link
-      fluidRow(column(width=4,
-                      selectInput("link","Link Function:",
+      shiny::fluidRow(column(width=4,
+                      shiny::selectInput("link","Link Function:",
                                   c("Parital Credit"="partialCredit",
                                     "Graded Response"="gradedResponse"),
                                   selected=pLink)),
-               column(width=6,
-                      selectInput("rules","Structure Function (Rule):",
+               shiny::column(width=6,
+                      shiny::selectInput("rules","Structure Function (Rule):",
                                   c("OffsetConjunctive",
                                     "OffsetDisjunctive"),
                                   selected=pRules))
                ),
-      conditionalPanel("input.link == 'gradedResponse'",
-                       fluidRow(column(width=1,h4("Alpha:")),
-                                column(width=3,
-                                       sliderInput("a","Alpha",
+      shiny::conditionalPanel("input.link == 'gradedResponse'",
+                       shiny::fluidRow(column(width=1,htmltools::h4("Alpha:")),
+                                shiny::column(width=3,
+                                       shiny::sliderInput("a","Alpha",
                                                    min=0.01,max=2,
                                                    value=pa[[1]]))
                         )),
-      conditionalPanel("input.link == 'partialCredit'",
-                       fluidRow(column(width=1,h4("Alphas:")),
+      shiny::conditionalPanel("input.link == 'partialCredit'",
+                       shiny::fluidRow(column(width=1,htmltools::h4("Alphas:")),
                                 lapply(names(pa),function(st) {
-                                  column(width=3,
-                                         sliderInput(paste("a",st,sep="."),st,
+                                  shiny::column(width=3,
+                                         shiny::sliderInput(paste("a",st,sep="."),st,
                                                      min=0.01,max=2,
                                                      value=pa[[st]])
                         )}))),
-      fluidRow(column(width=1,h4("Betas:")),
+      shiny::fluidRow(column(width=1,htmltools::h4("Betas:")),
                lapply(names(pb),function(par) {
-                 column(width=3,
-                        sliderInput(paste("b",par,sep="."),par,
+                 shiny::column(width=3,
+                        shiny::sliderInput(paste("b",par,sep="."),par,
                                     min=-3,max=3,value=pb[par])
                         )})),
       ## conditionalPanel("input.link == normalLink",
       ##                  sliderInput(lsp,"Link Scale Parameter:",
       ##                              min=0.01,max=1,value=lsp)),
       ## Resulting CPT
-      fluidRow(
-          column(width=12,
-                 tabsetPanel(
-                     tabPanel("Plot",plotOutput("barchart")),
-                     tabPanel("Table",tableOutput("cptFrame")),
-                     tabPanel("Effective Thetas",tableOutput("etFrame")))))
+      shiny::fluidRow(
+          shiny::column(width=12,
+                 shiny::tabsetPanel(
+                            shiny::tabPanel("Plot",
+                                            shiny::plotOutput("barchart")),
+                            shiny::tabPanel("Table",
+                                            shiny::tableOutput("cptFrame")),
+                            shiny::tabPanel("Effective Thetas",
+                                            shiny::tableOutput("etFrame")))))
 
   )
 
   server <-  function (input, output, session) {
 
     ## Reassemble vectors
-    newpa <- reactive({
+    newpa <- shiny::reactive({
       if (input$link=='gradedResponse')
         newa <- input$a
       else {
@@ -251,7 +260,7 @@ MakeOffsetGadget <- function(pnode, color="plum"){
       newa
     })
 
-    newpb <- reactive({
+    newpb <- shiny::reactive({
       newb <- lapply(names(pb),function(par) input[[paste("b",par,sep=".")]])
       newb <- as.numeric(newb)
       names(newb) <- names(pb)
@@ -260,7 +269,7 @@ MakeOffsetGadget <- function(pnode, color="plum"){
 
 
     ## Reassemble Node
-    reassembleNode <- reactive( {
+    reassembleNode <- shiny::reactive( {
       PnodeQ(pnode) <- pQ
       PnodeRules(pnode) <- input$rules
       PnodeLink(pnode) <- input$link
@@ -269,12 +278,12 @@ MakeOffsetGadget <- function(pnode, color="plum"){
       pnode
     })
     ## Build CPF
-    buildCPF <- reactive({
+    buildCPF <- shiny::reactive({
       calcDPCFrame(parStates,pstates,lapply(newpa(),log),newpb(),
                    input$rules,input$link,NULL,pQ)
     })
     ## Effective Thetas table
-    eThetasFrame <- reactive({
+    eThetasFrame <- shiny::reactive({
       rules <- input$rules
       newa <- newpa()
       newb <- newpb()
@@ -290,15 +299,15 @@ MakeOffsetGadget <- function(pnode, color="plum"){
         result <- data.frame(et)
     })
 
-    output$barchart <- renderPlot({
+    output$barchart <- shiny::renderPlot({
       barchart.CPF(buildCPF(), baseCol=color)
     })
 
-    output$cptFrame <- renderTable(buildCPF(),striped=TRUE,digits=3)
-    output$etFrame <- renderTable(eThetasFrame(),striped=TRUE,digits=3)
+    output$cptFrame <- shiny::renderTable(buildCPF(),striped=TRUE,digits=3)
+    output$etFrame <- shiny::renderTable(eThetasFrame(),striped=TRUE,digits=3)
 
-    observeEvent(input$done, {
-      stopApp(reassembleNode())
+    shiny::observeEvent(input$done, {
+      shiny::stopApp(reassembleNode())
     })
   }
   list(ui=ui,server=server)
@@ -307,7 +316,7 @@ MakeOffsetGadget <- function(pnode, color="plum"){
 OffsetGadget <- function(pnode, color="plum",
                          viewer=shiny::paneViewer()) {
   gadget=MakeOffsetGadget(pnode,color)
-  runGadget(gadget$ui,gadget$server,
+  shiny::runGadget(gadget$ui,gadget$server,
             viewer=viewer)
 }
 
@@ -345,75 +354,76 @@ MakeRegressionGadget <- function(pnode, useR2=PnodeNumParents(pnode)>0L,
   pls <- PnodeLinkScale(pnode)
   R2 <- sum(pa*pa)/length(pa)/(sum(pa*pa)/length(pa)+pls*pls)
 
-  ui <- fluidPage(
+  ui <- shiny::fluidPage(
       title=(paste("Editor for node ",PnodeName(pnode))),
-      wellPanel(h1(paste("Editor for node ",PnodeName(pnode))),
-                actionButton("cancel","Cancel"),
-                actionButton("done","OK")),
+      shiny::wellPanel(
+                 htmltools::h1(paste("Editor for node ",PnodeName(pnode))),
+                 shiny::actionButton("cancel","Cancel"),
+                 shiny::actionButton("done","OK")),
       ## Structure and Link
-      conditionalPanel(paste(tolower(as.character(npar>0L))),
-                       fluidRow(column(width=6,offset=4,
-                                       selectInput("rules",
+      shiny::conditionalPanel(paste(tolower(as.character(npar>0L))),
+                       shiny::fluidRow(shiny::column(width=6,offset=4,
+                                       shiny::selectInput("rules",
                                                    "Structure Function (Rule):",
                                                    c("Compensatory",
                                                      "Conjunctive",
                                                      "Disjunctive"),
                                                    selected=pRules)))),
-      fluidRow(column(width=1,h4("Slopes:")),
+      shiny::fluidRow(shiny::column(width=1,htmltools::h4("Slopes:")),
                lapply(names(pa),function(par) {
-                 column(width=3,
-                        sliderInput(paste("a",par,sep="."),par,
+                 shiny::column(width=3,
+                        shiny::sliderInput(paste("a",par,sep="."),par,
                                     min=0.01,max=2,value=pa[par])
                         )})),
-      fluidRow(column(width=1,h4("Intercept:")),
-               column(width=3,
-                      sliderInput("b","(Intercept)",
+      shiny::fluidRow(shiny::column(width=1,htmltools::h4("Intercept:")),
+               shiny::column(width=3,
+                      shiny::sliderInput("b","(Intercept)",
                                   min=-3,max=3,value=-pb)
                       )),
-      conditionalPanel(paste(tolower(as.character(useR2))),
-                       fluidRow(column(width=1,h4("Scale Parameter")),
-                                column(width=3,
-                                       sliderInput("rsq","R-squared",
+      shiny::conditionalPanel(paste(tolower(as.character(useR2))),
+                       shiny::fluidRow(shiny::column(width=1,htmltools::h4("Scale Parameter")),
+                                shiny::column(width=3,
+                                       shiny::sliderInput("rsq","R-squared",
                                                    min=0.01,max=1,value=R2)))),
-      conditionalPanel(paste(tolower(as.character(!useR2))),
-                       fluidRow(column(width=1,h4("Scale Parameter")),
-                                column(width=3,
-                                       sliderInput("pls",
+      shiny::conditionalPanel(paste(tolower(as.character(!useR2))),
+                       shiny::fluidRow(shiny::column(width=1,htmltools::h4("Scale Parameter")),
+                                shiny::column(width=3,
+                                       shiny::sliderInput("pls",
                                                    "Residual Variance",
                                                    min=0.01,max=2,value=pls)))),
       ## Resulting CPT
-      fluidRow(
-          column(width=12,
-                 tabsetPanel(
-                     tabPanel("Plot",plotOutput("barchart")),
-                     tabPanel("Table",tableOutput("cptFrame")),
-                     tabPanel("Effective Thetas",tableOutput("etFrame")))))
+      shiny::fluidRow(
+          shiny::column(width=12,
+                 shiny::tabsetPanel(
+                     shiny::tabPanel("Plot",shiny::plotOutput("barchart")),
+                     shiny::tabPanel("Table",shiny::tableOutput("cptFrame")),
+                     shiny::tabPanel("Effective Thetas",shiny::tableOutput("etFrame")))))
 
   )
 
   server <-  function (input, output, session) {
 
     ## Reassemble vectors
-    newpa <- reactive({
+    newpa <- shiny::reactive({
       newa <- lapply(names(pa),function(par) input[[paste("a",par,sep=".")]])
       newa <- as.numeric(newa)
       names(newa) <- names(pa)
       newa
     })
 
-    newpb <- reactive({
+    newpb <- shiny::reactive({
       newb <- -input$b
       newb
     })
 
-    newrules <- reactive({
+    newrules <- shiny::reactive({
       if (npar>0L)
         input$rules
       else
         pRules
     })
 
-    newpls <- reactive({
+    newpls <- shiny::reactive({
       if (useR2) {
         newr2 <- input$rsq
         a2 <- sum(newpa()^2)/length(pa)
@@ -424,7 +434,7 @@ MakeRegressionGadget <- function(pnode, useR2=PnodeNumParents(pnode)>0L,
     })
 
     ## Reassemble Node
-    reassembleNode <- reactive( {
+    reassembleNode <- shiny::reactive( {
       PnodeQ(pnode) <- pQ
       PnodeRules(pnode) <- newrules()
       PnodeLink(pnode) <- input$link
@@ -434,13 +444,13 @@ MakeRegressionGadget <- function(pnode, useR2=PnodeNumParents(pnode)>0L,
       pnode
     })
     ## Build CPF
-    buildCPF <- reactive({
+    buildCPF <- shiny::reactive({
       calcDPCFrame(parStates,pstates,log(newpa()),newpb(),
                    newrules(),pLink,newpls(),pQ)
     })
 
     ## Effective Thetas table
-    eThetasFrame <- reactive({
+    eThetasFrame <- shiny::reactive({
       rules <- input$rules
       newa <- newpa()
       newb <- newpb()
@@ -454,15 +464,15 @@ MakeRegressionGadget <- function(pnode, useR2=PnodeNumParents(pnode)>0L,
         result <- data.frame(theta=et)
     })
 
-    output$barchart <- renderPlot({
+    output$barchart <- shiny::renderPlot({
       barchart.CPF(buildCPF(), baseCol=color)
     })
 
-    output$cptFrame <- renderTable(buildCPF(),striped=TRUE,digits=3)
-    output$etFrame <- renderTable(eThetasFrame(),striped=TRUE,digits=3)
+    output$cptFrame <- shiny::renderTable(buildCPF(),striped=TRUE,digits=3)
+    output$etFrame <- shiny::renderTable(eThetasFrame(),striped=TRUE,digits=3)
 
-    observeEvent(input$done, {
-      stopApp(reassembleNode())
+    shiny::observeEvent(input$done, {
+      shiny::stopApp(reassembleNode())
     })
   }
   list(ui=ui,server=server)
@@ -579,60 +589,60 @@ MakeDPCGadget <- function(pnode, color="steelblue"){
     }
   }
 
-  ui <- fluidPage(
-    useShinyjs(),
+  ui <- shiny::fluidPage(
+    shinyjs::useShinyjs(),
     title=(paste("Editor for node ",PnodeName(pnode))),
-    wellPanel(h1(paste("Editor for node ",PnodeName(pnode))),
-              actionButton("cancel","Cancel"),
-              actionButton("done","OK")),
+    shiny::wellPanel(h1(paste("Editor for node ",PnodeName(pnode))),
+              shiny::actionButton("cancel","Cancel"),
+              shiny::actionButton("done","OK")),
     {
       tabs <- lapply(names(pRules),
                  function(st) {
-                   tabPanel(st,
-                     fluidRow(column(2,h3("Transition to state ",st)),
-                              column(width=4,offset=2,
+                   shiny::tabPanel(st,
+                     shiny::fluidRow(shiny::column(2,h3("Transition to state ",st)),
+                              shiny::column(width=4,offset=2,
                                      selectInput(paste("rules",st,sep="."),
                                                  "Structure Function (Rule):",
                                                  c("Compensatory","Conjunctive",
                                                    "Disjunctive","OffsetConjunctive",
                                                    "OffsetDisjunctive"),
                                                  selected=pRules[[st]]))),
-                     fluidRow(column(width=4,h4(paste("Q-matrix row for ",st))),
+                     shiny::fluidRow(shiny::column(width=4,htmltools::h4(paste("Q-matrix row for ",st))),
                               lapply(parnames,function(par) {
-                                column(width=3,
+                                shiny::column(width=3,
                                        checkboxInput(paste("Q",st,par,sep="."),
                                                      par,pQ[st,par]))
                                 })),
-                     fluidRow(column(width=1,h4("Alphas:")),
+                     shiny::fluidRow(shiny::column(width=1,htmltools::h4("Alphas:")),
                               lapply(anames,function(par) {
-                                column(width=3,
-                                       sliderInput(paste("a",st,par,sep="."),
+                                shiny::column(width=3,
+                                       shiny::sliderInput(paste("a",st,par,sep="."),
                                                    par,
                                                    min=0.01,max=2,
                                                    value=pa[[st]][par])
                                        )})),
-                     fluidRow(column(width=1,h4("Betas:")),
+                     shiny::fluidRow(shiny::column(width=1,htmltools::h4("Betas:")),
                               lapply(bnames,function(par) {
-                                column(width=3,
-                                       sliderInput(paste("b",st,par,sep="."),
+                                shiny::column(width=3,
+                                       shiny::sliderInput(paste("b",st,par,sep="."),
                                                    par,
                                                    min=-3,max=3,
                                                    value=pb[[st]][par])
                                        )})))
                    })
-      fluidRow(column(width=12,(do.call(tabsetPanel,tabs))))
+      shiny::fluidRow(shiny::column(width=12,(do.call(shiny::tabsetPanel,tabs))))
     },
-    fluidRow(
-        column(width=12,
-               tabsetPanel(
-                   tabPanel("Plot",plotOutput("barchart")),
-                   tabPanel("CP Table",tableOutput("cptFrame")),
-                   tabPanel("Effective Thetas",tableOutput("etFrame")))))
+    shiny::fluidRow(
+        shiny::column(width=12,
+               shiny::tabsetPanel(
+                   shiny::tabPanel("Plot",shiny::plotOutput("barchart")),
+                   shiny::tabPanel("CP Table",shiny::tableOutput("cptFrame")),
+                   shiny::tabPanel("Effective Thetas",shiny::tableOutput("etFrame")))))
   )
 
   server <-  function (input, output, session) {
 
-    newRules <- reactive({
+    newRules <- shiny::reactive({
       nrules <-
         lapply(names(pRules),
                function (st) {
@@ -644,7 +654,7 @@ MakeDPCGadget <- function(pnode, color="steelblue"){
       nrules
       })
 
-    offsetRules <- reactive({
+    offsetRules <- shiny::reactive({
       orules <- sapply(newRules(),isOffsetRule)
       names(orules) <- names(pRules)
       ## print("Offsets:")
@@ -652,7 +662,7 @@ MakeDPCGadget <- function(pnode, color="steelblue"){
       orules
     })
 
-    newQ <- reactive({
+    newQ <- shiny::reactive({
       QQ <- pQ
       for (st in rownames(pQ)) {
         for (par in colnames(pQ)) {
@@ -665,7 +675,7 @@ MakeDPCGadget <- function(pnode, color="steelblue"){
     })
 
     ## Reassemble vectors
-    newpa <- reactive({
+    newpa <- shiny::reactive({
       orules <- offsetRules()
       QQ <- newQ()
       newa <-
@@ -690,7 +700,7 @@ MakeDPCGadget <- function(pnode, color="steelblue"){
 
 
     ## Reassemble vectors
-    newpb <- reactive({
+    newpb <- shiny::reactive({
       orules <- offsetRules()
       QQ <- newQ()
       newb <-
@@ -713,7 +723,7 @@ MakeDPCGadget <- function(pnode, color="steelblue"){
       newb
     })
 
-    eThetasFrame <- reactive({
+    eThetasFrame <- shiny::reactive({
       rules <- newRules()
       newa <- newpa()
       newb <- newpb()
@@ -732,7 +742,7 @@ MakeDPCGadget <- function(pnode, color="steelblue"){
     })
 
     ## Reassemble Node
-    reassembleNode <- reactive( {
+    reassembleNode <- shiny::reactive( {
       PnodeQ(pnode) <- newQ()
       PnodeRules(pnode) <- newRules()
       PnodeLink(pnode) <- pLink
@@ -741,34 +751,34 @@ MakeDPCGadget <- function(pnode, color="steelblue"){
       pnode
     })
     ## Build CPF
-    buildCPF <- reactive({
+    buildCPF <- shiny::reactive({
       calcDPCFrame(parStates,pstates,lapply(newpa(),log),
                    newpb(),newRules(),pLink,NULL,newQ())
     })
 
-    output$barchart <- renderPlot({
+    output$barchart <- shiny::renderPlot({
       barchart.CPF(buildCPF(), baseCol=color)
     })
 
-    output$cptFrame <- renderTable(buildCPF(),striped=TRUE,digits=3)
-    output$etFrame <- renderTable(eThetasFrame(),striped=TRUE,digits=3)
-    observeEvent(input$done, {
-      stopApp(reassembleNode())
+    output$cptFrame <- shiny::renderTable(buildCPF(),striped=TRUE,digits=3)
+    output$etFrame <- shiny::renderTable(eThetasFrame(),striped=TRUE,digits=3)
+    shiny::observeEvent(input$done, {
+      shiny::stopApp(reassembleNode())
     })
 
-    observe({
+    shiny::observe({
       orules <- offsetRules()
       QQ <- newQ()
       for (st in rownames(pQ)) {
         for (i in 2L:(npar+1L)) {
-          toggleState(paste("a",st,anames[i],sep="."),
+          shinyjs::toggleState(paste("a",st,anames[i],sep="."),
                       condition = !orules[[st]] & QQ[st,anames[i]])
-          toggleState(paste("b",st,bnames[i],sep="."),
+          shinyjs::toggleState(paste("b",st,bnames[i],sep="."),
                       condition =  orules[[st]] & QQ[st,bnames[i]])
         }
       }
     })
-    observe({
+    shiny::observe({
       orules <- offsetRules()
       #print(orules)
       for (st in rownames(pQ)) {
@@ -785,7 +795,7 @@ MakeDPCGadget <- function(pnode, color="steelblue"){
 DPCGadget <- function(pnode, color="steelblue",
                       viewer=shiny::paneViewer()) {
   gadget=MakeDPCGadget(pnode,color)
-  runGadget(gadget$ui,gadget$server,
+  shiny::runGadget(gadget$ui,gadget$server,
             viewer=viewer)
 }
 
@@ -793,4 +803,4 @@ DPCGadget <- function(pnode, color="steelblue",
 ##########################################
 ## Shinyjs breaks the show command
 
-show <- methods::show
+# show <- methods::show

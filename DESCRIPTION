@@ -11,11 +11,14 @@ Authors@R:
            email = "ralmond@fsu.edu",
            comment = c(ORCID = "0000-0002-8876-9337"))
 Depends: R (>= 3.0), CPTtools (>= 0.5), methods
-Imports: shiny (>= 1.1), shinyjs, utils, futile.logger
+Imports: utils, futile.logger
 Suggests:  PNetica,
     knitr,
     rmarkdown,
-    tidyr
+    tidyr,
+    htmltools,
+    shiny,
+    shinyjs
 VignetteBuilder: knitr
 Description: This provides support of learning conditional probability
     tables parameterized using CPTtools. This provides and object oriented

@@ -1,3 +1,10 @@
+2023-01-04  Russell Almond  <ralmond@cherry.local>
+
+	* R/PnodeMin.R (PnodeMin): This is a minimal implementation of a
+	Pnode.  The idea is that many of the widgets only need minimal
+	information about the node to operate, so a full Bayes net
+	implementation is not necessary at this phase.  
+
 2022-10-28  Russell Almond  <ralmond@cherry.local>
 
 	* R/BNgenerics.R (PnetName): Added a NULL method to PnetName as it appears to often happen that we get a NULL where we expect an Net during debugging. 
