@@ -228,7 +228,7 @@ MakeOffsetGadget <- function(pnode, color="plum"){
                lapply(names(pb),function(par) {
                  shiny::column(width=3,
                         shiny::sliderInput(paste("b",par,sep="."),par,
-                                    min=-3,max=3,value=pb[par])
+                                    min=-3,max=3,value=pb[[par]])
                         )})),
       ## conditionalPanel("input.link == normalLink",
       ##                  sliderInput(lsp,"Link Scale Parameter:",
@@ -353,6 +353,8 @@ MakeRegressionGadget <- function(pnode, useR2=PnodeNumParents(pnode)>0L,
   pb <- pb[1]
   pls <- PnodeLinkScale(pnode)
   R2 <- sum(pa*pa)/length(pa)/(sum(pa*pa)/length(pa)+pls*pls)
+  if (is.na(R2)) R2 <- 1
+  
 
   ui <- shiny::fluidPage(
       title=(paste("Editor for node ",PnodeName(pnode))),
@@ -380,17 +382,22 @@ MakeRegressionGadget <- function(pnode, useR2=PnodeNumParents(pnode)>0L,
                       shiny::sliderInput("b","(Intercept)",
                                   min=-3,max=3,value=-pb)
                       )),
-      shiny::conditionalPanel(paste(tolower(as.character(useR2))),
-                       shiny::fluidRow(shiny::column(width=1,htmltools::h4("Scale Parameter")),
-                                shiny::column(width=3,
+      {
+        if (useR2) 
+         shiny::fluidRow(shiny::column(width=1,htmltools::h4("Scale Parameter")),
+                         shiny::column(width=3,
                                        shiny::sliderInput("rsq","R-squared",
-                                                   min=0.01,max=1,value=R2)))),
-      shiny::conditionalPanel(paste(tolower(as.character(!useR2))),
-                       shiny::fluidRow(shiny::column(width=1,htmltools::h4("Scale Parameter")),
-                                shiny::column(width=3,
+                                                          min=0.01,max=1,
+                                                          value=R2)))
+       else
+         shiny::fluidRow(shiny::column(width=1,htmltools::h4("Scale Parameter")),
+                         shiny::column(width=3,
                                        shiny::sliderInput("pls",
-                                                   "Residual Variance",
-                                                   min=0.01,max=2,value=pls)))),
+                                                          "Residual Variance",
+                                                          min=0.01,max=2,
+                                                          value=pls)))
+      },
+      
       ## Resulting CPT
       shiny::fluidRow(
           shiny::column(width=12,
@@ -632,6 +639,11 @@ MakeDPCGadget <- function(pnode, color="steelblue"){
                    })
       shiny::fluidRow(shiny::column(width=12,(do.call(shiny::tabsetPanel,tabs))))
     },
+    ## shiny::fluidRow(shiny::textOutput("Rules"),
+    ##                 shiny::textOutput("ORules"),
+    ##                 shiny::textOutput("Q"),
+    ##                 shiny::textOutput("Alphas"),
+    ##                 shiny::textOutput("Betas")),
     shiny::fluidRow(
         shiny::column(width=12,
                shiny::tabsetPanel(
@@ -649,18 +661,21 @@ MakeDPCGadget <- function(pnode, color="steelblue"){
                  input[[paste("rules",st,sep=".")]]
                })
       names(nrules) <- names(pRules)
-      ## print("Rules:")
-      ## print(nrules)
+      ##print("Rules:")
+      ##print(nrules)
       nrules
-      })
+    })
+    ##output$Rules <- renderText(paste("Rules:",paste(newRules(),collapse=",")))
 
     offsetRules <- shiny::reactive({
       orules <- sapply(newRules(),isOffsetRule)
       names(orules) <- names(pRules)
-      ## print("Offsets:")
-      ## print(orules)
+      ##print("Offsets:")
+      ##print(orules)
       orules
     })
+    ## output$ORules <- renderText(paste("ORules:",
+    ##                                   paste(offsetRules(),collapse=",")))
 
     newQ <- shiny::reactive({
       QQ <- pQ
@@ -669,10 +684,11 @@ MakeDPCGadget <- function(pnode, color="steelblue"){
           QQ[st,par] <- input[[paste("Q",st,par,sep=".")]]
         }
       }
-      ## print("Q:")
-      ## print(QQ)
+      ##print("Q:")
+      ##print(QQ)
       QQ
     })
+    ##output$Q <- renderText(paste("Q:",paste(newQ(),collapse=",")))
 
     ## Reassemble vectors
     newpa <- shiny::reactive({
@@ -692,11 +708,13 @@ MakeDPCGadget <- function(pnode, color="steelblue"){
                    rowa
                  }
                })
-      ## print("Alphas:")
-      ## print(newa)
+      ##print("Alphas:")
+      ##print(newa)
       names(newa) <- names(orules)
       newa
     })
+    ## output$Alphas <- renderText(paste("Alphas:",
+    ##                                   paste(squash(newpa()),collapse=",")))
 
 
     ## Reassemble vectors
@@ -718,10 +736,12 @@ MakeDPCGadget <- function(pnode, color="steelblue"){
                  }
                })
       names(newb) <- names(orules)
-      ## print("Betas:")
-      ## print(newb)
+      ##print("Betas:")
+      ##print(newb)
       newb
     })
+    ## output$Betas <- renderText(paste("Betas:",
+    ##                                   paste(squash(newpb()),collapse=",")))
 
     eThetasFrame <- shiny::reactive({
       rules <- newRules()

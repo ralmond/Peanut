@@ -835,8 +835,12 @@ Omega2Pnet <- function(OmegaMat,pn,nodewarehouse,
       PnodeAlphas(node) <- alphas
 
       pwt <- PnodePriorWeight(node)
-      if (!is.na(weights[ndn]) && nchar(weights[ndn]) > 0L) {
-        pwt <- dgetFromString(weights[ndn])
+      if (!is.na(weights[ndn])) {
+        if (is.character(weights[ndn]) && nchar(weights[ndn]) > 0L) {
+          pwt <- dgetFromString(weights[ndn])
+        } else if (is.numeric(weights[ndn])) {
+          pwt <- weights[ndn]
+        }
       }
       if (is.null(pwt)) pwt <- defaultPriorWeight
       flog.debug("Prior Weight: ",pwt, capture=TRUE)

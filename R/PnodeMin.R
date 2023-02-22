@@ -101,7 +101,7 @@ PnodePriorWeight.PnodeMin <- function (node) node$PriorWeight
 }
 
 
-PnodeBuildTable.PnodeMin (node) {
+PnodeBuildTable.PnodeMin <- function (node) {
   node$CPT <- calcDPCTable(PnodeParentStates(node),PnodeStates(node),
                           PnodeLnAlphas(node), PnodeBetas(node),
                           PnodeRules(node),PnodeLink(node),
@@ -112,8 +112,40 @@ PnodeBuildTable.PnodeMin (node) {
 
 
 
-parsePnode(json) {
+parsePnode <- function (json) {
 
 }
 
-serializePnode
+serializePnode <- function (node,
+                            dataframe = c("rows", "columns", "values"),
+                            matrix = c("rowmajor","columnmajor"),
+                            Date = c("ISO8601", "epoch"),
+                            POSIXt = c("string", "ISO8601", "epoch", "mongo"),
+                            factor = c("string", "list"),
+                            complex = c("string", "list"),
+                            raw = c("base64", "hex", "mongo", "int", "js"),
+                            null = c("list", "null"),
+                            na = c("null", "string")) {
+  jlist <- attributes(node)
+  jlist$class <- jsonlite::unbox(class(node))
+  jlist$name <- jsonlite::unbox(jlist$name)
+  jlist$title <- jsonlite::unbox(jlist$title)
+  jlist$description <- jsonlite::unbox(jlist$description)
+  jlist$parents <- sapply(PnodeParents(node),PnodeName)
+  jlist$is.continuous <- jsonlite::unbox(jlist$is.continuous)
+  jlist$link <- jsonlite::unbox(jlist$link)
+  if (length(jlist$rules)==1L) jlist$rules <- jsonlite::unbox(jlist$rules)
+  if (length(jlist$lnAlphas)==1L)
+    jlist$lnAlphas <- jsonlite::unbox(jlist$lnAlphas)
+  if (length(jlist$betas)==1L)
+    jlist$betas <- jsonlite::unbox(jlist$betas)
+  if (length(jlist$linkScale)==1L)
+    jlist$linkScale <- jsonlite::unbox(jlist$linkScale)
+  if (length(jlist$QQ)==1L)
+    jlist$QQ <- jsonlite::unbox(jlist$QQ)
+  
+  jsonlite::toJSON(jlist, dataframe[1], matrix[1], Date[1], POSIXt[1],
+                   factor[1], complex[1],
+                   raw[1], null[1], na[1])
+
+}

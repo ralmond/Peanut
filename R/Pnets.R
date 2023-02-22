@@ -283,7 +283,7 @@ PnodeParentTvals <- function (node) {
 setGeneric("PnodeParentTvals")
 
 PnodeParentTvals.default <- function (node) {
-  effectiveThetas(PnodeNumStates(node))
+  lapply(PnodeParents(node),PnodeStateValues)
 }
 
 
