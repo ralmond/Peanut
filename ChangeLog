@@ -1,3 +1,9 @@
+2023-04-10  Russell Almond  <ralmond@cherry>
+
+	* R/QOmegaMat.R (Omega2Pnet): Added hack to remove stray symbols
+	from Q-matrix.
+	(Qmat2Pnet): Trimmed rows with NA for model or node
+
 2023-01-04  Russell Almond  <ralmond@cherry.local>
 
 	* R/PnodeMin.R (PnodeMin): This is a minimal implementation of a

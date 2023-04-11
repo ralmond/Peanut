@@ -273,6 +273,7 @@ Qmat2Pnet <- function (Qmat, nethouse,nodehouse,defaultRule="Compensatory",
 
   Qmat$Model <- trimws(Qmat$Model)
   Qmat$Node <- trimws(Qmat$Node)
+  Qmat <- Qmat[!is.na(Qmat$Model) & !is.na(Qmat$Node),]
   netnames <- unique(Qmat$Model)
   for (netname in netnames) {
     if (nchar(netname) ==0L) {
@@ -715,6 +716,10 @@ Omega2Pnet <- function(OmegaMat,pn,nodewarehouse,
     stop("There are not columns corresponding to every variable.")
   }
   rownames(QQ) <- colnames(QQ)
+  for (ndn in nodenames) {
+    ## Treat NA's and other things as false
+    QQ[,ndn] <- sapply(QQ[,ndn],isTRUE)
+  }
   flog.trace("Included Q-matrix:",QQ,capture=TRUE)
   Anames <- paste("A",nodenames,sep=".")
   Acol <- pmatch(Anames,names(OmegaMat))
