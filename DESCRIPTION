@@ -11,11 +11,14 @@ Authors@R:
            email = "ralmond@fsu.edu",
            comment = c(ORCID = "0000-0002-8876-9337"))
 Depends: R (>= 3.0), CPTtools (>= 0.5), methods
-Imports: shiny (>= 1.1), shinyjs, utils, futile.logger
+Imports: utils, futile.logger
 Suggests:  PNetica,
     knitr,
     rmarkdown,
-    tidyr
+    tidyr,
+    htmltools,
+    shiny,
+    shinyjs
 VignetteBuilder: knitr
 Description: This provides support of learning conditional probability
     tables parameterized using CPTtools. This provides and object oriented
@@ -27,5 +30,16 @@ Description: This provides support of learning conditional probability
     using Netica and RNetica. 
 License: Artistic-2.0 
 URL: http://pluto.coe.fsu.edu/RNetica
+Support: c(
+   'Bill & Melinda Gates Foundation grant
+   "Games as Learning/Assessment:  Stealth Assessment" (#0PP1035331,
+   Val Shute, PI)',
+   'National Science Foundation grant "DIP:
+   Game-based Assessment and Support of STEM-related Competencies"
+   (#1628937, Val Shute, PI)',
+   'National Scient Foundation grant "Mathematical Learning via
+   Architectual Design and Modeling Using E-Rebuild." (\#1720533,
+   Fengfeng Ke, PI)',
+   'Institute of Educational Statistics Grant: "Exploring adaptive cognitive and affective learning support for next-generation STEM learning games." (#R305A170376-20, Val Shute and Russell Almond, PIs')	
 
 

@@ -46,11 +46,11 @@ PnodeBuildTable <- function (node) {
   UseMethod("PnodeBuildTable")
 }
 setGeneric("PnodeBuildTable")
-  ## node[] <- calcDPCTable(PnodeParentStates(node),PnodeStates(node),
+  ## PnodeProbs(node) <- CPTtools::calcDPCTable(PnodeParentStates(node),PnodeStates(node),
   ##                        PnodeLnAlphas(node), PnodeBetas(node),
   ##                        PnodeRules(node),PnodeLink(node),
   ##                        PnodeLinkScale(node),PnodeParentTvals(node))
-  ## NodeExperience(node) <- GetPriorWeight(node)
+  ## PnodePriorWeight(node) <- GetPriorWeight(node)
   ## invisible(node)
 
 
@@ -89,7 +89,31 @@ maxAllTableParams <- function (net, Mstepit=5,
 }
 setGeneric("maxAllTableParams")
 
-maxCPTParam <- function (node, Mstepit=5, tol=sqrt(.Machine$double.eps)) {
-  UseMethod("maxCPTParam")
+
+maxCPTParam <- function (node, Mstepit=5,
+                                    tol=sqrt(.Machine$double.eps)) {
+  ## Get the posterior pseudo-counts by multiplying each row of the
+  ## node's CPT by its experience.
+  ne <- PnodePostWeights(node)
+  np <- as.CPA(PnodeProbs(node))
+  npdim <- length(dim(np)) -1L
+  if (npdim==0L || length(ne) == 1L) {
+    counts <- np*ne
+  } else {
+    counts <- sweep(np,1L:npdim,ne,"*")
+  }
+  withCallingHandlers(
+      est <- CPTtools::mapDPC(counts,ParentStates(node),NodeStates(node),
+                    PnodeLnAlphas(node), PnodeBetas(node),
+                    PnodeRules(node),PnodeLink(node),
+                    PnodeLinkScale(node),PnodeQ(node),
+                    PnodeParentTvals(node),
+                    control=list(reltol=tol,maxit=Mstepit)
+                    ),
+      warning=muffler)
+  PnodeLnAlphas(node) <- est$lnAlphas
+  PnodeBetas(node) <- est$betas
+  PnodeLinkScale(node) <- est$linkScale
+  invisible(node)
 }
 setGeneric("maxCPTParam")

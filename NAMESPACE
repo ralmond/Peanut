@@ -4,12 +4,10 @@ importFrom(CPTtools,getOffsetRules)
 importFrom(CPTtools,isOffsetRule)
 importFrom(CPTtools,calcDPCFrame,barchart.CPF)
 importFrom("utils", "limitedLabels", "recover")
-import(shiny)
-importFrom(shinyjs, useShinyjs, toggleState)
 import(futile.logger)
 
 ## Pnet and Pnode interfaces
-export(is.Pnet, as.Pnet, Pnet,
+export(is.Pnet, as.Pnet, Pnet, 
        PnetPriorWeight, "PnetPriorWeight<-",
        PnetPnodes, "PnetPnodes<-",
        BuildAllTables,
@@ -96,6 +94,8 @@ exportMethods(PnodeName, "PnodeName<-",
        PnetMakeStubNodes, PnetRemoveStubNodes,
        PnetAdjoin, PnetDetach, PnetCompile,
        PnetFindNode)
+
+export(PnodeMin)
 
 ## Manifests
 
