@@ -1,6 +1,6 @@
-\name{defaultAlphas}
-\alias{defaultAlphas}
-\alias{defaultBetas}
+\name{PnodeDefaultAlphas}
+\alias{PnodeDefaultAlphas}
+\alias{PnodeDefaultBetas}
 \title{Reshapes alpha or beta vector based on rule and parents}
 \description{
   
@@ -14,16 +14,19 @@
 
 }
 \usage{
-defaultAlphas(node, rule)
-defaultBetas(node, rule)
+PnodeDefaultAlphas(node, rule=PnodeRules(node), link=PnodeLink(node) )
+PnodeDefaultBetas(node, rule=PnodeRules(node), link=PnodeLink(node))
 }
 \arguments{
   \item{node}{A \code{\link{Pnode}} object whose
     \code{\link{PnodeLnAlphas}} or \code{\link{PnodeBetas}} field is to
     be set.
-}
-\item{rule}{A character scalar giving the name of a combination rule.
-}
+  }
+  \item{rule}{A rule (e.g., \code{\link{Compensatory}}, 
+    \code{\link{OffsetConjunctive}} or the name of a rule.
+  }
+  \item{link}{A link function (e.g., \code{\link{partialCredit}})
+    or the name of a link function.}
 }
 \value{
 
@@ -59,10 +62,10 @@ comp <- PnetFindNode(EM1,"CompensatoryObs")
 conj <- PnetFindNode(EM2,"ConjunctiveObs")
 
 stopifnot(
-  defaultAlphas(comp,"Compensatory") == c(0,0),
-  defaultBetas(comp,"Compensatory") == 0,
-  defaultAlphas(conj,"OffsetConjuctive") == 0,
-  defaultBetas(conj,"OffsetConjunctive") == c(0,0)
+  PnodeDefaultAlphas(comp,"Compensatory") == c(0,0),
+  PnodeDefaultBetas(comp,"Compensatory") == 0,
+  PnodeDefaultAlphas(conj,"OffsetConjuctive") == 0,
+  PnodeDefaultBetas(conj,"OffsetConjunctive") == c(0,0)
 )
 
 DeleteNetwork(list(EM1,EM2))

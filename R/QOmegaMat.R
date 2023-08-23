@@ -280,288 +280,332 @@ Qmat2Pnet <- function (Qmat, nethouse,nodehouse,defaultRule="Compensatory",
       flog.warn("Skipping Blank Row(s)")
       next
     }
-    flog.info("Processing net %s",netname)
-    net <- WarehouseSupply(nethouse,netname)
-    if (is.null(net)) {
-      flog.error("Could not find/create network %s",netname)
-      Errs <- c(Errs,
-                simpleError(sprintf("Could not find/create network %s",
-                                    netname)))
-      next
-    }
-    hubname <- PnetHub(net)
-    if (nchar(hubname)>0) {
-      flog.debug("Fetching hub network %s",hubname)
-      hub <- WarehouseSupply(nethouse,hubname)
-      if (is.null(hub)) {
-        flog.error("Could not find hub (%s) for network %s", hubname,netname)
-        Errs <- c(Errs,
-                  simpleError(sprintf("Could not find hub (%s) for network %s",
-                                      hubname, netname)))
-        next
-      }
-    }
-    nodenames <- unique(Qmat$Node[Qmat$Model==netname])
-    for (nodename in nodenames) {
-      flog.info("Processing node %s in net %s",nodename, netname)
-      node <- WarehouseSupply(nodehouse,c(netname,nodename))
-      if (is.null(node)) {
-        flog.error("Could not find/create node %s in model %s",
-                   nodename, netname)
-        Errs <- c(Errs,
-                  simpleError(sprintf("Could not find/create node %s in model %s",
-                                      nodename, netname)))
-      }
-      context <- sprintf("processing node %s in net %s", nodename, netname)
-      out <- flog.try({
-        Qrows <- Qmat[Qmat$Model==netname & Qmat$Node==nodename,,drop=FALSE]
-        nstates <- nrow(Qrows)
-        if (nstates != Qrows[1,"NStates"] - 1L) {
-          stop("Expected ", Qrows[1,"NStates"] - 1L," rows got ",nstates)
-        }
-        ## Check/adjust structure
-        stubs <- list()
-        parnames <- profnames[which(apply(Qrows[,profnames,drop=FALSE]==1,2,any))]
-        exparnames <- PnodeParentNames(node)
-        flog.trace("While %s:",context)
-        flog.trace("Node has parents: ", exparnames,capture=TRUE)
-        flog.trace("And Q matrix has parents: ", parnames,capture=TRUE)
-        if (!setequal(parnames,exparnames)) {
-          if (length(exparnames) > 0L) {
-            flog.warn("While %s:",context)
-            flog.warn("Node has parents: ", exparnames,capture=TRUE)
-            flog.warn("But Q matrix has parents: ", parnames,capture=TRUE)
-            if (override) {
-              flog.warn("Changing node %s to match Q matrix.", nodename)
-            } else {
-              stop("Graphical structure does not match Q matrix.  See console.")
-            }
-          }
-          parents <- list()
-          isStub <- rep(FALSE,length(parnames))
-          names(isStub) <- parnames
-          for (pname in parnames) {
-            flog.trace("Processing Parent %s",pname)
-            ## Already existing node?
-            parents[[pname]] <- PnetFindNode(net,pname)
-            if (is.null(parents[[pname]])) {
-              flog.trace("Parent %s not found, making stub node",pname)
-              ## Try to make stub node from hub.
-              isStub[pname] <- TRUE
-              parents[[pname]] <-
-                WarehouseSupply(nodehouse,c(hubname,pname))
-            }
-            if (is.null(parents[[pname]])) {
-              flog.trace("Parent %s not found in hub, making local node",pname)
-              ## Try to make local node.
-              isStub[pname] <- FALSE
-              parents[[pname]] <-
-                WarehouseSupply(nodehouse,c(netname,pname))
-            }
-            if (is.null(parents[[pname]])) {
-              flog.error("While %s:",context)
-              flog.error("Could not find parent %s of %s in %s or %s",
-                         pname, nodename, hubname,netname)
-              stop("Could not find parent ",pname, "in net", hubname,
-                   "or ",netname)
-            }
-          }
-          if (any(isStub)) {
-            flog.trace("Making stub nodes for ",pname[isStub],
-                       capture=TRUE)
-            stubs <- PnetMakeStubNodes(net,parents[isStub])
-            parents[isStub] <- stubs
-          }
-          PnodeParents(node) <- parents
-        }
-        ## Change order to match node. Even if nominally a match.
-        parnames <- PnodeParentNames(node)
-        flog.debug("Final parents for node %s: %s ",nodename,
-                   paste(parnames,collapse=", "))
-        ## Extract Parameters
-        ## "Link","LinkScale",
-        ll <- trimws(Qrows[1,"Link"])
-        if (is.na(ll) || nchar(ll)==0L) {
-          flog.trace("No link for %s, using default link.", nodename)
-          ll <- defaultLink
-        }
-        PnodeLink(node) <- ll
-        lsc <- Qrows[1,"LinkScale"]
-        if (is.na(lsc) || nchar(lsc)==0L) {
-          flog.trace("No link scale for %s, using default.", nodename)
-          lsc <- defaultLinkScale
-        }
-        if (!is.null(lsc)) {
-          PnodeLinkScale(node) <- lsc
-        }
-        flog.debug("Link: %s (%f)",ll,as.numeric(lsc))
-
-
-        ## "Rules",
-        rules <- trimws(Qrows$Rules)    #Need to use $ here to force
-                                        #in case Qmat is tibble not df
-        ## Fix fancy quotes added by some spreadsheets
-        rules <- gsub(intToUtf8(c(91,0x201C,0x201D,93)),"\"",rules)
-        ## Blanks are read as NAs, so fix
-        if (any(is.na(rules)))
-          rules[is.na(rules)] <- ""
-        nrules <- sum(nchar(rules)>0L)  #Number of non-missing rules
-        ## Add back in quotes if missing.
-        rules <- ifelse(grepl('^".*"$',rules),rules,sprintf('"%s"',rules))
-        if (nrules == 0L) {
-          flog.trace("No rule for %s, using default rule.", nodename)
-          rules <- defaultRule
-        }
-        flog.debug("Rules for node %s: %s",nodename,
-                   paste(rules,collapse=", "))
-        if (nrules!=1L && nrules !=nstates) {
-          flog.error("Context",context)
-          flog.error("Expected ",nstates," (or 1) rules but got ",nrules)
-          stop("Expected ",nstates," (or 1) rules but got ",nrules)
-        }
-        if (nrules==1L) {
-          PnodeRules(node) <- dgetFromString(rules[[1]])
-        }
-        else {
-          PnodeRules(node) <- lapply(rules,dgetFromString)
-        }
-        rules <- PnodeRules(node)
-
-        ## "A","B",
-        QrowsQ <- Qrows[,parnames]
-        QrowsA <- Qrows[,paste("A",parnames,sep=".")]
-        QrowsB <- Qrows[,paste("B",parnames,sep=".")]
-
-        if (nstates==1L) {
-          PnodeQ(node) <- TRUE
-          if (is.list(rules)) rules <- rules[[1]]
-          ## Single Row Cases
-          if (rules %in% getOffsetRules()) {
-            ## Offset Case
-            alphas <- Qrows[1,"A"]
-            if (is.na(alphas)) alphas <- defaultAlpha
-            PnodeAlphas(node) <- alphas
-            betas <- as.numeric(QrowsB)
-            if (all(is.na(betas))) betas <- rep(defaultBeta,length(parnames))
-            names(betas) <- parnames
-            PnodeBetas(node) <- betas
-            flog.debug("Single Row offset: ")
-            flog.debug("PnodeQ:",PnodeQ(node), capture=TRUE)
-            flog.debug("PnodeAlphas:", PnodeAlphas(node), capture=TRUE)
-            flog.debug("PnodeBetas:", PnodeBetas(node), capture=TRUE)
-          } else {
-            ## Weighted Case (Compensatory)
-            alphas <- as.numeric(QrowsA)
-            if (all(is.na(alphas))) alphas <- rep(defaultAlpha,length(parnames))
-            names(alphas) <- parnames
-            PnodeAlphas(node) <- alphas
-            betas <- Qrows[1,"B"]
-            if (is.na(betas)) betas <- defaultBeta
-            PnodeBetas(node) <- betas
-            flog.debug("Single Row weighted:")
-            flog.debug("PnodeQ:", PnodeQ(node), capture=TRUE)
-            flog.debug("PnodeAlphas", PnodeAlphas(node), capture=TRUE)
-            flog.debug("PnodeBetas", PnodeBetas(node), capture=TRUE)
-          }
-        } else {
-          QrowsQ <- as.matrix(QrowsQ)
-          QrowsA <- as.matrix(QrowsA)
-          QrowsB <- as.matrix(QrowsB)
-          ## Multiple Row Cases
-          if (length(rules) == 1L && !(rules %in% getOffsetRules())
-              && all(is.na(QrowsA[-1,])) && all(QrowsQ)) {
-            ## Weighted -- single row of AAs.
-            ## This pattern is only allowed when there is a single
-            ## non-offset rule, all elements of the Q-matrix are true,
-            ## and all rows after the first are blank (NA)
-            PnodeQ(node) <- TRUE
-            alphas <- as.numeric(QrowsA[1,])
-            if (all(is.na(alphas))) alphas <- rep(defaultAlpha,length(parnames))
-            names(alphas) <- parnames
-            PnodeAlphas(node) <- alphas
-            betas <- Qrows$B            # Need $ her in case we have
-                                        # tibble instead of df.
-            if (is.na(betas)) betas <- rep(defaultBeta,nstates)
-            PnodeBetas(node) <- as.list(betas)
-
-            flog.debug("Multiple Row weighted:")
-            flog.debug("PnodeQ", PnodeQ(node), capture=TRUE)
-            flog.debug("PnodeAlphas", PnodeAlphas(node), capture=TRUE)
-            flog.debug("PnodeBetas", PnodeBetas(node), capture=TRUE)
-          } else {
-            ## Offset or Mixed
-            QrowsQ <- QrowsQ==1
-            PnodeQ(node) <- QrowsQ
-            if (length(rules) <nstates) {
-              ##If single rules, replicate out as that will be easier
-              for (i in 2:nstates) {
-                rules[[i]] <- rules[[1]]
-              }
-            }
-            alphas <- list()
-            betas <- list()
-            for (istate in 1:nstates) {
-              npar <- sum(QrowsQ[istate,])
-              if (rules[[istate]] %in% getOffsetRules()) {
-                bb <- as.numeric(QrowsB[istate,QrowsQ[istate,]])
-                if (all(is.na(bb))) bb <- rep(defaultBeta,npar)
-                names(bb) <- parnames[QrowsQ[istate,]]
-                betas[[istate]] <- bb
-                aa <- Qrows[istate,"A"]
-                if (is.na(aa)) aa <- defaultAlpha
-                alphas[[istate]] <- aa
-              } else { ## Weighted Rule
-                aa <- as.numeric(QrowsA[istate,QrowsQ[istate,]])
-                if (all(is.na(aa))) aa <- rep(defaultAlpha,npar)
-                names(aa) <- parnames[QrowsQ[istate,]]
-                alphas[[istate]] <- aa
-                bb <- Qrows[istate,"B"]
-                if (is.na(bb)) bb <- defaultBeta
-                betas[[istate]] <- bb
-              }
-            }
-            PnodeAlphas(node) <- alphas
-            PnodeBetas(node) <- betas
-            flog.debug("Multiple Row mixed: \n")
-            flog.debug("PnodeRules", PnodeRules(node), capture=TRUE)
-            flog.debug("PnodeQ", PnodeQ(node), capture=TRUE)
-            flog.debug("PnodeAlphas", PnodeAlphas(node), capture=TRUE)
-            flog.debug("PnodeBetas", PnodeBetas(node), capture=TRUE)
-          } ## End Mixed
-        } ## End Multiple
-
-        ## "PriorWeight" from table
-        wt <- Qrows[1,"PriorWeight"]
-        pwt <- NULL
-        if (!is.na(wt) && !is.null(wt)) {
-          if (isTRUE(is.numeric(wt)) && isTRUE(wt > 0)) pwt <- wt
-          if (isTRUE(is.character(wt)) && isTRUE(nchar(wt)>=0L)) {
-            pwt <- dgetFromString(wt)
-          }
-        }
-        if (is.null(pwt)) pwt <- PnodePriorWeight(node)
-        if (is.null(pwt)) pwt <- defaultPriorWeight
-        flog.debug("Prior Weight: ",pwt, capture=TRUE)
-        PnodePriorWeight(node) <- pwt
-        ## Build Table
-        BuildTable(node)
-
-        ## Clean out stub nodes
-        if (length(stubs)>0L)
-          PnetRemoveStubNodes(net,stubs)
-
-      }, ## End tryCatch
-      context=context)
-      if (is(out,'try-error')) {
-        Errs <- c(Errs,out)
-        if (debug) recover()
-      }
-    }  ## Next Node
+    newErrs <- try(QbuildNet(netname,Qmat,nethouse,nodehouse,
+                             profnames,Anames,Bnames,
+                             defaultRule=defaultRule,
+                             defaultLink=defaultLink,
+                             defaultAlpha=defaultAlpha,
+                             defaultBeta=defaultBeta,
+                             defaultLinkScale=defaultLinkScale,
+                             defaultPriorWeight=defaultPriorWeight,
+                             debug=debug,override=override))
+    if (is(Errs,'try-error') || length(newErrs) > 0L)
+      Errs[[netname]] <- newErrs
   } ## Next Net
-  if (length(Errs) >0L)
+  if (length(Errs) >0L) {
+    flog.error("Qmat2Pnet Errors",Errs,capture=TRUE)
     stop("Errors encountered while building networks.")
+  }
   invisible(netnames)
 }
+
+QbuildNet <- function (netname, Qmat, nethouse,nodehouse,
+                       profnames,Anames,Bnames,
+                       defaultRule="Compensatory",
+                       defaultLink="partialCredit",defaultAlpha=1,
+                       defaultBeta=NULL,defaultLinkScale=NULL,
+                       defaultPriorWeight=10,
+                       debug=FALSE,override=FALSE) {
+  Errs <- list()
+
+  flog.info("Processing net %s",netname)
+  net <- WarehouseSupply(nethouse,netname)
+  if (is.null(net)) {
+    flog.error("Could not find/create network %s",netname)
+    stop(sprintf("Could not find/create network %s",
+                 netname))
+  }
+  hubname <- PnetHub(net)
+  if (nchar(hubname)>0) {
+    flog.debug("Fetching hub network %s",hubname)
+    hub <- WarehouseSupply(nethouse,hubname)
+    if (is.null(hub)) {
+      flog.error("Could not find hub (%s) for network %s", hubname,netname)
+      stop(sprintf("Could not find hub (%s) for network %s",
+                   hubname, netname))
+    }
+  }
+  nodenames <- unique(Qmat$Node[Qmat$Model==netname])
+  for (nodename in nodenames)   {
+    newErrs <- try(QbuildNode(nodename,net, netname, hubname,
+                              Qmat,nethouse,nodehouse,
+                              profnames,Anames,Bnames,
+                              defaultRule=defaultRule,
+                              defaultLink=defaultLink,
+                              defaultAlpha=defaultAlpha,
+                              defaultBeta=defaultBeta,
+                              defaultLinkScale=defaultLinkScale,
+                              defaultPriorWeight=defaultPriorWeight,
+                              debug=debug,override=override))
+    if (is(Errs,'try-error') || length(Errs) > 0L)
+      Errs[[nodename]] <- Errs
+  }## Next Node
+  Errs
+}
+
+QbuildNode <- function (nodename, net, netname, hubname,
+                        Qmat, nethouse,nodehouse,
+                        profnames,Anames,Bnames,
+                        defaultRule="Compensatory",
+                        defaultLink="partialCredit",defaultAlpha=1,
+                        defaultBeta=NULL,defaultLinkScale=NULL,
+                        defaultPriorWeight=10,
+                        debug=FALSE,override=FALSE) {
+  context <- sprintf("Processing node %s in net %s", nodename, netname)
+  flog.info(context)
+  node <- WarehouseSupply(nodehouse,c(netname,nodename))
+  if (is.null(node)) {
+    flog.error("Could not find/create node %s in model %s",
+               nodename, netname)
+    stop(sprintf("Could not find/create node %s in model %s",
+                 nodename, netname))
+  }
+  out <- flog.try({
+    Qrows <- Qmat[Qmat$Model==netname & Qmat$Node==nodename,,drop=FALSE]
+    nstates <- nrow(Qrows)
+    if (nstates != Qrows[1,"NStates"] - 1L) {
+      stop("Expected ", Qrows[1,"NStates"] - 1L," rows got ",nstates)
+    }
+    ## Check/adjust structure
+    stubs <- list()
+    parnames <- profnames[which(apply(Qrows[,profnames,drop=FALSE]==1,2,any))]
+    exparnames <- PnodeParentNames(node)
+    flog.trace("While %s:",context)
+    flog.trace("Node has parents: ", exparnames,capture=TRUE)
+    flog.trace("And Q matrix has parents: ", parnames,capture=TRUE)
+    if (!setequal(parnames,exparnames)) {
+      if (length(exparnames) > 0L) {
+        flog.warn("While %s:",context)
+        flog.warn("Node has parents: ", exparnames,capture=TRUE)
+        flog.warn("But Q matrix has parents: ", parnames,capture=TRUE)
+        if (override) {
+          flog.warn("Changing node %s to match Q matrix.", nodename)
+        } else {
+          stop("Graphical structure does not match Q matrix.  See console.")
+        }
+      }
+      parents <- list()
+      isStub <- rep(FALSE,length(parnames))
+      names(isStub) <- parnames
+      for (pname in parnames) {
+        flog.trace("Processing Parent %s",pname)
+        ## Already existing node?
+        parents[[pname]] <- PnetFindNode(net,pname)
+        if (is.null(parents[[pname]])) {
+          flog.trace("Parent %s not found, making stub node",pname)
+          ## Try to make stub node from hub.
+          isStub[pname] <- TRUE
+          parents[[pname]] <-
+            WarehouseSupply(nodehouse,c(hubname,pname))
+        }
+        if (is.null(parents[[pname]])) {
+          flog.trace("Parent %s not found in hub, making local node",pname)
+          ## Try to make local node.
+          isStub[pname] <- FALSE
+          parents[[pname]] <-
+            WarehouseSupply(nodehouse,c(netname,pname))
+        }
+        if (is.null(parents[[pname]])) {
+          flog.error("While %s:",context)
+          flog.error("Could not find parent %s of %s in %s or %s",
+                     pname, nodename, hubname,netname)
+          stop("Could not find parent ",pname, "in net", hubname,
+               "or ",netname)
+        }
+      }
+      if (any(isStub)) {
+        flog.trace("Making stub nodes for ",pname[isStub],
+                   capture=TRUE)
+        stubs <- PnetMakeStubNodes(net,parents[isStub])
+        parents[isStub] <- stubs
+      }
+      PnodeParents(node) <- parents
+    }
+    ## Change order to match node. Even if nominally a match.
+    parnames <- PnodeParentNames(node)
+    flog.debug("Final parents for node %s: %s ",nodename,
+               paste(parnames,collapse=", "))
+    ## Extract Parameters
+    ## "Link","LinkScale",
+    ll <- trimws(Qrows[1,"Link"])
+    if (is.na(ll) || nchar(ll)==0L) {
+      flog.trace("No link for %s, using default link.", nodename)
+      ll <- defaultLink
+    }
+    PnodeLink(node) <- ll
+    lsc <- Qrows[1,"LinkScale"]
+    if (is.na(lsc) || nchar(lsc)==0L) {
+      flog.trace("No link scale for %s, using default.", nodename)
+      lsc <- defaultLinkScale
+    }
+    if (!is.null(lsc)) {
+      PnodeLinkScale(node) <- lsc
+    }
+    flog.debug("Link: %s (%f)",ll,as.numeric(lsc))
+
+
+    ## "Rules",
+    rules <- trimws(Qrows$Rules)    #Need to use $ here to force
+                                    #in case Qmat is tibble not df
+    ## Fix fancy quotes added by some spreadsheets
+    rules <- gsub(intToUtf8(c(91,0x201C,0x201D,93)),"\"",rules)
+    ## Blanks are read as NAs, so fix
+    if (any(is.na(rules)))
+      rules[is.na(rules)] <- ""
+    nrules <- sum(nchar(rules)>0L)  #Number of non-missing rules
+    ## Add back in quotes if missing.
+    rules <- ifelse(grepl('^".*"$',rules),rules,sprintf('"%s"',rules))
+    if (nrules == 0L) {
+      flog.trace("No rule for %s, using default rule.", nodename)
+      rules <- defaultRule
+    }
+    flog.debug("Rules for node %s: %s",nodename,
+               paste(rules,collapse=", "))
+    if (nrules!=1L && nrules !=nstates) {
+      flog.error("Context",context)
+      flog.error("Expected ",nstates," (or 1) rules but got ",nrules)
+      stop("Expected ",nstates," (or 1) rules but got ",nrules)
+    }
+    if (nrules==1L) {
+      PnodeRules(node) <- dgetFromString(rules[[1]])
+    }
+    else {
+      PnodeRules(node) <- lapply(rules,dgetFromString)
+    }
+    rules <- PnodeRules(node)
+
+    ## "A","B",
+    QrowsQ <- Qrows[,parnames]
+    QrowsA <- Qrows[,paste("A",parnames,sep=".")]
+    QrowsB <- Qrows[,paste("B",parnames,sep=".")]
+
+    if (nstates==1L) {
+      PnodeQ(node) <- TRUE
+      if (is.list(rules)) rules <- rules[[1]]
+      ## Single Row Cases
+      if (rules %in% getOffsetRules()) {
+        ## Offset Case
+        alphas <- Qrows[1,"A"]
+        if (is.na(alphas)) alphas <- defaultAlpha
+        PnodeAlphas(node) <- alphas
+        betas <- as.numeric(QrowsB)
+        if (all(is.na(betas))) betas <- rep(defaultBeta,length(parnames))
+        names(betas) <- parnames
+        PnodeBetas(node) <- betas
+        flog.debug("Single Row offset: ")
+        flog.debug("PnodeQ:",PnodeQ(node), capture=TRUE)
+        flog.debug("PnodeAlphas:", PnodeAlphas(node), capture=TRUE)
+        flog.debug("PnodeBetas:", PnodeBetas(node), capture=TRUE)
+      } else {
+        ## Weighted Case (Compensatory)
+        alphas <- as.numeric(QrowsA)
+        if (all(is.na(alphas))) alphas <- rep(defaultAlpha,length(parnames))
+        names(alphas) <- parnames
+        PnodeAlphas(node) <- alphas
+        betas <- Qrows[1,"B"]
+        if (is.na(betas)) betas <- defaultBeta
+        PnodeBetas(node) <- betas
+        flog.debug("Single Row weighted:")
+        flog.debug("PnodeQ:", PnodeQ(node), capture=TRUE)
+        flog.debug("PnodeAlphas", PnodeAlphas(node), capture=TRUE)
+        flog.debug("PnodeBetas", PnodeBetas(node), capture=TRUE)
+        }
+    } else {
+      QrowsQ <- as.matrix(QrowsQ)
+      QrowsA <- as.matrix(QrowsA)
+      QrowsB <- as.matrix(QrowsB)
+      ## Multiple Row Cases
+      if (length(rules) == 1L && !(rules %in% getOffsetRules())
+          && all(is.na(QrowsA[-1,])) && all(QrowsQ)) {
+        ## Weighted -- single row of AAs.
+        ## This pattern is only allowed when there is a single
+        ## non-offset rule, all elements of the Q-matrix are true,
+        ## and all rows after the first are blank (NA)
+        PnodeQ(node) <- TRUE
+        alphas <- as.numeric(QrowsA[1,])
+        if (all(is.na(alphas))) alphas <- rep(defaultAlpha,length(parnames))
+        names(alphas) <- parnames
+        PnodeAlphas(node) <- alphas
+        betas <- Qrows$B            # Need $ her in case we have
+                                    # tibble instead of df.
+        if (is.na(betas)) betas <- rep(defaultBeta,nstates)
+        PnodeBetas(node) <- as.list(betas)
+        
+        flog.debug("Multiple Row weighted:")
+        flog.debug("PnodeQ", PnodeQ(node), capture=TRUE)
+        flog.debug("PnodeAlphas", PnodeAlphas(node), capture=TRUE)
+        flog.debug("PnodeBetas", PnodeBetas(node), capture=TRUE)
+      } else {
+        ## Offset or Mixed
+        QrowsQ <- QrowsQ==1
+        PnodeQ(node) <- QrowsQ
+        if (length(rules) <nstates) {
+          ##If single rules, replicate out as that will be easier
+          for (i in 2:nstates) {
+            rules[[i]] <- rules[[1]]
+          }
+        }
+        alphas <- list()
+        betas <- list()
+        for (istate in 1:nstates) {
+          npar <- sum(QrowsQ[istate,])
+          if (rules[[istate]] %in% getOffsetRules()) {
+            bb <- as.numeric(QrowsB[istate,QrowsQ[istate,]])
+            if (all(is.na(bb))) bb <- rep(defaultBeta,npar)
+            names(bb) <- parnames[QrowsQ[istate,]]
+            betas[[istate]] <- bb
+            aa <- Qrows[istate,"A"]
+            if (is.na(aa)) aa <- defaultAlpha
+            alphas[[istate]] <- aa
+          } else { ## Weighted Rule
+            aa <- as.numeric(QrowsA[istate,QrowsQ[istate,]])
+            if (all(is.na(aa))) aa <- rep(defaultAlpha,npar)
+            names(aa) <- parnames[QrowsQ[istate,]]
+            alphas[[istate]] <- aa
+            bb <- Qrows[istate,"B"]
+            if (is.na(bb)) bb <- defaultBeta
+            betas[[istate]] <- bb
+          }
+        }
+        PnodeAlphas(node) <- alphas
+        PnodeBetas(node) <- betas
+        flog.debug("Multiple Row mixed: \n")
+        flog.debug("PnodeRules", PnodeRules(node), capture=TRUE)
+        flog.debug("PnodeQ", PnodeQ(node), capture=TRUE)
+        flog.debug("PnodeAlphas", PnodeAlphas(node), capture=TRUE)
+        flog.debug("PnodeBetas", PnodeBetas(node), capture=TRUE)
+      } ## End Mixed
+    } ## End Multiple
+
+    ## "PriorWeight" from table
+    wt <- Qrows[1,"PriorWeight"]
+    pwt <- NULL
+    if (!is.na(wt) && !is.null(wt)) {
+      if (isTRUE(is.numeric(wt)) && isTRUE(wt > 0)) pwt <- wt
+      if (isTRUE(is.character(wt)) && isTRUE(nchar(wt)>=0L)) {
+        pwt <- dgetFromString(wt)
+      }
+    }
+    if (is.null(pwt)) pwt <- PnodePriorWeight(node)
+    if (is.null(pwt)) pwt <- defaultPriorWeight
+    flog.debug("Prior Weight: ",pwt, capture=TRUE)
+    PnodePriorWeight(node) <- pwt
+    ## Build Table
+    BuildTable(node)
+
+    ## Clean out stub nodes
+    if (length(stubs)>0L)
+      PnetRemoveStubNodes(net,stubs)
+
+  }, ## End tryCatch
+  context=context)
+  if (is(out,'try-error')) {
+    if (debug) recover()
+    return(out)
+  }
+  list()
+}
+
 
 
 

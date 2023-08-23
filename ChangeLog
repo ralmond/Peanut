@@ -1,3 +1,14 @@
+2023-08-21  Russell Almond  <ralmond@cherry>
+
+	* R/Pnets.R (PnodeDefaultAlphas,PnodeDefaultBetas): changed name
+	to avoid clash with CPTtools.  Delegated function to CPTtools.
+
+2023-08-20  Russell Almond  <ralmond@cherry>
+
+	* R/Warehouses.R (WarehouseSupply,WarehouseMake): added new
+	restoreOnly argument to generate an error if the filename for a
+	network does not exist.
+
 2023-04-10  Russell Almond  <ralmond@cherry>
 
 	* R/QOmegaMat.R (Omega2Pnet): Added hack to remove stray symbols
