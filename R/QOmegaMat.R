@@ -762,7 +762,7 @@ Omega2Pnet <- function(OmegaMat,pn,nodewarehouse,
   rownames(QQ) <- colnames(QQ)
   for (ndn in nodenames) {
     ## Treat NA's and other things as false
-    QQ[,ndn] <- sapply(QQ[,ndn],isTRUE)
+    QQ[,ndn] <- sapply(as.logical(QQ[,ndn]),isTRUE)
   }
   flog.trace("Included Q-matrix:",QQ,capture=TRUE)
   Anames <- paste("A",nodenames,sep=".")
