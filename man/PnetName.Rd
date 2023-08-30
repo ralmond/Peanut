@@ -1,6 +1,7 @@
 \name{PnetName}
 \alias{PnetName}
 \alias{PnetName<-}
+\alias{PnetName,NULL-method}
 \title{
   Gets or Sets the name of a Netica network.
 }
@@ -12,6 +13,7 @@ particular, they should probably follow the rules for R variable names.
 }
 \usage{
 PnetName(net)
+\S4method{PnetName}{NULL}(net)
 PnetName(net) <- value
 }
 

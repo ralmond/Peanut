@@ -108,8 +108,7 @@ Pnet2Qmat <- function (obs,prof,defaultRule="Compensatory",
       if (is.null(PnodeRules(nd))) {
         rules <- defaultRule
       }
-      if (length(rules) == 1 ||
-          class(rules)=="function") {
+      if (length(rules) == 1 || is(rules,"function")) {
         Rules[irow] <- dputToString(rules)
       } else {
         Rules[irow:(irow+nstate-2)] <- sapply(rules,dputToString)
@@ -147,7 +146,7 @@ Pnet2Qmat <- function (obs,prof,defaultRule="Compensatory",
       ## A  -- Alpha if Rule is OffsetXXX
       ## B -- Beta if Rule is not OffsetXXX
       ## BB -- Betas if Rule is OffsetXXX
-      if (length(rules) ==1 || class(rules)== "function") {
+      if (length(rules) ==1 || is(rules,"function")) {
         ## Replicate out to length nstate-1
         rules <- list(rules)
         if (nstate>2) {

@@ -17,7 +17,10 @@
 
 }
 \usage{
-Qmat2Pnet(Qmat, nethouse, nodehouse, defaultRule = "Compensatory", defaultLink = "partialCredit", defaultAlpha = 1, defaultBeta = NULL, defaultLinkScale = NULL, defaultPriorWeight=10, debug = FALSE, override = FALSE)
+Qmat2Pnet(Qmat, nethouse, nodehouse, defaultRule = "Compensatory", 
+          defaultLink = "partialCredit", defaultAlpha = 1, 
+          defaultBeta = NULL, defaultLinkScale = NULL, 
+          defaultPriorWeight=10, debug = FALSE, override = FALSE)
 }
 \arguments{
   \item{Qmat}{A \code{\link[base]{data.frame}} containing an augmented
