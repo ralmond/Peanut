@@ -16,7 +16,8 @@
 
 }
 \usage{
-Pnet2Qmat(obs, prof, defaultRule = "Compensatory", defaultLink = "partialCredit", defaultAlpha = 1, defaultBeta = NULL, defaultLinkScale = NULL, debug = TRUE)
+Pnet2Qmat(obs, prof, defaultRule = "Compensatory", defaultLink = "partialCredit", 
+          defaultAlpha = 1, defaultBeta = NULL, defaultLinkScale = NULL, debug = TRUE)
 }
 \arguments{
   \item{obs}{A list of \emph{observable} \code{\link{Pnode}} objects.

@@ -3,6 +3,7 @@
 \alias{PnodeParents<-}
 \alias{PnodeNumParents}
 \alias{PnodeParentNames}
+\alias{PnodeParentStates}
 \title{ Gets or sets the parents of a parameterized node.}
 \description{
 
@@ -17,6 +18,7 @@ PnodeParents(node)
 PnodeParents(node) <- value
 PnodeNumParents(node)
 PnodeParentNames(node)
+PnodeParentStates(node)
 }
 \arguments{
   \item{node}{
@@ -58,7 +60,9 @@ PnodeParentNames(node)
   the number of parents of \code{node}.
 
   The expression \code{PnodeParentNames(node)} is a shortcut fo
-  \code{sapply(PnodeParents(node), PnodeName)}.
+  \code{sapply(PnodeParents(node), PnodeName)} and
+  \code{PnodeParentStates(node)} is a shortcut for
+  \code{sapply(PnodeParents(node), PnodeName)}
 
 }
 \author{
@@ -94,6 +98,9 @@ stopifnot(
   PnodeName(PnodeParents(B)[[2]])=="A3",
   all(nchar(names(PnodeParents(B)))==0)
 )
+
+PnodeParentNames(B)
+PnodeParentStates(B)
 
 ## Remove a node.
 PnodeParents(B) <- anodes[2:1]

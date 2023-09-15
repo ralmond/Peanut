@@ -8,7 +8,8 @@
 
 }
 \usage{
-flog.try(expr, context = deparse(substitute(expr)), loggername = flog.namespace(), tracelevel = c("WARN", "ERROR", "FATAL"))
+flog.try(expr, context = deparse(substitute(expr)), loggername = flog.namespace(), 
+         tracelevel = c("WARN", "ERROR", "FATAL"))
 }
 \arguments{
   \item{expr}{An R expression to be executed. }

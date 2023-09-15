@@ -13,7 +13,8 @@
 
 }
 \usage{
-Pnet2Omega(net, prof, defaultRule = "Compensatory", defaultLink = "normalLink", defaultAlpha = 1, defaultBeta = 0, defaultLinkScale = 1, debug = FALSE)
+Pnet2Omega(net, prof, defaultRule = "Compensatory", defaultLink = "normalLink",
+           defaultAlpha = 1, defaultBeta = 0, defaultLinkScale = 1, debug = FALSE)
 }
 \arguments{
   \item{net}{A \code{\link{Pnet}} object containing the network to be

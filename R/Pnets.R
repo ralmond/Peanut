@@ -295,12 +295,12 @@ setGeneric("BuildTable")
 #####
 ## Offset Mechinism
 
-defaultAlphas <- function (node, rule) {
-  if (isOffsetRule(rule)[1]) return(0)
-  rep(0, PnodeNumParents(node))
+PnodeDefaultAlphas <- function (node, rule=PnodeRules(node),
+                                link=PnodeLink(node)) {
+  CPTtools::defaultAlphas(rule,PnodeStates(node),link)
 }
 
-defaultBetas <- function (node, rule) {
-  if (!isOffsetRule(rule)[1]) return(0)
-  rep(0, PnodeNumParents(node))
+PnodeDefaultBetas <- function (node, rule=PnodeRules(node),
+                               link=PnodeLink(node)) {
+  CPTtools::defaultBetas(rule,PnodeStates(node),link)
 }

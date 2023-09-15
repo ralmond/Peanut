@@ -71,7 +71,7 @@ MakeCompensatoryGadget <- function(pnode, color="firebrick") {
       ##                              min=0.01,max=1,value=lsp)),
       ## Resulting CPT
       shiny::fluidRow(
-          column(width=12,
+          shiny::column(width=12,
                  shiny::tabsetPanel(
                             shiny::tabPanel("Plot",
                                             shiny::plotOutput("barchart")),
@@ -198,7 +198,7 @@ MakeOffsetGadget <- function(pnode, color="plum"){
                  shiny::actionButton("cancel","Cancel"),
                  shiny::actionButton("done","OK")),
       ## Structure and Link
-      shiny::fluidRow(column(width=4,
+      shiny::fluidRow(shiny::column(width=4,
                       shiny::selectInput("link","Link Function:",
                                   c("Parital Credit"="partialCredit",
                                     "Graded Response"="gradedResponse"),
@@ -210,21 +210,21 @@ MakeOffsetGadget <- function(pnode, color="plum"){
                                   selected=pRules))
                ),
       shiny::conditionalPanel("input.link == 'gradedResponse'",
-                       shiny::fluidRow(column(width=1,htmltools::h4("Alpha:")),
+                       shiny::fluidRow(shiny::column(width=1,htmltools::h4("Alpha:")),
                                 shiny::column(width=3,
                                        shiny::sliderInput("a","Alpha",
                                                    min=0.01,max=2,
                                                    value=pa[[1]]))
                         )),
       shiny::conditionalPanel("input.link == 'partialCredit'",
-                       shiny::fluidRow(column(width=1,htmltools::h4("Alphas:")),
+                       shiny::fluidRow(shiny::column(width=1,htmltools::h4("Alphas:")),
                                 lapply(names(pa),function(st) {
                                   shiny::column(width=3,
                                          shiny::sliderInput(paste("a",st,sep="."),st,
                                                      min=0.01,max=2,
                                                      value=pa[[st]])
                         )}))),
-      shiny::fluidRow(column(width=1,htmltools::h4("Betas:")),
+      shiny::fluidRow(shiny::column(width=1,htmltools::h4("Betas:")),
                lapply(names(pb),function(par) {
                  shiny::column(width=3,
                         shiny::sliderInput(paste("b",par,sep="."),par,
@@ -489,7 +489,7 @@ RegressionGadget <- function(pnode, useR2=PnodeNumParents(pnode)>0L,
                              color = "sienna",
                              viewer=shiny::paneViewer()) {
   gadget=MakeRegressionGadget(pnode,useR2,color)
-  runGadget(gadget$ui,gadget$server,
+  shiny::runGadget(gadget$ui,gadget$server,
             viewer=viewer)
 }
 
@@ -599,16 +599,16 @@ MakeDPCGadget <- function(pnode, color="steelblue"){
   ui <- shiny::fluidPage(
     shinyjs::useShinyjs(),
     title=(paste("Editor for node ",PnodeName(pnode))),
-    shiny::wellPanel(h1(paste("Editor for node ",PnodeName(pnode))),
+    shiny::wellPanel(htmltools::h1(paste("Editor for node ",PnodeName(pnode))),
               shiny::actionButton("cancel","Cancel"),
               shiny::actionButton("done","OK")),
     {
       tabs <- lapply(names(pRules),
                  function(st) {
                    shiny::tabPanel(st,
-                     shiny::fluidRow(shiny::column(2,h3("Transition to state ",st)),
+                     shiny::fluidRow(shiny::column(2,htmltools::h3("Transition to state ",st)),
                               shiny::column(width=4,offset=2,
-                                     selectInput(paste("rules",st,sep="."),
+                                     shiny::selectInput(paste("rules",st,sep="."),
                                                  "Structure Function (Rule):",
                                                  c("Compensatory","Conjunctive",
                                                    "Disjunctive","OffsetConjunctive",
@@ -617,7 +617,7 @@ MakeDPCGadget <- function(pnode, color="steelblue"){
                      shiny::fluidRow(shiny::column(width=4,htmltools::h4(paste("Q-matrix row for ",st))),
                               lapply(parnames,function(par) {
                                 shiny::column(width=3,
-                                       checkboxInput(paste("Q",st,par,sep="."),
+                                       shiny::checkboxInput(paste("Q",st,par,sep="."),
                                                      par,pQ[st,par]))
                                 })),
                      shiny::fluidRow(shiny::column(width=1,htmltools::h4("Alphas:")),
@@ -802,9 +802,9 @@ MakeDPCGadget <- function(pnode, color="steelblue"){
       orules <- offsetRules()
       #print(orules)
       for (st in rownames(pQ)) {
-        toggleState(paste("a",st,anames[1L],sep="."),
+        shinyjs::toggleState(paste("a",st,anames[1L],sep="."),
                     condition=isTRUE(orules[[st]]))
-        toggleState(paste("b",st,bnames[1L],sep="."),
+        shinyjs::toggleState(paste("b",st,bnames[1L],sep="."),
                     condition=!isTRUE(orules[[st]]))
       }
     })

@@ -21,7 +21,7 @@ PnodeMin <- function (name,states=c("Yes","No"), parents=list(),
       a})
     if (length(alphas)==1L) alphas <- alphas[[1]]
   }
-  if (missing(beta)) {
+  if (missing(betas)) {
     betas <- lapply(rules, function(r) {
       b <- 0
       if (!isOffsetRule(r)) {

@@ -122,6 +122,17 @@ PnodeParentNames <- function (node)
   UseMethod("PnodeParentNames")
 setGeneric("PnodeParentNames")
 
+PnodeParentNames.default <- function (node)
+  sapply(PnodeParents(node),PnodeName)
+
+PnodeParentStates <- function(node)
+  UseMethod("PnodeParentStates")
+setGeneric("PnodeParentStates")
+
+PnodeParentStates.default <- function (node)
+  lapply(PnodeParents(node),PnodeStates)
+
+
 PnodeNumParents <- function (node)
   UseMethod("PnodeNumParents")
 setGeneric("PnodeNumParents")
