@@ -146,3 +146,7 @@ export(StatName, Statistic, calcStat, PnodeMargin, PnodeEAP, PnodeSD,
 exportMethods(calcStat, StatName)
 
 export(flog.try)
+
+## Igraphs
+export(pnet2Igraph)
+

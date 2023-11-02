@@ -1,6 +1,6 @@
 Package: Peanut
-Version: 0.9-2
-Date: 2023/08/20
+Version: 0.9-3
+Date: 2023/11/02
 Title: Parameterized Bayesian Networks, Abstract Classes
 Author: Russell Almond
 Maintainer: Russell Almond <ralmond@fsu.edu>
@@ -12,13 +12,17 @@ Authors@R:
            comment = c(ORCID = "0000-0002-8876-9337"))
 Depends: R (>= 3.0), CPTtools (>= 0.5), methods
 Imports: utils, futile.logger, jsonlite
-Suggests:  PNetica,
+Suggests: 
+    RNetica,
+    PNetica,
     knitr,
     rmarkdown,
     tidyr,
     htmltools,
     shiny,
-    shinyjs
+    shinyjs,
+    igraph,
+    testthat (>= 3.0.0)
 VignetteBuilder: knitr
 Description: This provides support of learning conditional probability
     tables parameterized using CPTtools. This provides and object oriented
@@ -41,5 +45,4 @@ Support: c(
    Architectural Design and Modeling Using E-Rebuild." (\#1720533,
    Fengfeng Ke, PI)',
    'Institute of Educational Statistics Grant: "Exploring adaptive cognitive and affective learning support for next-generation STEM learning games." (#R305A170376-20, Val Shute and Russell Almond, PIs')	
-
-
+Config/testthat/edition: 3

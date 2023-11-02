@@ -434,7 +434,7 @@ obs <-unlist(sapply(list(sess$nets$PPcompEM,sess$nets$PPconjEM,
                   sess$nets$PPtwostepEM,sess$nets$PPdurAttEM),
              NetworkAllNodes))
 
-Q2 <- Pnet2Qmat(obs,NetworkAllNodes(CM))
+Q2 <- Pnet2Qmat(obs,PnetPnodess(CM))
 
 
 stopSession(sess)
