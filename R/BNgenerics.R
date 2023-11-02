@@ -44,6 +44,15 @@ setGeneric("PnodeLabels")
   UseMethod("PnodeLabels<-")
 setGeneric("PnodeLabels<-")
 
+
+PnodeVisPos <- function (node)
+  UseMethod("PnodeVisPos")
+setGeneric("PnodeVisPos")
+
+"PnodeVisPos<-" <- function (node,value)
+  UseMethod("PnodeVisPos")
+setGeneric("PnodeVisPos<-")
+
 ##### States
 
 
@@ -217,4 +226,24 @@ PnetCompile <- function(net)
 setGeneric("PnetCompile")
 
 
+PnetCanvas <- function (net)
+  UseMethod("PnetCanvas")
+setGeneric("PnetCanvas")
+
+PnetCanvas.default <- function (net) {
+  coords <- sapply(PnetPnodes(net),PnodeVisPos)
+  coords <- cbind(coords,c(0,0))
+  ur <- apply(coords,1,max,na.rm=TRUE)
+  ll <- apply(coords,1,min,na.rm=TRUE)
+  list(ll=ll,ur=ur)
+}   
+
+
+
+"PnetCanvas<-" <- function (net,value)
+  UseMethod("PnetCanvas<-")
+setGeneric("PnetCanvas<-")
+
+"PnetCanvas<-.default" <- function (net, value)
+  stop("Setting Network Canvas not supported for graphs of class ",class(net))
 
