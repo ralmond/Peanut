@@ -150,5 +150,5 @@ exportMethods(calcStat, StatName)
 export(flog.try)
 
 ## Igraphs
-export(pnet2Igraph)
+export(pnet2Igraph,PnetIGLayout,"PnetIGLayout<-")
 

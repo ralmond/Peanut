@@ -17,6 +17,15 @@ pnet2Igraph <- function (net) {
  ig
 }
                      
+PnetIGLayout <- function (net, ig) {
+  UseMethod("PnetIGLayout")
+}
+setGeneric("PnetIGLayout")
+
+"PnetIGLayout<-" <- function (net, ig, value) {
+  UseMethod("PneIGLayout<-")
+}
+setGeneric("PnetIGLayout<-")
 
   
   
