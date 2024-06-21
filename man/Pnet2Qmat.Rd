@@ -16,8 +16,10 @@
 
 }
 \usage{
-Pnet2Qmat(obs, prof, defaultRule = "Compensatory", defaultLink = "partialCredit", 
-          defaultAlpha = 1, defaultBeta = NULL, defaultLinkScale = NULL, debug = TRUE)
+Pnet2Qmat(obs, prof, defaultRule = "Compensatory", 
+          defaultLink = "partialCredit", 
+          defaultAlpha = 1, defaultBeta = NULL, 
+          defaultLinkScale = NULL, debug = character())
 }
 \arguments{
   \item{obs}{A list of \emph{observable} \code{\link{Pnode}} objects.
@@ -41,8 +43,7 @@ Pnet2Qmat(obs, prof, defaultRule = "Compensatory", defaultLink = "partialCredit"
     difficulty (negative intercept) parameters.}
   \item{defaultLinkScale}{A positive number which gives the default
     value for the link scale parameter.}
-  \item{debug}{A logical value.  If true, extra information will be
-    printed during process of building the Pnet.}
+  \item{debug}{A character vector which gives the names of the variables to provide extra debugging information about.}
 }
 \details{
 
@@ -314,6 +315,26 @@ Pnet2Qmat(obs, prof, defaultRule = "Compensatory", defaultLink = "partialCredit"
   meeting of Association for Uncertainty in Artificial Intelligence,
   Sydney, Australia. (International) Retrieved from
   \url{http://bmaw2017.azurewebsites.net/} 
+}
+\section{Debugging}{
+
+It is fairly common for their to be problems with the properties of 
+specific nodes.  The \code{Pnet2Qmat} function tries to provide context 
+information for the error messages so the problematic nodes can be 
+identified and the problem resolved.  
+
+First, the function uses the \code{futile.logger} framework, so setting 
+\code{\link[futile.logger]{flog.threshold}} will change how much 
+diagnostic information is given.  At the \dQuote{INFO} level, it provides
+progress information about which observables have been processed.  
+
+The \dQuote{DEBUG} and \dQuote{TRACE} levels provide quite a lot of 
+information about each variable.  To make this more manageable, the 
+\code{debug} argument is a list of node names.  The debug and trace 
+information is printed only for the nodes with that name.  (Currently, 
+the network is not checked, although it is reported.  So nodes with the 
+same name will all be reported if the logging level is set to DEBUG or TRACE.
+
 }
 \author{Russell Almond}
 \seealso{

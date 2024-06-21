@@ -16,7 +16,7 @@ dputToString <- function (obj) {
     textConnectionValue(con)},
     finally=close(con))
   ## R is helpfully adding newlines which we don't want.
-  paste(result,collapse="")
+  paste(result,collapse="\n")
 }
 
 dgetFromString <- function (str) {
@@ -33,7 +33,7 @@ dgetFromString <- function (str) {
 Pnet2Qmat <- function (obs,prof,defaultRule="Compensatory",
                        defaultLink="partialCredit",defaultAlpha=1,
                        defaultBeta=NULL,defaultLinkScale=NULL,
-                       debug=TRUE) {
+                       debug=character()) {
   statecounts <- sapply(obs,PnodeNumStates)
   obsnames <- sapply(obs,PnodeName)
   modnames <- sapply(obs,function(nd) PnetName(PnodeNet(nd)))
@@ -71,8 +71,17 @@ Pnet2Qmat <- function (obs,prof,defaultRule="Compensatory",
   for (nd in obs) {
     ndnm <- PnodeName(nd)
     netnm <- PnetName(PnodeNet(nd))
-    flog.debug("Processing node %s in net %s",ndnm,netnm)
-    out <- tryCatch({
+    flog.info("Processing node %s in net %s",ndnm,netnm)
+    debugp <- ndnm %in% debug
+    out <- flog.try({
+      ## Catch Unknown Parent Errors
+      upars <- setdiff(PnodeParentNames(nd),profnames)
+      flog.trace("Missing parents %s",
+                 paste(upars,collapse=", "))
+      if (length(upars)>0L) {
+        stop(sprintf("Node %s in net %s has unknown parents %s.",
+                         ndnm,netnm,paste(upars,collapse=", ")))
+      }
       ## first row
       NStates[irow] <- nstate <- PnodeNumStates(nd)
       State[irow:(irow+nstate-2)] <- PnodeStates(nd)[1:(nstate-1)]
@@ -98,11 +107,10 @@ Pnet2Qmat <- function (obs,prof,defaultRule="Compensatory",
       QQQ <-QQ[irow:(irow+nstate-2),
                match(PnodeParentNames(nd),profnames),
                drop=FALSE] == 1        # as.logical drops dims!
-      if (debug) {
-        cat("Q matrix:\n")
-        print(QQ[irow:(irow+nstate-2),])
-        print(QQQ)
-        cat("\n")
+      if (debugp) {
+        flog.debug("Q matrix:\n",QQ[irow:(irow+nstate-2),],
+                   capture=TRUE)
+        flog.trace("QQQ",QQQ,capture=TRUE)
       }
       rules <- PnodeRules(nd)
       if (is.null(PnodeRules(nd))) {
@@ -157,9 +165,11 @@ Pnet2Qmat <- function (obs,prof,defaultRule="Compensatory",
       }
       for (i in 1:(nstate-1)) {
         pnames <- PnodeParentNames(nd)[QQQ[i,]]
-        if(debug) {
-          cat("Rules[[",i,"]]:",toString(rules[[i]]),"\n")
-          cat("Parents[[",i,"]]:",pnames,"\n")
+        if(debugp) {
+          flog.debug(paste("Rules[[",i,"]]:"),
+                     toString(rules[[i]]),capture=TRUE)
+          flog.debug(paste("Parents[[",i,"]]:"),
+                     pnames,capture=TRUE)
         }
         if (rules[[i]] %in% getOffsetRules()) {
           ## Use BB and A
@@ -170,8 +180,13 @@ Pnet2Qmat <- function (obs,prof,defaultRule="Compensatory",
               bb <- rep_len(bb,length(pnames))
             names(bb) <- pnames
           }
-          if (debug) {
-            cat("BB[[",i,"]] =",bb," A[",i,"] = ",a,"\n")
+          upars <- setdiff(names(bb),colnames(BB))
+          if (length(upars) > 0L) 
+            stop(sprintf("Unrecognized parent names: %s; in betas of node %s in net %s",
+                         paste(upars,collapse=", "),ndnm,netnm))
+          if (debugp) {
+            flog.debug(paste("BB[[",i,"]] ="),bb,capture=TRUE)
+            flog.debug(paste("A[",i,"] = "),a,capture=TRUE)
           }
           BB[irow+i-1,names(bb)] <- bb
           A[irow+i-1] <- a
@@ -184,21 +199,29 @@ Pnet2Qmat <- function (obs,prof,defaultRule="Compensatory",
               aa <- rep_len(aa,length(pnames))
             names(aa) <- pnames
           }
-          if (debug) {
-            cat("AA[[",i,"]] =",aa," B[",i,"] = ",b,"\n")
+          upars <- setdiff(names(aa),colnames(AA))
+          if (length(upars) > 0L) 
+            stop(sprintf("Unrecognized parent names: %s; in alphas of node %s in net %s",
+                         paste(upars,collapse=", "),ndnm,netnm))
+          if (debugp) {
+            flog.debug(paste("AA[[",i,"]] ="),aa,capture=TRUE)
+            flog.debug(paste("B[",i,"] = "),b,capture=TRUE)
+            flog.trace("names(aa)",names(aa),capture=TRUE)
+            flog.trace("irow=%d i=%d",irow,i)
           }
           AA[irow+i-1,names(aa)] <- aa
           B[irow+i-1] <- b
         }
       }                                 #Next state
-      if (debug) {
-        cat("AA & A matrix:\n")
-        print(cbind(AA[irow:(irow+nstate-2),,drop=FALSE],
-                    A[irow:(irow+nstate-2)]))
-        cat("BB & B matrix:\n")
-        print(cbind(BB[irow:(irow+nstate-2),,drop=FALSE],
-                    B[irow:(irow+nstate-2)]))
-        cat("\n")
+      if (debugp) {
+        flog.trace("AA & A matrix:\n",
+             cbind(AA[irow:(irow+nstate-2),,drop=FALSE],
+                    A[irow:(irow+nstate-2)]),
+             capture=TRUE)
+        flog.trace("BB & B matrix:\n",
+                   cbind(BB[irow:(irow+nstate-2),,drop=FALSE],
+                    B[irow:(irow+nstate-2)]),
+                   capture=TRUE)
       }
       ## Weights
       wt <- PnodePriorWeight(nd)
@@ -207,15 +230,17 @@ Pnet2Qmat <- function (obs,prof,defaultRule="Compensatory",
       }
     }, context=sprintf("Processing node %s in net %s",ndnm,netnm))
     if (is(out,'try-error')) {
-      Errs <- c(Errs,out)
-      if (debug) recover()
+      Errs <- c(Errs,conditionMessage(attr(out,"condition")))
     }
 
     ## Next node
     irow <- irow + nstate-1
   }
-  if (length(Errs) >0L)
+  if (length(Errs) >0L) {
+    cat("Errors encountered:\n")
+    print(Errs)
     stop("Errors encountered while building Q-matrix.")
+  }
   ## Finally, put this togehter into a data frame
   ## Fix colnames(A) so they are different from colnames(QQ)
   colnames(AA) <- paste("A",colnames(AA),sep=".")
@@ -236,7 +261,8 @@ Qmat2Pnet <- function (Qmat, nethouse,nodehouse,defaultRule="Compensatory",
                        defaultLink="partialCredit",defaultAlpha=1,
                        defaultBeta=NULL,defaultLinkScale=NULL,
                        defaultPriorWeight=10,
-                       debug=FALSE,override=FALSE) {
+                       debug=flog.threshold()%in%c("DEBUG","TRACE"),
+                       override=FALSE) {
 
   if (!is.PnodeWarehouse(nodehouse)) {
     stop("Node warehouse must be supplied.")
@@ -304,7 +330,8 @@ QbuildNet <- function (netname, Qmat, nethouse,nodehouse,
                        defaultLink="partialCredit",defaultAlpha=1,
                        defaultBeta=NULL,defaultLinkScale=NULL,
                        defaultPriorWeight=10,
-                       debug=FALSE,override=FALSE) {
+                       debug=flog.threshold()%in%c("DEBUG","TRACE"),
+                       override=FALSE) {
   Errs <- list()
 
   flog.info("Processing net %s",netname)
@@ -349,7 +376,8 @@ QbuildNode <- function (nodename, net, netname, hubname,
                         defaultLink="partialCredit",defaultAlpha=1,
                         defaultBeta=NULL,defaultLinkScale=NULL,
                         defaultPriorWeight=10,
-                        debug=FALSE,override=FALSE) {
+                        debug=flog.threshold()%in%c("DEBUG","TRACE"),
+                        override=FALSE) {
   context <- sprintf("Processing node %s in net %s", nodename, netname)
   flog.info(context)
   node <- WarehouseSupply(nodehouse,c(netname,nodename))

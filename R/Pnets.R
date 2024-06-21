@@ -203,6 +203,54 @@ PnodeAlphas.default <- function(node) {
   node
 }
 
+checkAlphaBeta <- function(node,value,
+                           which=c("Alphas","Betas")) {
+  if (is.list(value)) {
+    if (length(value) >= PnodeNumStates(node)) {
+      warning("New ",which, " for node ",PnodeName(node),
+              ", which has ",PnodeNumStates(node)," states, ",
+              " is a list of length ",length(value),".")
+    }
+    if (is.null(names(value))) {
+      message("New value for node ",PnodeName(node),
+              " is an unnamed list.")
+      for (row in 1:length(value)) {
+        checkAlphaBeta(node,value[[row]],
+                       paste(which,"[[",row,"]]"))
+      } 
+    } else {
+      unames <- setdiff(names(value),PnodeStates(node))
+      if (length(unames) > 0L) {
+        warning("Found unrecognized state names, ",
+                paste(unames,collapse=", "),
+                "; for ",which," of node ",PnodeName(node))
+      }
+      for (row in names(value)) {
+        checkAlphaBeta(node,value[[row]],
+                       paste(which,"[[",row,"]]"))
+      } 
+    }
+  } else { ## Vector
+    if (length(value)==1L) return(TRUE)
+    if (length(value) >= PnodeNumParents(node)) {
+      warning("New ",which, " for node ",PnodeName(node),
+              ", which has ",PnodeNumParents(node)," parents, ",
+              " is a vector of length ",length(value),".")
+    }
+    if (is.null(names(value))) {
+      message("New value for node ",PnodeName(node),
+              " is an unnamed vector.")
+    }
+    unames <- setdiff(names(value),PnodeParentNames(node))
+    if (length(unames) > 0L) {
+      warning("Found unrecognized parent names, ",
+              paste(unames,collapse=", "),
+              "; for ",which," of node ",PnodeName(node))
+    }
+    
+  }
+}
+
 PnodeBetas <- function (node) {
   UseMethod("PnodeBetas")
 }

@@ -72,7 +72,7 @@ Pnet2Omega(net, prof, defaultRule = "Compensatory", defaultLink = "normalLink",
   Let \eqn{Q} be the logical matrix formed by the \eqn{J} columns after the
   first and let \eqn{A} be the matrix of coefficients.  The matrix
   \eqn{Q} gives the structure of the graph with \eqn{Q[i,j]} being true
-  when Node \eqn{j} is a parent of node {i}.  By convention,
+  when Node \eqn{j} is a parent of Node \eqn{i}.  By convention,
   \eqn{Q[j,j]=1}.  Note that unlike the inverse covariance matrix from
   which it gets its name, this matrix is not symmetric.  It instead
   reflects the (possibly arbitrary) directions assigned to the edges.

@@ -20,7 +20,9 @@
 Qmat2Pnet(Qmat, nethouse, nodehouse, defaultRule = "Compensatory", 
           defaultLink = "partialCredit", defaultAlpha = 1, 
           defaultBeta = NULL, defaultLinkScale = NULL, 
-          defaultPriorWeight=10, debug = FALSE, override = FALSE)
+          defaultPriorWeight=10, 
+          debug = flog.threshold() \%in\% c("DEBUG","TRACE"), 
+          override = FALSE)
 }
 \arguments{
   \item{Qmat}{A \code{\link[base]{data.frame}} containing an augmented
@@ -49,7 +51,8 @@ Qmat2Pnet(Qmat, nethouse, nodehouse, defaultRule = "Compensatory",
   \item{defaultPriorWeight}{A positive number which gives the default
     value for the node prior weight hyper-parameter.}
   \item{debug}{A logical value.  If true, extra information will be
-    printed during process of building the Pnet.}
+    printed during process of building the Pnet.  Default value is 
+    based on \code{\link[futile.logger]{flog.threshold}}.}
   \item{override}{A logical value.  If false, differences between any
     exsiting structure in the graph and the \code{Qmat} will raise an
     error.  If true, the graph will be modified to conform to the matrix.
