@@ -48,7 +48,15 @@ Pnet <- function (net, priorWeight=10, pnodes=list()) {
 }
 setGeneric("Pnet")
 
+PnetOnodes <- function (net) {
+  UseMethod("PnetOnodes")
+}
+setGeneric("PnetOnodes")
 
+"PnetOnodes<-" <- function (net, value) {
+  UseMethod("PnetOnodes<-")
+}
+setGeneric("PnetOnodes<-")
 
 BuildAllTables <- function (net, debug=FALSE) {
   netnm <- PnetName(net)
@@ -119,6 +127,17 @@ as.Pnode <- function (x) {
   UseMethod("as.Pnode")
 }
 setGeneric("as.Pnode")
+
+is.Onode <- function (x) {
+  UseMethod("is.Onode")
+}
+setGeneric("is.Onode")
+
+"is.Onode<-" <- function (x,value) {
+  UseMethod("is.Onode<-")
+}
+setGeneric("is.Onode<-")
+
 
 PnodeNet <- function (node) {
   UseMethod("PnodeNet")
