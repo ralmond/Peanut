@@ -32,7 +32,9 @@ setGeneric("PnodeSD",function(net,node) standardGeneric("PnodeSD"))
 setGeneric("PnodeMedian",function(net,node) standardGeneric("PnodeMedian"))
 setGeneric("PnodeMode",function(net,node) standardGeneric("PnodeMode"))
 
-
+buildStats <- function(nodes,fun=PnodeEAP) {
+  sapply(nodes,function(nd) Statistic(fun,nd))
+}
 
 flattenStats <- function(statlist) {
     do.call("c",statlist)
