@@ -33,9 +33,26 @@ setGeneric("PnodeMedian",function(net,node) standardGeneric("PnodeMedian"))
 setGeneric("PnodeMode",function(net,node) standardGeneric("PnodeMode"))
 
 buildStats <- function(nodes,fun=PnodeEAP) {
-  sapply(nodes,function(nd) Statistic(fun,nd))
+  if (is.character(nodes))
+      return(sapply(nodes,function(nd) Statistic(fun,nd)))
+  sapply(nodes,function(nd) Statistic(fun,PnodeName(nd)))
 }
 
 flattenStats <- function(statlist) {
     do.call("c",statlist)
+}
+
+calcStats <- function (stats,net) {
+  result <- sapply(stats,function(h) calcStat(h,net))
+  if (is.list(result)) result <- flattenStats(result)
+  result
+}
+
+setNodes <- function (net,values,row=1) {
+  for (nname in names(values)) {
+    node <- PnetFindNode(net,nname)
+    if (is.null(node)) stop ("Could not find node named ",nname)
+    PnodeEvidence(node) <- values[row,nname]
+  }
+  invisible(net)
 }

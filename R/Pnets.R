@@ -58,6 +58,9 @@ setGeneric("PnetOnodes")
 }
 setGeneric("PnetOnodes<-")
 
+
+
+
 BuildAllTables <- function (net, debug=FALSE) {
   netnm <- PnetName(net)
   Errs <- list()
@@ -138,6 +141,16 @@ setGeneric("is.Onode")
 }
 setGeneric("is.Onode<-")
 
+setMethod("is.Onode","Pnode",function(x)
+  "onodes" %in% PnodeLabels(x)
+)
+
+setMethod("is.Onode<-","Pnode",function(x,value) {
+  labels <- setdiff(PnodeLabels(x),"onodes")
+  if (isTRUE(value)) labels <- c("onodes",labels)
+  PnodeLabels(x) <- labels
+  x
+})
 
 PnodeNet <- function (node) {
   UseMethod("PnodeNet")
