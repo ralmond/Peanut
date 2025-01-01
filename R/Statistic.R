@@ -18,24 +18,97 @@ setMethod("show","Statistic",function(object) {
 setGeneric("StatName",function(x) standardGeneric("StatName"))
 setMethod("StatName","Statistic", function(x) x@name)
 
+setGeneric("StatNode",function(x) standardGeneric("StatNode"))
+setMethod("StatNode","Statistic", function(x) x@node)
+
+setGeneric("StatFun",function(x) standardGeneric("StatFun"))
+setMethod("StatFun","Statistic", function(x) x@fun)
+
+
 setGeneric("calcStat",function (stat,net) standardGeneric("calcStat"))
 setMethod("calcStat",c("Statistic"),
           function (stat,net) {
+            if (!is.Pnet(net)) 
+              stop("Second argument is not a Pnet.")
             node <- PnetFindNode(net,stat@node)
-            do.call(stat@fun,list(net,node))
+            do.call(stat@fun,list(node,net))
           })
 
 
-setGeneric("PnodeMargin",function(net,node) standardGeneric("PnodeMargin"))
-setGeneric("PnodeEAP",function(net,node) standardGeneric("PnodeEAP"))
-setGeneric("PnodeSD",function(net,node) standardGeneric("PnodeSD"))
-setGeneric("PnodeMedian",function(net,node) standardGeneric("PnodeMedian"))
-setGeneric("PnodeMode",function(net,node) standardGeneric("PnodeMode"))
+setGeneric("PnodeMargin",function(node,net=NULL) standardGeneric("PnodeMargin"))
+setGeneric("PnodeEAP",function(node,net=NULL) standardGeneric("PnodeEAP"))
+setGeneric("PnodeSD",function(node,net=NULL) standardGeneric("PnodeSD"))
+setGeneric("PnodeMedian",function(node,net=NULL) standardGeneric("PnodeMedian"))
+setGeneric("PnodeMode",function(node,net=NULL) standardGeneric("PnodeMode"))
 
-buildStats <- function(nodes,fun=PnodeEAP) {
-  if (is.character(nodes))
-      return(sapply(nodes,function(nd) Statistic(fun,nd)))
-  sapply(nodes,function(nd) Statistic(fun,PnodeName(nd)))
+setMethod("PnodeMargin",c("character"),
+          function(node,net=NULL) {
+            if (missing(net) || !is.Pnet(net)) {
+              stop("When node is a name, network argument must be a Pnet.")
+            }
+            anode <- PnetFindNode(net,node)
+            if (is.null(anode)) {
+              stop("Node ",node," not found in ",PnetName(net),".")
+            }
+            PnodeMargin(anode,net)
+          })
+setMethod("PnodeEAP",c("character"),
+          function(node,net=NULL) {
+            if (missing(net) || !is.Pnet(net)) {
+              stop("When node is a name, network argument must be a Pnet.")
+            }
+            anode <- PnetFindNode(net,node)
+            if (is.null(anode)) {
+              stop("Node ",node," not found in ",PnetName(net),".")
+            }
+            PnodeEAP(anode,net)
+          })
+setMethod("PnodeSD",c("character"),
+          function(node,net=NULL) {
+            if (missing(net) || !is.Pnet(net)) {
+              stop("When node is a name, network argument must be a Pnet.")
+            }
+            anode <- PnetFindNode(net,node)
+            if (is.null(anode)) {
+              stop("Node ",node," not found in ",PnetName(net),".")
+            }
+            PnodeSD(anode,net)
+          })
+setMethod("PnodeMedian",c("character"),
+          function(node,net=NULL) {
+            if (missing(net) || !is.Pnet(net)) {
+              stop("When node is a name, network argument must be a Pnet.")
+            }
+            anode <- PnetFindNode(net,node)
+            if (is.null(anode)) {
+              stop("Node ",node," not found in ",PnetName(net),".")
+            }
+            PnodeMedian(anode,net)
+          })
+setMethod("PnodeMode",c("character"),
+          function(node,net=NULL) {
+            if (missing(net) || !is.Pnet(net)) {
+              stop("When node is a name, network argument must be a Pnet.")
+            }
+            anode <- PnetFindNode(net,node)
+            if (is.null(anode)) {
+              stop("Node ",node," not found in ",PnetName(net),".")
+            }
+            PnodeMode(anode,net)
+          })
+
+          
+
+buildStats <- function(nodes,fun=c("PnodeEAP","PnodeMargin",
+                                   "PnodeMedian","PnodeSD",
+                                   "PnodeMode")) {
+  if (length(fun) > 1L) {
+    do.call("c",sapply(fun,function(f) buildStats(nodes,f))) 
+  } else {
+    if (is.character(nodes))
+        return(sapply(nodes,function(nd) Statistic(fun,nd)))
+    sapply(nodes,function(nd) Statistic(fun,PnodeName(nd)))
+  }
 }
 
 flattenStats <- function(statlist) {
