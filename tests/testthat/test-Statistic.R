@@ -42,7 +42,7 @@ test_that("PnodeMargin",{
   BuildAllTables(irt10)
   PnetCompile(irt10)
   
-  expect_equal(PnodeMargin(irt10,"theta"),
+  expect_equal(PnodeMargin("theta",irt10),
                c(VH=.2,High=.2,Mid=.2,Low=.2,VL=.2),
                tolerance=.00001)
     
@@ -55,7 +55,7 @@ test_that("PnodeEAP",{
   BuildAllTables(irt10)
   PnetCompile(irt10)
   
-  expect_equal(PnodeEAP(irt10,"theta"),0,tolerance=.0001)
+  expect_equal(PnodeEAP("theta",irt10),0,tolerance=.0001)
   
 })
 
@@ -66,7 +66,7 @@ test_that("PnodeSD",{
   BuildAllTables(irt10)
   PnetCompile(irt10)
   
-  expect_equal(PnodeSD(irt10,"theta"),.8757,tolerance=.0001)
+  expect_equal(PnodeSD("theta",irt10),.8757,tolerance=.0001)
   
 })
 
@@ -77,7 +77,7 @@ test_that("PnodeMedian",{
   BuildAllTables(irt10)
   PnetCompile(irt10)
   
-  expect_equal(PnodeMedian(irt10,"theta"),"Mid")
+  expect_equal(PnodeMedian("theta",irt10),"Mid")
   
 })
 
@@ -88,7 +88,7 @@ test_that("PnodeMode",{
   BuildAllTables(irt10)
   PnetCompile(irt10)
   
-  expect_equal(PnodeMode(irt10,"theta"),"VH")
+  expect_equal(PnodeMode("theta",irt10),"VH")
   
 })
 
@@ -176,8 +176,52 @@ test_that("setNodes",{
   irt10 <- PNetica::local_PNetica_net("IRT10.2PL.base.dne")
   BuildAllTables(irt10)
   PnetCompile(irt10)
+  item1 <- PnetFindNode(irt10,"item1")
+  item2 <- PnetFindNode(irt10,"item2")
+  item3 <- PnetFindNode(irt10,"item3")
   
   vals1 <- data.frame(item1=c("Correct","Correct",NA),
                       item2=c("Correct","Incorrect","Correct"))
   
+  setNodes(irt10,vals1)
+  expect_equal(PnodeEvidence(item1),
+               c(Correct="Correct"))
+  expect_equal(PnodeEvidence(item2),
+               c(Correct="Correct"))
+  expect_equal(PnodeEvidence(item3),NA)
+  expect_equal(PnodeMargin(item1),
+               c(Correct=1,Incorrect=0))
+  expect_equal(PnodeMargin(item2),
+               c(Correct=1,Incorrect=0))
+  expect_gt(PnodeMargin(item3)[1],0)
+  expect_lt(PnodeMargin(item3)[1],1)
+  
+  setNodes(irt10,vals1,2)
+  expect_equal(PnodeEvidence(item1),
+               c(Correct="Correct"))
+  expect_equal(PnodeEvidence(item2),
+               c(Incorrect="Incorrect"))
+  expect_equal(PnodeEvidence(item3),NA)
+  expect_equal(PnodeMargin(item1),
+               c(Correct=1,Incorrect=0))
+  expect_equal(PnodeMargin(item2),
+               c(Correct=0,Incorrect=1))
+  expect_gt(PnodeMargin(item3)[1],0)
+  expect_lt(PnodeMargin(item3)[1],1)
+  
+  setNodes(irt10,vals1,3)
+  expect_equal(PnodeEvidence(item1),NA)
+  expect_equal(PnodeEvidence(item2),
+               c(Correct="Correct"))
+  expect_equal(PnodeEvidence(item3),NA)
+  expect_gt(PnodeMargin(item1)[1],0)
+  expect_lt(PnodeMargin(item1)[1],1)
+  expect_equal(PnodeMargin(item2),
+               c(Correct=1,Incorrect=0))
+  expect_gt(PnodeMargin(item3)[1],0)
+  expect_lt(PnodeMargin(item3)[1],1)
+
+  
+  
+
 })
