@@ -1,0 +1,21 @@
+---
+title: "Building Matrixes from Networks"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Building Matrixes from Networks}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+```{r loadLibs}
+library(PNetica)
+```
+
+

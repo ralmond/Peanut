@@ -107,6 +107,7 @@ buildStats <- function(nodes,fun=c("PnodeEAP","PnodeMargin",
   } else {
     if (is.character(nodes))
         return(sapply(nodes,function(nd) Statistic(fun,nd)))
+    if (!is.list(nodes)) nodes <- list(nodes)
     sapply(nodes,function(nd) Statistic(fun,PnodeName(nd)))
   }
 }
@@ -116,6 +117,7 @@ flattenStats <- function(statlist) {
 }
 
 calcStats <- function (stats,net) {
+  if (!is.list(stats)) stats <- list(stats)
   result <- sapply(stats,function(h) calcStat(h,net))
   if (is.list(result)) result <- flattenStats(result)
   result

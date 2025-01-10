@@ -1,0 +1,206 @@
+---
+title: "Exploring Evidence Models"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Exploring Evidence Models}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+```{r loadLibs}
+library(PNetica)
+```
+
+# Introduction
+
+Consider the point in time where the proficiency and evidence models have been built and given parameter by the experts, but data are not yet available to refine the models.  Usually the "experts" who supplied the parameters for the evidence models are experts in a particular domain and/or its pedagogy, and not experts in probability models.  So to evaluate the appropriateness of the evidence models, the statistical parameters need to be translated into something more readily interpretable by the experts.
+
+The function `buildEMTable` assists with this task.  In this table, the columns correspond to statistics of the proficiency model, and the rows to configurations of the evidence models.  The first row is the baseline where nothing is observed, and every other row is a different combination of evidence.  By comparing the first row to the others, the experts can evaluate whether or not the inferences from these evidence models seem reasonable.
+
+# Example 1  Language Model
+
+This assessment is based on an example found in [@Mislevy1995].  It is a test of language arts in which there are four constructs being measured:  _Reading_, _Writing_, _Speaking_ and _Listening_.  Each variable can tale on the possible values `Advanced`, `Intermediate` or `Novice`.
+
+There are four kinds of tasks:
+
+Reading
+: Subjects read a short segment of text and then answer a selected response question.
+
+Writing
+: An integrated Reading/Writing task where the subject provides a short written response based on an reading passage.  Two outcome variables are recorded:  Whether the quality of the writing was good or poor, and whether the response was on-topic or off-topic.
+
+Listening
+: Subject listens to a prompt followed by a multiple choice question where the options are also spoken (as are the instructions).
+
+Speaking
+: Subject is requested to respond verbally (response is recorded) after listening to an audio stimulus.  The instructions are written.
+
+Networks for these are available in the RNetica package.  These can be converted into Peanut format with the use of the PNetica package.
+
+The following code sets up Netica and loads the networks.
+
+```{r setupNetica}
+RNetica::SetupDefaultSession()
+Language <- as.Pnet(RNetica::local_RNetica_net("LanguagePM.dne"))
+Proficiencies <- RNetica::NetworkAllNodes(Language)
+Reading <- as.Pnet(RNetica::local_RNetica_net("ReadingTask.dne"))
+Writing <- as.Pnet(RNetica::local_RNetica_net("Write2EM.dne"))
+Speaking <- as.Pnet(RNetica::local_RNetica_net("SpeakingTask.dne"))
+Listening <- as.Pnet(RNetica::local_RNetica_net("ListeningTask.dne"))
+EMs <- list(Reading=Reading,Writing=Writing,
+            Speaking=Speaking,Listening=Listening)
+Observables <- lapply(EMs,RNetica::NetworkAllNodes)
+
+```
+
+## Selecting statistics
+
+The first step is to figure out which statistics to monitor.  In Peanut, a statistic consists of the name of a node, and a function to call to calculate the statistic for a node.  The name is used, as each student model will have a different copy of the target node, so it needs to be identified by name within the limited environment.  
+
+When this document was prepared, the following statistics are available:
+
+`PnodeMargin`
+: This returns a vector of probabilities giving the (posterior) marginal distribution of the node.
+
+`PnodeMode`
+: This returns the state of the node with the highest probability.  It has a character value.
+
+`PnodeMedian`
+: If the node has ordered states, it returns a state such as such that one-half of the probability mass is at that value or below.
+
+`PnodeEAP`
+: If the states of the node have been assigned numeric values, it returns the expected (_a posteriori_) value.
+
+`PnodeSD`
+: If the states of the node have been assigned numeric values, it returns the standard deviation.
+
+The function `buildStats` can be used to quickly build lists of stats.  The first argument is a list of nodes, or a vector of node names.  The second argument is a list of statistic names.  The function builds statistic objects for each of these.  It is vectorized in both directions
+
+
+
+Same function for each node.
+```{r allvars}
+buildStats(Proficiencies, "PnodeEAP")
+```
+
+Same node for each function.
+```{r manystats}
+# Same variable for each statistic
+buildStats("Reading",c("PnodeEAP","PnodeSD"))
+```
+
+Cross product of nodes and functions.
+```{r manyboth}
+# cross product
+buildStats(Proficiencies,c("PnodeEAP","PnodeSD"))
+```
+
+## Hypothetical observations
+
+Fortunately, exploring hypotheticals with Bayes nets is straightforward.  Set the observable nodes to the hypothesized values and then read off the updated probabilities of the target proficiency variables.  As there is a usually a small number of observable variables in each evidence model with a small number of possible states each, this results in a table with a manageable number of rows (one for each possible configuration).  
+
+The function `allCombinations()` builds up the table of 
+possible results.  Here is the table for the Listening Task.
+
+```{r}
+allCombinations(Observables$Listening)
+```
+And for the reading task:
+```{r}
+allCombinations(Observables$Reading)
+```
+The writing task is a bit more complicated, as it has two observable variables.  In a Bayes net, not all observables need to be observed; assigning the value `NA` to `PnodeEvidence(node)` leaves it unobserved.  There is an optional argument to building the table about whether or not to include `NA` as a possible value.
+
+This first table includes the `NA`s as possibility (`includeNULLs=TRUE`, the default).  Note that the baseline all `NA` case is excluded by default.
+
+```{r}
+allCombinations(Observables$Writing,includeNULLs=TRUE)
+```
+
+To exclude the `NA` possibilities, use `includeNULLs=FALSE`.
+
+```{r}
+allCombinations(Observables$Writing,includeNULLs=FALSE)
+```
+
+## Building the Tables
+
+The function `buildEMTable(cm,em,stats,combos)` builds the tables.  The arguments are the competency model, the evidence model, a list of statistics and a data frame of observable combinations.  Note that the examples here are not built as Pnets, so the default values of the latter two arguments do not work.
+
+### Margin for Reading
+
+The Reading skill is used in all of the tasks.  So lets look about how much information each of the four task types provides about Reading.
+
+```{r}
+buildEMTable(Language,Reading,
+             buildStats(Proficiencies$Reading,"PnodeMargin"),
+             allCombinations(Observables$Reading))
+```
+
+```{r}
+buildEMTable(Language,Listening,
+             buildStats(Proficiencies$Reading,"PnodeMargin"),
+             allCombinations(Observables$Listening))
+```
+
+```{r}
+buildEMTable(Language,Writing,
+             buildStats(Proficiencies$Reading,"PnodeMargin"),
+             allCombinations(Observables$Writing))
+```
+
+### EAP for all skills
+
+```{r}
+buildEMTable(Language,Reading,
+             buildStats(Proficiencies,"PnodeEAP"),
+             allCombinations(Observables$Reading))
+```
+```{r}
+buildEMTable(Language,Writing,
+             buildStats(Proficiencies,"PnodeEAP"),
+             allCombinations(Observables$Writing))
+```
+```{r}
+buildEMTable(Language,Speaking,
+             buildStats(Proficiencies,"PnodeEAP"),
+             allCombinations(Observables$Speaking))
+```
+```{r}
+buildEMTable(Language,Listening,
+             buildStats(Proficiencies,"PnodeEAP"),
+             allCombinations(Observables$Listening))
+```
+
+### EAP and SD for each skill
+
+```{r}
+buildEMTable(Language,Reading,
+             buildStats(Proficiencies,c("PnodeEAP","PnodeSD")),
+             allCombinations(Observables$Reading))
+```
+```{r}
+buildEMTable(Language,Writing,
+             buildStats(Proficiencies,c("PnodeEAP","PnodeSD")),
+             allCombinations(Observables$Writing))
+```
+```{r}
+buildEMTable(Language,Speaking,
+             buildStats(Proficiencies,c("PnodeEAP","PnodeSD")),
+             allCombinations(Observables$Speaking))
+```
+```{r}
+buildEMTable(Language,Listening,
+             buildStats(Proficiencies,c("PnodeEAP","PnodeSD")),
+             allCombinations(Observables$Listening))
+```
+
+
+### Adjusting the Starting stop.
