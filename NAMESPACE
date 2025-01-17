@@ -111,7 +111,6 @@ exportMethods(PnodeStates, "PnodeStates<-", PnodeNumStates,
        PnodeStateDescriptions, "PnodeStateDescriptions<-",
        PnodeStateValues, "PnodeStateValues<-",
        PnodeStateBounds, "PnodeStateBounds<-",
-       is.PnodeContinuous,
        PnodeStateDF, "PnodeStateDF<-",
        PnodeAddStates, PnodeRemoveStates,
        PnodeReorderStates)
