@@ -102,7 +102,7 @@ export(PnodeStates, "PnodeStates<-", PnodeNumStates,
        PnodeStateDescriptions, "PnodeStateDescriptions<-",
        PnodeStateValues, "PnodeStateValues<-",
        PnodeStateBounds, "PnodeStateBounds<-",
-       is.PnodeContinuous,
+       isPnodeContinuous,
        PnodeStateDF, "PnodeStateDF<-",
        PnodeAddStates, PnodeRemoveStates,
        PnodeReorderStates)
