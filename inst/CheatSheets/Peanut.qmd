@@ -35,81 +35,81 @@ library(PNetica)
 
 ## Warehouses
 
-   - `PnetWarehouse`
-   - `PnodeWarehouse`
-   - `WarehouseManifest`
-   - `is.PnodeWarehouse`, `is.PnetWarehouse`,
-   - `is.legal.name`, `as.legal.name`
-   - `is.valid`
-   - `BuildNetManifest`, `BuildNodeManifest`
-   - `WarehouseData`
-   - `WarehouseFetch`
-   - `WarehouseMake`
-   - `WarehouseSupply`
-   - `WarehouseFree`, `ClearWarehouse`
-   - `WarehouseCopy`
-   - `WarehouseSave`
-   - `WarehouseUnpack`
+   - `r args(PnetWarehouse)`
+   - `r args(PnodeWarehouse)`
+   - `r args(WarehouseManifest)`
+   - `r args(is.PnodeWarehouse)`, `r args(is.PnetWarehouse)`,
+   - `r args(is.legal.name)`, `r args(as.legal.name)`
+   - `r args(is.valid)`
+   - `r args(BuildNetManifest)`, `r args(BuildNodeManifest)`
+   - `r args(WarehouseData)`
+   - `r args(WarehouseFetch)`
+   - `r args(WarehouseMake)`
+   - `r args(WarehouseSupply)`
+   - `r args(WarehouseFree)`, `r args(ClearWarehouse)`
+   - `r args(WarehouseCopy)`
+   - `r args(WarehouseSave)`
+   - `r args(WarehouseUnpack)`
 
 ## Network Generic Functions
 
-   - `Pnet`, `is.Pnet`, `as.Pnet`
-   - `PnetPnodes`
-   - `PnetOnodes`
-   - `PnetName`, `PnetTitle`, `PnetDescription`
-   - `PnetPathname`
-   - `PnetFindNode`
-   - `PnetPriorWeight`
+   - `r args(Pnet)`, `r args(is.Pnet)`, `r args(as.Pnet)`
+   - `r args(PnetPnodes)`
+   - `r args(PnetOnodes)`
+   - `r args(PnetName)`, `r args(PnetTitle)`, `r args(PnetDescription)`
+   - `r args(PnetPathname)`
+   - `r args(PnetFindNode)`
+   - `r args(PnetPriorWeight)`
    
 ## Node Generic Functions
 
-   - `Pnode`, `is.Pnode`, `as.Pnode`
-   - `is.Onode`
-   - `PnodeNet`
-   - `PnodeName`, `PnodeTitle`, `PnodeDescription`
-   - `PnodeParents`,
-   - `PnodeParentNames`, `PnodeNumParents`, `PnodeParentStates`
-   - `isPnodeContinuous`
-   - `PnodeLabels`
-   - `PnodeStates`, `PnodeStateTitles`, `PnodeStateDescriptions`,
-   - `PnodeStateValues`
-   - `PnodeStateBounds`
-   - `PnodeProbs`
-   - `PnodePriorWeight`, `PnodePostWeight`, `GetPriorWeight`
+   - `r args(Pnode)`, `r args(is.Pnode)`, `r args(as.Pnode)`
+   - `r args(is.Onode)`
+   - `r args(PnodeNet)`
+   - `r args(PnodeName)`, `r args(PnodeTitle)`, `r args(PnodeDescription)`
+   - `r args(PnodeParents)`,
+   - `r args(PnodeParentNames)`, `r args(PnodeNumParents)`, `r args(PnodeParentStates)`
+   - `r args(isPnodeContinuous)`
+   - `r args(PnodeLabels)`
+   - `r args(PnodeStates)`, `r args(PnodeStateTitles)`, `r args(PnodeStateDescriptions)`,
+   - `r args(PnodeStateValues)`
+   - `r args(PnodeStateBounds)`
+   - `r args(PnodeProbs)`
+   - `r args(PnodePriorWeight)`, `r args(PnodePostWeight)`, `r args(GetPriorWeight)`
    
 
 ## Node Parameterizations
 
-   - `PnodeQ`
-   - `PnodeRules`
-   - `PnodeLink`
-   - `PnodeAlphas`, `PnodeLnAlphas`
-   - `PnodeBetas`
-   - `PnodeDefaultAlphas`, `PnodeDefaultBetas`
-   - `PnodeParentTvals`
-   - `PnodeLinkScale`
+   - `r args(PnodeQ)`
+   - `r args(PnodeRules)`
+   - `r args(PnodeLink)`
+   - `r args(PnodeAlphas)`, `r args(PnodeLnAlphas)`
+   - `r args(PnodeBetas)`
+   - `r args(PnodeDefaultAlphas)`, `r args(PnodeDefaultBetas)`
+   - `r args(PnodeParentTvals)`
+   - `r args(PnodeLinkScale)`
 
 
 ## Parameter Calculation
 
-- `BuildAllTables`, `BuildTable`
-- `GEMfit`
-- `calcPnetLLike`
-- `calcExpTables`
-- `maxCPTParm`, `maxAllTableParams`
+- `r args(BuildAllTables)`, `r args(BuildTable)`
+- `r args(GEMfit)`
+- `r args(calcPnetLLike)`
+- `r args(calcExpTables)`
+- `r args(maxCPTParm)`, `r args(maxAllTableParams)`
 
 ## Inference and Statistics
 
-- `PnetCompile`
-- `PnetMakeStubNodes`, `PnetRemoveStubNodes`
-- `PnetDetach`, `PnetCompile`
-- `PnetEvidence`
-- `Statistics`
-- `StatName`, `StatNode`, `StatFun`
-- `PnodeMargin`, `PnodeEAP`, `PnodeSD`, `PnodeMedian`, `PnodeMode`
-- `calcStat`, `calcStats`
-- `buildStats`
-- `setNodes`
+- `r args(PnetCompile)`
+- `r args(PnetMakeStubNodes)`, `r args(PnetRemoveStubNodes)`
+- `r args(PnetDetach)`, `r args(PnetCompile)`
+- `r args(PnetEvidence)`
+- `r args(Statistics)`
+- `r args(StatName)`, `r args(StatNode)`, `r args(StatFun)`
+- `r args(PnodeMargin)`, `r args(PnodeEAP)`, `r args(PnodeSD)`, `r args(PnodeMedian)`, `r args(PnodeMode)`
+- `r args(calcStat)`, `r args(calcStats)`
+- `r args(buildStats)`
+- `r args(setNodes)`
 
 <!-- Page 2 -->
 
@@ -117,23 +117,23 @@ library(PNetica)
 
 ## Graph Layout
 
-   - `PnodeVisPos`
-   - `pnet2Igraph`
-   - `PnetIGLayout`
+   - `r args(PnodeVisPos)`
+   - `r args(pnet2Igraph)`
+   - `r args(PnetIGLayout)`
 
 ## Gadgets
 
-- `CompensatoryGadget`, `MakeCompensatoryGadget`
-- `OffsetGadget`, `MakeOffsetGadget`
-- `RegressionGadget`, `MakeRegressionGadget`
-- `DPCGadget`, `MakeDPCGadget`
+- `r args(CompensatoryGadget)`, `r args(MakeCompensatoryGadget)`
+- `r args(OffsetGadget)`, `r args(MakeOffsetGadget)`
+- `r args(RegressionGadget)`, `r args(MakeRegressionGadget)`
+- `r args(DPCGadget)`, `r args(MakeDPCGadget)`
 
 ## Utilities
 
-- `allCombinations`
-- `buildEMTable`
-- `flog.try`
-- `flattenStats`
+- `r args(allCombinations)`
+- `r args(buildEMTable)`
+- `r args(flog.try)`
+- `r args(flattenStats)`
 
 
 

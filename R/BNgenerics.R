@@ -53,60 +53,6 @@ setGeneric("PnodeVisPos")
   UseMethod("PnodeVisPos")
 setGeneric("PnodeVisPos<-")
 
-##### States
-
-
-PnodeStates <- function (node)
-  UseMethod("PnodeStates")
-setGeneric("PnodeStates")
-
-"PnodeStates<-" <- function (node,value)
-  UseMethod("PnodeStates<-")
-setGeneric("PnodeStates<-")
-
-PnodeNumStates <- function (node)
-  UseMethod("PnodeNumStates")
-setGeneric("PnodeNumStates")
-
-PnodeNumStates.default <- function (node) length(PnodeStates(node))
-
-PnodeStateTitles <- function (node)
-  UseMethod("PnodeStateTitles")
-setGeneric("PnodeStateTitles")
-
-"PnodeStateTitles<-" <- function (node,value)
-  UseMethod("PnodeStateTitles<-")
-setGeneric("PnodeStateTitles<-")
-
-PnodeStateDescriptions <- function (node)
-  UseMethod("PnodeStateDescriptions")
-setGeneric("PnodeStateDescriptions")
-
-"PnodeStateDescriptions<-" <- function (node,value)
-  UseMethod("PnodeStateDescriptions<-")
-setGeneric("PnodeStateDescriptions<-")
-
-PnodeStateValues <- function (node)
-  UseMethod("PnodeStateValues")
-setGeneric("PnodeStateValues")
-
-"PnodeStateValues<-" <- function (node,value)
-  UseMethod("PnodeStateValues<-")
-setGeneric("PnodeStateValues<-")
-
-
-PnodeStateBounds <- function (node)
-  UseMethod("PnodeStateBounds")
-setGeneric("PnodeStateBounds")
-
-"PnodeStateBounds<-" <- function (node,value)
-  UseMethod("PnodeStateBounds<-")
-setGeneric("PnodeStateBounds<-")
-
-
-isPnodeContinuous <- function (node)
-  UseMethod("isPnodeContinuous")
-setGeneric("isPnodeContinuous")
 
 PnodeEvidence <- function (node)
   UseMethod("PnodeEvidence")

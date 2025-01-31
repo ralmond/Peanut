@@ -1,6 +1,6 @@
 Package: Peanut
-Version: 0.10-1
-Date: 2025/01/01
+Version: 0.11-1
+Date: 2025/01/16
 Title: Parameterized Bayesian Networks, Abstract Classes
 Author: Russell Almond
 Maintainer: Russell Almond <ralmond@fsu.edu>
@@ -33,7 +33,7 @@ Description: This provides support of learning conditional probability
     engines.  The companion pacakge PNetica provides an implementation
     using Netica and RNetica. 
 License: Artistic-2.0 
-URL: http://pluto.coe.fsu.edu/RNetica
+URL: http://myweb.fsu.edu/ralmond/RNetica
 Support: c(
    'Bill & Melinda Gates Foundation grant
    "Games as Learning/Assessment:  Stealth Assessment" (#0PP1035331,

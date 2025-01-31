@@ -160,6 +160,18 @@ PnodeSetQuad <- function(node,cuts,vals=(cuts[-length(cuts)]+cuts[-1])/2)
   UseMethod("PnodeSetQuad")
 setGeneric("PnodeSetQuad")
 
+PnodeSetQuad.default <- function(node,cuts,vals=(cuts[-length(cuts)]+cuts[-1])/2) {
+  bounds <- cbind(cuts[-length(cuts)],cuts[-1])
+  names <- paste0("Q",1:length(cuts))
+  titles <- paste("[",bounds[,1],",",bounds[,2],")")
+  PnodeStates(node)<-names
+  PnodeStateTitles(node)<-titles
+  PnodeStateValues(node) <- values
+  PnodeStateBounds(node) <- bounds
+}
+
+
+
 PnodeDistQuad <- function(node,K,Fp=qnorm) {
   PnodeSetQuad(node,Fp((0:K)/K),Fp((.5+1:(K-1))/K))
 }
