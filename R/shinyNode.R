@@ -144,14 +144,13 @@ MakeCompensatoryGadget <- function(pnode, color="firebrick") {
       shiny::stopApp(reassembleNode())
     })
   }
-  list(ui=ui,server=server)
+  shiny::shinyApp(ui=ui,server=server)
 }
 
 CompensatoryGadget <- function(pnode, color="firebrick",
                                viewer=shiny::paneViewer()) {
   gadget=MakeCompensatoryGadget(pnode,color)
-  shiny::runGadget(gadget$ui,gadget$server,
-            viewer=viewer)
+  shiny::runGadget(gadget,viewer=viewer)
 }
 
 MakeOffsetGadget <- function(pnode, color="plum"){
@@ -310,14 +309,13 @@ MakeOffsetGadget <- function(pnode, color="plum"){
       shiny::stopApp(reassembleNode())
     })
   }
-  list(ui=ui,server=server)
+  shiny::shinyApp(ui=ui,server=server)
 }
 
 OffsetGadget <- function(pnode, color="plum",
                          viewer=shiny::paneViewer()) {
   gadget=MakeOffsetGadget(pnode,color)
-  shiny::runGadget(gadget$ui,gadget$server,
-            viewer=viewer)
+  shiny::runGadget(gadget, viewer=viewer)
 }
 
 
@@ -482,15 +480,14 @@ MakeRegressionGadget <- function(pnode, useR2=PnodeNumParents(pnode)>0L,
       shiny::stopApp(reassembleNode())
     })
   }
-  list(ui=ui,server=server)
+  shiny::shinyApp(ui=ui,server=server)
 }
 
 RegressionGadget <- function(pnode, useR2=PnodeNumParents(pnode)>0L,
                              color = "sienna",
                              viewer=shiny::paneViewer()) {
   gadget=MakeRegressionGadget(pnode,useR2,color)
-  shiny::runGadget(gadget$ui,gadget$server,
-            viewer=viewer)
+  shiny::runGadget(gadget, viewer=viewer)
 }
 
 
@@ -809,14 +806,13 @@ MakeDPCGadget <- function(pnode, color="steelblue"){
       }
     })
   }
-  list(ui=ui,server=server)
+  shiny::shinyApp(ui=ui,server=server)
 }
 
 DPCGadget <- function(pnode, color="steelblue",
                       viewer=shiny::paneViewer()) {
   gadget=MakeDPCGadget(pnode,color)
-  shiny::runGadget(gadget$ui,gadget$server,
-            viewer=viewer)
+  shiny::runGadget(gadget, viewer=viewer)
 }
 
 

@@ -22,10 +22,10 @@ PnodeDefaultBetas(node, rule=PnodeRules(node), link=PnodeLink(node))
     \code{\link{PnodeLnAlphas}} or \code{\link{PnodeBetas}} field is to
     be set.
   }
-  \item{rule}{A rule (e.g., \code{\link{Compensatory}}, 
-    \code{\link{OffsetConjunctive}} or the name of a rule.
+  \item{rule}{A rule (e.g., \code{\link[CPTtools]{Compensatory}}, 
+    \code{\link[CPTtools]{OffsetConjunctive}} or the name of a rule.
   }
-  \item{link}{A link function (e.g., \code{\link{partialCredit}})
+  \item{link}{A link function (e.g., \code{\link[CPTtools]{partialCredit}})
     or the name of a link function.}
 }
 \value{

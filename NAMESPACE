@@ -4,6 +4,7 @@ importFrom(CPTtools,getOffsetRules)
 importFrom(CPTtools,isOffsetRule)
 importFrom(CPTtools,calcDPCFrame,calcDPCTable,barchart.CPF)
 importFrom("utils", "limitedLabels", "recover")
+importFrom("stats", "qnorm")
 import(futile.logger)
 
 ## Pnet and Pnode interfaces

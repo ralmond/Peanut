@@ -12,14 +12,15 @@
   
 }
 \usage{
-buildEMTable(cm, em, stats = buildStats(PnetPnodes(cm), PnodeEAP), combos = allCombinations(PnetOnodes(em)))
+buildEMTable(cm, em, stats = buildStats(PnetPnodes(cm), "PnodeEAP"), 
+             combos = allCombinations(PnetOnodes(em)))
 }
 \arguments{
   \item{cm}{A \code{\linkS4class{Pnet}} object which contains the 
     competency model.}
   \item{em}{A \code{\linkS4class{Pnet}} object which contains the 
     evidence model.}
-  \item{stats}{A list of \code{\linkS4class{Statitic}} objects 
+  \item{stats}{A list of \code{\linkS4class{Statistic}} objects 
     which correspond to the columns of the output table.}
   \item{combos}{A data frame whose columns represent observable 
     variables, and whose cells contain values for those variables. 

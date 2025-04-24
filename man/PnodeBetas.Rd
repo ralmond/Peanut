@@ -116,7 +116,7 @@ PnodeBetas(node) <- value
   Also, if the value of \code{\link{PnodeQ}(node)} is not a matrix
   of all \code{TRUE} values, then the effective number of parents for
   each state transition could be different.  In this case, if the
-  \code{\link{OffsetConjunctive}} or \code{\link{OffsetDisjunctive}}
+  \code{\link[CPTtools]{OffsetConjunctive}} or \code{\link[CPTtools]{OffsetDisjunctive}}
   rule is used the value of \code{PnodeBetas(node)} should be a list of
   vectors of different lengths (corresponding to the number of true
   entries in each row of \code{\link{PnodeQ}(node)}).
