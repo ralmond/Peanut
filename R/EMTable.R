@@ -10,7 +10,21 @@ allCombinations <- function (nodes, includeNULLs=TRUE) {
   if (isTRUE(includeNULLs)) return(result[-1,,drop=FALSE])
   result
 }
-  
+
+allSingleObs <- function (nodes) {
+  if (!is.list(nodes)) nodes <- list(nodes)
+  statecounts <- lapply(nodes,function(n) PnodeNumStates(n))
+  firstrow <- cumsum(c(0L,statecounts))
+  totrow <- firstrow[length(firstrow)]
+  firstrow <- firstrow[-length(firstrow)]
+  do.call("data.frame",
+          mapply(function(n,r) {
+            k <- PnodeNumStates(n)
+            c(rep(NA,r),PnodeStates(n),rep(NA,totrow-k-r))
+          }, nodes,firstrow, SIMPLIFY = FALSE))
+}  
+
+
 buildEMTable <- function(cm,em,stats=buildStats(PnetPnodes(cm),"PnodeEAP"),
                            combos=allCombinations(PnetOnodes(em))) {
   cm1 <- RNetica::local_copy_nets(cm,paste0(PnetName(cm),"_emtest"))

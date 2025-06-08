@@ -49,9 +49,9 @@ setGeneric("PnodeStateBounds")
 setGeneric("PnodeStateBounds<-")
 
 
-isPnodeContinuous <- function (node)
-  UseMethod("isPnodeContinuous")
-setGeneric("isPnodeContinuous")
+is.PnodeContinuous <- function (node)
+  UseMethod("is.PnodeContinuous")
+setGeneric("is.PnodeContinuous")
 
 
 PnodeStateDF <- function (node)

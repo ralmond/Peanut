@@ -111,7 +111,6 @@ exportMethods(PnodeStates, "PnodeStates<-", PnodeNumStates,
        PnodeStateDescriptions, "PnodeStateDescriptions<-",
        PnodeStateValues, "PnodeStateValues<-",
        PnodeStateBounds, "PnodeStateBounds<-",
-       is.PnodeContinuous,
        PnodeStateDF, "PnodeStateDF<-",
        PnodeAddStates, PnodeRemoveStates,
        PnodeReorderStates)
@@ -161,7 +160,8 @@ exportClass(Statistic)
 export(StatName, Statistic, calcStat, PnodeMargin, PnodeEAP, PnodeSD,
        PnodeMedian, PnodeMode, flattenStats, buildStats, calcStats)
 exportMethods(calcStat, StatName, StatNode, StatFun)
-export(buildStats,calcStats,setNodes,allCombinations,buildEMTable)
+export(buildStats,calcStats,setNodes,allCombinations,
+       allSingleObs,buildEMTable)
 export(flog.try)
 
 ## Igraphs
