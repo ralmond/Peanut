@@ -782,7 +782,7 @@ Omega2Pnet <- function(OmegaMat,pn,nodewarehouse,
   if (any(is.na(Qcol))) {
     stop ("Could not find Q-matrix columns:",nodenames[is.na(Qcol)])
   }
-  QQ <- OmegaMat[,nodenames]
+  QQ <- as.matrix(OmegaMat[,nodenames])
   if (ncol(QQ) != length(nodenames)) {
     stop("There are not columns corresponding to every variable.")
   }

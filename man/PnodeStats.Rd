@@ -4,6 +4,11 @@
 \alias{PnodeMargin}
 \alias{PnodeMedian}
 \alias{PnodeMode}
+\alias{PnodeEAP,character-method}
+\alias{PnodeSD,character-method}
+\alias{PnodeMargin,character-method}
+\alias{PnodeMedian,character-method}
+\alias{PnodeMode,character-method}
 \title{Pnode Marginal Statistics}
 \description{
 
@@ -33,6 +38,14 @@ PnodeMode(node, net = NULL)
   typically called by \code{\link{calcStat}} which finds the nodes
   corresponding to the named nodes in the statistics.  The \code{net}   
   argument is only used if the supplied statistic is a name.
+  
+   In general, this method dispatches on the type of the node, so uses
+  implementation specific code.  
+  
+  The exception is if the \code{node} argument is a character value.
+  In this case, the \code{net} must be supplied and the function 
+  \code{\link{PnetFindNode}} is called to find the actual node object.
+
 
 }
 \value{
@@ -52,20 +65,10 @@ PnodeMode(node, net = NULL)
 
   
 }
-\details{
-  
-  In general, this method dispatches on the type of the node, so uses
-  implementation specific code.  
-  
-  The exception is if the \code{node} argument is a character value.
-  In this case, the \code{net} must be supplied and the function 
-  \code{\link{PnetFindNode}} is called to find the actual node object.
-
-}
 \note{
   
   The previous implementation had the order of the \code{net} and 
-  \code{node} arguments reversed.  \em{This breaks compatability with 
+  \code{node} arguments reversed.  \emph{This breaks compatability with 
   code written against 0.9 and earlier versions.}  However, as I was 
   working with the package, the need to be able to call 
   `PnodeMargin(node)` to look at the current value of a node seemed too 

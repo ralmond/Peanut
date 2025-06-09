@@ -17,7 +17,6 @@ PnetOnodes(net) <- value
 is.Onode(x)
 \S4method{is.Onode}{Pnode}(x)
 is.Onode(x)<- value
-\S4method{is.Onode<-}{Pnode}(x,value)
 }
 \arguments{
   \item{net}{An object of class \code{\linkS4class{Pnet}} in which the observables are nodes.}
@@ -27,7 +26,8 @@ is.Onode(x)<- value
 \details{
 
   A node is marked as an observable by adding 
-  \dquote{onode} to its \code{\link{NodeLabels}}.  Certain   functions operate on observables.
+  \dQuote{onode} to its \code{\link{PnodeLabels}}.  
+  Certain functions operate on observables.
   
 }
 \value{
@@ -45,23 +45,7 @@ is.Onode(x)<- value
 ##--	or standard data sets, see data().
 
 ## The function is currently defined as
-new("standardGeneric", .Data = function (net) 
-standardGeneric("PnetOnodes"), generic = structure("PnetOnodes", package = "Peanut"), 
-    package = "Peanut", group = list(), valueClass = character(0), 
-    signature = "net", default = new("derivedDefaultMethod", 
-        .Data = function (net) 
-        {
-            UseMethod("PnetOnodes")
-        }, target = new("signature", .Data = "ANY", names = "net", 
-            package = "methods"), defined = new("signature", 
-            .Data = "ANY", names = "net", package = "methods"), 
-        generic = structure("PnetOnodes", package = "Peanut")), 
-    skeleton = (new("derivedDefaultMethod", .Data = function (net) 
-    {
-        UseMethod("PnetOnodes")
-    }, target = new("signature", .Data = "ANY", names = "net", 
-        package = "methods"), defined = new("signature", .Data = "ANY", 
-        names = "net", package = "methods"), generic = structure("PnetOnodes", package = "Peanut")))(net))
+
 }
 % Add one or more standard keywords, see file 'KEYWORDS' in the
 % R documentation directory (show via RShowDoc("KEYWORDS")):

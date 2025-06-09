@@ -1,7 +1,7 @@
 \name{PnodeProbs}
 \alias{PnodeProbs}
 \alias{PnodeProbs<-}
-\title{  Gets or sets the conditional probability table associated with a
+\title{Gets or sets the conditional probability table associated with a
   Netica node.
 }
 \description{
@@ -59,7 +59,7 @@ PnodeProbs(node) <- value
 \value{
 
   A conditional probability array of class
-  \code{c("\link{CPA}","array")}.  See \code{\link[CPTtools]{CPA}}.
+  \code{c("CPA","array")}.  See \code{\link[CPTtools]{CPA}}.
 
 }
 \author{Russell Almond}

@@ -36,7 +36,7 @@ Pnet2Qmat(obs, prof, defaultRule = "Compensatory",
     \code{\link[CPTtools]{Compensatory}}).  
   }
   \item{defaultLink}{This should be a character scalar giving the name
-    of a CPTtools link function (see \code{\link{partialCredit}}).}
+    of a CPTtools link function (see \code{\link[CPTtools]{partialCredit}}).}
   \item{defaultAlpha}{A numeric scalar giving the default value for
     slope parameters.}
   \item{defaultBeta}{A numeric scalar giving the default value for

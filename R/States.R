@@ -96,7 +96,7 @@ PnodeAddStates <- function(node, newstates, after=Inf) {
   }
   K1 <- K+length(newstates)
   sdf <- sdf[1L:K1,]
-  sdf$Name[(K+1L):K1]<-newnames
+  sdf$Name[(K+1L):K1]<-newstates
   if (after < 1L) {
     sdf <- sdf[c((K+1L):K1,1L:K),]
   } else if (after > K) {
@@ -134,7 +134,7 @@ PnodeReorderStates.default <- function(node, neworder) {
   if (!is.numeric(neworder)) {
     pm <- pmatch(neworder,sdf$Name)
     if (any(is.na(pm)))
-      stop("Did not find states ",whichstates, " in node ",PnodeName(node))
+      stop("Did not find states ",neworder, " in node ",PnodeName(node))
     neworder <- pm
   }
   PnodeStateDF(node) <- sdf[neworder,]

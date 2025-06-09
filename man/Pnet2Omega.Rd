@@ -28,7 +28,7 @@ Pnet2Omega(net, prof, defaultRule = "Compensatory", defaultLink = "normalLink",
     only value that makes sense.
   }
   \item{defaultLink}{This should be a character scalar giving the name
-    of a CPTtools link function (see \code{\link{normalLink}}).  With
+    of a CPTtools link function (see \code{\link[CPTtools]{normalLink}}).  With
     the regression model assumed in the algorithm, currently
     \dQuote{normalLink} is the only value that makes sense.}
   \item{defaultAlpha}{A numeric scalar giving the default value for
@@ -82,8 +82,8 @@ Pnet2Omega(net, prof, defaultRule = "Compensatory", defaultLink = "normalLink",
   were correctly entered if the Omega matrix is being used for data
   entry.
 
-  When the link function is set to \code{\link{normalLink}} and the
-  rules is set of \code{\link{Compensatory}} the model is described as a
+  When the link function is set to \code{\link[CPTtools]{normalLink}} and the
+  rules is set of \code{\link[CPTtools]{Compensatory}} the model is described as a
   series of regressions.  Consider Node \eqn{j} which has \eqn{K}
   parents.  Let \eqn{\theta_j} be a real value corresponding to that
   node and let \eqn{\theta_k} be a real (standard normal)
@@ -184,16 +184,16 @@ Pnet2Omega(net, prof, defaultRule = "Compensatory", defaultLink = "normalLink",
   While the Omega matrix allows the user to specify both link function
   and combination rule, the description of the Bayesian network as a
   series of regressions only really makes sense when the link function
-  is \code{\link{normalLink}} and the combination rule is
-  \code{\link{Compensatory}}.  These are included for future exapnsion.
+  is \code{\link[CPTtools]{normalLink}} and the combination rule is
+  \code{\link[CPTtools]{Compensatory}}.  These are included for future exapnsion.
 
   The representation, using a single row of the data frame for each node
   in the graph, only works well with the normal link function.  In
   particular, both the partial credit and graded response links require
   the ability to specify different intercepts for different states of
   the variable, something which is not supported in the Omega matrix.
-  Furthermore, the \code{\link{OffsetConjunctive}} rule requires
-  multiple intercepts.  Presumable the \code{\link{Conjunctive}} rule
+  Furthermore, the \code{\link[CPTtools]{OffsetConjunctive}} rule requires
+  multiple intercepts.  Presumable the \code{\link[CPTtools]{Conjunctive}} rule
   could be used, but the interpretation of the slope parameters is then
   unclear. If the variables need a model other than the compensatory
   normal model, it might be better to use a Q-matrix (see
