@@ -244,6 +244,7 @@ Qmat2Pnet <- function (Qmat, nethouse,nodehouse,defaultRule="Compensatory",
   if (!is.PnetWarehouse(nethouse)) {
     stop("Net warehouse must be supplied.")
   }
+  Qmat <- as.data.frame(Qmat) # Tibbles will break us.
   foundCols <- (Qmat.reqcol %in% names(Qmat))
   if (!all(foundCols)) {
     flog.error("Q-matrix missing columns:", Qmat.reqcol[!foundCols],
@@ -742,6 +743,7 @@ Omega2Pnet <- function(OmegaMat,pn,nodewarehouse,
   if (!is.PnodeWarehouse(nodewarehouse)) {
     stop("Node warehouse must be supplied.")
   }
+  OmegaMat <- as.data.frame(OmegaMat) # Tibbles break the code.
   if (!all(Omega.reqcol %in% names(OmegaMat))) {
       flog.error("Omega matrix missing columns %s.",
                  paste(setdiff(Omega.reqcol,names(OmegaMat)),collapse=", "))
