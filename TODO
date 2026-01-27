@@ -10,3 +10,8 @@ Refactor using modular shiny procedures.
 https://docs.google.com/spreadsheets/d/{key}/gviz/tq?tqx=out:csv&sheet={sheet_name}
 
 https://docs.google.com/spreadsheets/d/1UoIfFQn5TUwDBDWqxBEQxkwJbUHHjlo7WDCebvzx9j8/edit?usp=sharing
+
+
+* Switch list--vector structure to data.frame
+
+* Remove dependence on flogger, go to thowing error

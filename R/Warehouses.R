@@ -18,7 +18,7 @@ WarehouseData <- function (warehouse,name)
     UseMethod("WarehouseData")
 setGeneric("WarehouseData")
 
-WarehouseSupply <- function(warehouse,name)
+WarehouseSupply <- function(warehouse,name,restoreOnly=FALSE)
   UseMethod("WarehouseSupply")
 setGeneric("WarehouseSupply")
 
@@ -30,10 +30,11 @@ setGeneric("WarehouseInventory")
 
 
 
-setMethod("WarehouseSupply", c("ANY"), function(warehouse,name) {
+setMethod("WarehouseSupply", c("ANY"),
+          function(warehouse,name,restoreOnly=FALSE) {
   val <- WarehouseFetch(warehouse,name)
   if (is.null(val))
-    val <- WarehouseMake(warehouse,name)
+    val <- WarehouseMake(warehouse,name,restoreOnly)
   val
 })
 
@@ -41,7 +42,7 @@ WarehouseFetch <- function (warehouse,name)
     UseMethod("WarehouseFetch")
 setGeneric("WarehouseFetch")
 
-WarehouseMake <- function (warehouse,name)
+WarehouseMake <- function (warehouse,name,restoreOnly=FALSE)
     UseMethod("WarehouseMake")
 setGeneric("WarehouseMake")
 

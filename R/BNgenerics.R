@@ -59,6 +59,8 @@ PnodeNumStates <- function (node)
   UseMethod("PnodeNumStates")
 setGeneric("PnodeNumStates")
 
+PnodeNumStates.default <- function (node) length(PnodeStates(node))
+
 PnodeStateTitles <- function (node)
   UseMethod("PnodeStateTitles")
 setGeneric("PnodeStateTitles")
@@ -120,16 +122,30 @@ PnodeParentNames <- function (node)
   UseMethod("PnodeParentNames")
 setGeneric("PnodeParentNames")
 
+PnodeParentNames.default <- function (node)
+  sapply(PnodeParents(node),PnodeName)
+
+PnodeParentStates <- function(node)
+  UseMethod("PnodeParentStates")
+setGeneric("PnodeParentStates")
+
+PnodeParentStates.default <- function (node)
+  lapply(PnodeParents(node),PnodeStates)
+
+
 PnodeNumParents <- function (node)
   UseMethod("PnodeNumParents")
 setGeneric("PnodeNumParents")
 
+PnodeNumParents.default <- function (node) length(PnodeParents)
 
 ###############################################################
 ## Pnets
 PnetName <- function (net)
   UseMethod("PnetName")
 setGeneric("PnetName")
+setMethod("PnetName","NULL",function(net) return("NULL"))
+
 
 "PnetName<-" <- function (net, value)
   UseMethod("PnetName<-")

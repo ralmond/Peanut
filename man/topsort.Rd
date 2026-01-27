@@ -41,8 +41,8 @@ topsort(Omega, noisy = FALSE)
 \examples{
 
 ## Sample Omega matrix.
-omegamat <- read.csv(paste(library(help="Peanut")$path, "auxdata",
-                           "miniPP-omega.csv", sep=.Platform$file.sep),
+omegamat <- read.csv(system.file("auxdata", "miniPP-omega.csv",
+                     package="Peanut"),
                      row.names=1,stringsAsFactors=FALSE)
 omega <- as.matrix(omegamat[,2:6])
 

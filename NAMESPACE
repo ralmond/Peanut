@@ -2,14 +2,12 @@ import(methods)
 importFrom(CPTtools,effectiveThetas)
 importFrom(CPTtools,getOffsetRules)
 importFrom(CPTtools,isOffsetRule)
-importFrom(CPTtools,calcDPCFrame,barchart.CPF)
+importFrom(CPTtools,calcDPCFrame,calcDPCTable,barchart.CPF)
 importFrom("utils", "limitedLabels", "recover")
-import(shiny)
-importFrom(shinyjs, useShinyjs, toggleState)
 import(futile.logger)
 
 ## Pnet and Pnode interfaces
-export(is.Pnet, as.Pnet, Pnet,
+export(is.Pnet, as.Pnet, Pnet, 
        PnetPriorWeight, "PnetPriorWeight<-",
        PnetPnodes, "PnetPnodes<-",
        BuildAllTables,
@@ -22,7 +20,7 @@ export(is.Pnet, as.Pnet, Pnet,
        PnodeLink, "PnodeLink<-",
        PnodeLnAlphas, "PnodeLnAlphas<-",
        PnodeAlphas, "PnodeAlphas<-",
-       defaultAlphas, defaultBetas,
+       PnodeDefaultAlphas, PnodeDefaultBetas,
        PnodeBetas, "PnodeBetas<-",
        PnodeLinkScale, "PnodeLinkScale<-",
        BuildTable,GetPriorWeight,PnodeParentTvals
@@ -51,6 +49,8 @@ S3method(is.Pnode, default)
 S3method(PnodeAlphas, default)
 S3method("PnodeAlphas<-", default)
 S3method(PnodeParentTvals, default)
+S3method(PnodeParentNames, default)
+S3method(PnodeParentStates, default)
 
 
 ## BN generics.
@@ -64,7 +64,8 @@ export(PnodeName, "PnodeName<-",
        PnodeStateDescriptions, "PnodeStateDescriptions<-",
        PnodeStateValues, "PnodeStateValues<-",
        PnodeStateBounds, "PnodeStateBounds<-",
-       PnodeParents, "PnodeParents<-", PnodeParentNames, PnodeNumParents,
+       PnodeParents, "PnodeParents<-",
+       PnodeParentNames, PnodeNumParents, PnodeParentStates,
        isPnodeContinuous,
        PnetName, "PnetName<-",
        PnetTitle, "PnetTitle<-",
@@ -85,7 +86,8 @@ exportMethods(PnodeName, "PnodeName<-",
        PnodeStateDescriptions, "PnodeStateDescriptions<-",
        PnodeStateValues, "PnodeStateValues<-",
        PnodeStateBounds, "PnodeStateBounds<-",
-       PnodeParents, "PnodeParents<-", PnodeParentNames, PnodeNumParents,
+       PnodeParents, "PnodeParents<-",
+       PnodeParentNames, PnodeNumParents, PnodeParentStates,
        isPnodeContinuous,
        PnodeEvidence,"PnodeEvidence<-",
        PnetName, "PnetName<-",
@@ -96,6 +98,8 @@ exportMethods(PnodeName, "PnodeName<-",
        PnetMakeStubNodes, PnetRemoveStubNodes,
        PnetAdjoin, PnetDetach, PnetCompile,
        PnetFindNode)
+
+export(PnodeMin)
 
 ## Manifests
 

@@ -17,7 +17,10 @@
 
 }
 \usage{
-Qmat2Pnet(Qmat, nethouse, nodehouse, defaultRule = "Compensatory", defaultLink = "partialCredit", defaultAlpha = 1, defaultBeta = NULL, defaultLinkScale = NULL, defaultPriorWeight=10, debug = FALSE, override = FALSE)
+Qmat2Pnet(Qmat, nethouse, nodehouse, defaultRule = "Compensatory", 
+          defaultLink = "partialCredit", defaultAlpha = 1, 
+          defaultBeta = NULL, defaultLinkScale = NULL, 
+          defaultPriorWeight=10, debug = FALSE, override = FALSE)
 }
 \arguments{
   \item{Qmat}{A \code{\link[base]{data.frame}} containing an augmented
@@ -386,9 +389,9 @@ Qmat2Pnet(Qmat, nethouse, nodehouse, defaultRule = "Compensatory", defaultLink =
 \examples{
 
 ## Sample Q matrix
-Q1 <- read.csv(paste(library(help="Peanut")$path, "auxdata",
-                           "miniPP-Q.csv", sep=.Platform$file.sep),
-               stringsAsFactors=FALSE)
+## Sample Q matrix
+Q1 <- read.csv(system.file("auxdata", "miniPP-Q.csv", package="Peanut"),
+                     stringsAsFactors=FALSE)
 
 \dontrun{
 library(PNetica) ## Needs PNetica
@@ -396,16 +399,16 @@ sess <- NeticaSession()
 startSession(sess)
 curd <- getwd()
 
-netman1 <- read.csv(paste(library(help="Peanut")$path, "auxdata",
-                          "Mini-PP-Nets.csv", sep=.Platform$file.sep),
+netman1 <- read.csv(system.file("auxdata", "Mini-PP-Nets.csv", 
+                                package="Peanut"),
                     row.names=1,stringsAsFactors=FALSE)
 
-nodeman1 <- read.csv(paste(library(help="Peanut")$path, "auxdata",
-                           "Mini-PP-Nodes.csv", sep=.Platform$file.sep),
+nodeman1 <- read.csv(system.file("auxdata", "Mini-PP-Nodes.csv", 
+                                package="Peanut"),
                      row.names=1,stringsAsFactors=FALSE)
 
-omegamat <- read.csv(paste(library(help="Peanut")$path, "auxdata",
-                           "miniPP-omega.csv", sep=.Platform$file.sep),
+omegamat <- read.csv(system.file("auxdata", "miniPP-omega.csv",
+                                package="Peanut"),
                      row.names=1,stringsAsFactors=FALSE)
 
 ## Insures we are building nets from scratch

@@ -72,7 +72,8 @@ CompensatoryGadget(pnode, color="firebrick",viewer=shiny::paneViewer())
   \preformatted{```{css, echo = FALSE}
 .shiny-frame{height: 1000px;}
 ```  
-   } will adjust the space allocated for the gadget to 1000 pixels,
+   } 
+  will adjust the space allocated for the gadget to 1000 pixels,
   allowing for sufficient room for display.
 
 }
@@ -129,4 +130,6 @@ stopSession(sess)
 \keyword{ interface }
 \concept{ CPT }
 \concept{ Compensatory }
+\concept{ partialCredit }
+\concept{ gradedResponse }
 

@@ -1,0 +1,623 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xmi:XMI xmi:version="2.1" xmlns:xmi="http://schema.omg.org/spec/XMI/2.1" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:uml="http://schema.omg.org/spec/UML/2.1">
+  <xmi:Documentation exporter="umbrello uml modeller 2.37.1 (Applications 22.12.1) http://umbrello.kde.org" exporterVersion="2.0.4"/>
+  <uml:Model xmi:id="m1" name="UML Model">
+    <packagedElement xmi:type="uml:Stereotype" xmi:id="folder" name="folder"/>
+    <packagedElement xmi:type="uml:Stereotype" xmi:id="dataType" name="dataType"/>
+    <packagedElement xmi:type="uml:Stereotype" xmi:id="u0Ld30NU62Quw" name="GenericFunction"/>
+    <packagedElement xmi:type="uml:Model" xmi:id="Logical_View" name="Logical View">
+      <uml:Package xmi:id="Datatypes" name="Datatypes" stereotype="folder">
+        <packagedElement xmi:type="uml:DataType" xmi:id="u8WjlFvUdKjdi" name="char" stereotype="dataType" isActive="false"/>
+        <packagedElement xmi:type="uml:DataType" xmi:id="uOOTJ85rljoD6" name="int" stereotype="dataType" isActive="false"/>
+        <packagedElement xmi:type="uml:DataType" xmi:id="uIYASVqWn4QwM" name="float" stereotype="dataType" isActive="false"/>
+        <packagedElement xmi:type="uml:DataType" xmi:id="uPZh0XkRj3nBS" name="double" stereotype="dataType" isActive="false"/>
+        <packagedElement xmi:type="uml:DataType" xmi:id="uKkDVAyq5JfKj" name="bool" stereotype="dataType" isActive="false"/>
+        <packagedElement xmi:type="uml:DataType" xmi:id="uI7CzABTkETZe" name="string" stereotype="dataType" isActive="false"/>
+        <packagedElement xmi:type="uml:DataType" xmi:id="uKhPV3JJOnf22" name="unsigned char" stereotype="dataType" isActive="false"/>
+        <packagedElement xmi:type="uml:DataType" xmi:id="uGSm9tdFqgxyN" name="signed char" stereotype="dataType" isActive="false"/>
+        <packagedElement xmi:type="uml:DataType" xmi:id="uS93IQBapKhZi" name="unsigned int" stereotype="dataType" isActive="false"/>
+        <packagedElement xmi:type="uml:DataType" xmi:id="uFOa5uFPTHQ41" name="signed int" stereotype="dataType" isActive="false"/>
+        <packagedElement xmi:type="uml:DataType" xmi:id="uOzsWRspTPCp7" name="short int" stereotype="dataType" isActive="false"/>
+        <packagedElement xmi:type="uml:DataType" xmi:id="uWi3zLiGn2U6X" name="unsigned short int" stereotype="dataType" isActive="false"/>
+        <packagedElement xmi:type="uml:DataType" xmi:id="uLvOcU0Lw0Ndz" name="signed short int" stereotype="dataType" isActive="false"/>
+        <packagedElement xmi:type="uml:DataType" xmi:id="uTKSAJU6ljwfx" name="long int" stereotype="dataType" isActive="false"/>
+        <packagedElement xmi:type="uml:DataType" xmi:id="uNg4WyZ9JPvDD" name="signed long int" stereotype="dataType" isActive="false"/>
+        <packagedElement xmi:type="uml:DataType" xmi:id="uOH1MxrJEPfwe" name="unsigned long int" stereotype="dataType" isActive="false"/>
+        <packagedElement xmi:type="uml:DataType" xmi:id="uLrNaHOhbxmIi" name="long double" stereotype="dataType" isActive="false"/>
+        <packagedElement xmi:type="uml:DataType" xmi:id="uedDhbVo7egd9" name="wchar_t" stereotype="dataType" isActive="false"/>
+        <packagedElement xmi:type="uml:DataType" xmi:id="uc2ELbIFnyf0y" name="vector(character)" stereotype="dataType"/>
+        <packagedElement xmi:type="uml:DataType" xmi:id="uv27IWLqGxejq" name="logical" stereotype="dataType"/>
+        <packagedElement xmi:type="uml:DataType" xmi:id="uuD600Vsmn8V4" name="list" stereotype="dataType"/>
+        <packagedElement xmi:type="uml:DataType" xmi:id="uvT3XqkeG3iP8" name="Integer" stereotype="dataType"/>
+        <packagedElement xmi:type="uml:DataType" xmi:id="uYwDtPZKl4v9m" name="vector(numeric)" stereotype="dataType"/>
+        <packagedElement xmi:type="uml:DataType" xmi:id="uFp7g4uAaEqui" name="ANY" stereotype="dataType"/>
+        <packagedElement xmi:type="uml:DataType" xmi:id="u7UUqPdBKbmEX" name="character" stereotype="dataType"/>
+        <packagedElement xmi:type="uml:DataType" xmi:id="uKrJpa0ZA4qtE" name="matrix(logical)" stereotype="dataType"/>
+        <packagedElement xmi:type="uml:DataType" xmi:id="uVXa2CfCgM9f7" name="numeric" stereotype="dataType"/>
+        <packagedElement xmi:type="uml:DataType" xmi:id="uDFCJnTq5bnct" name="list-vector" comment="This is a list -- corresponding to states of vectors -- corresponding to -- parent variables." stereotype="dataType"/>
+        <packagedElement xmi:type="uml:DataType" xmi:id="unOTAe8Kdp8Oy" name="matrix" stereotype="dataType"/>
+        <packagedElement xmi:type="uml:DataType" xmi:id="udhu8WTxpgBf5" name="data.frame" stereotype="dataType"/>
+        <packagedElement xmi:type="uml:DataType" xmi:id="ulDuqNhb5Qqy9" name="new_datatype_1" stereotype="dataType"/>
+        <packagedElement xmi:type="uml:DataType" xmi:id="upYih0RerG21L" name="list(Pnode)" stereotype="dataType"/>
+        <packagedElement xmi:type="uml:DataType" xmi:id="ueNruFOjycxKd" name="pathname" comment="Note, R uses linux style pathnames and converts them to Windows style as necessary." stereotype="dataType"/>
+        <packagedElement xmi:type="uml:DataType" xmi:id="uj09i2uXCMGYu" name="new_datatype" isActive="false"/>
+      </uml:Package>
+      <packagedElement xmi:type="uml:Class" xmi:id="uP9whnbOrm4sN" name="Pnet" comment="Parameterized network.&#10;Note that &quot;fields&quot; actually imply as set of getter and setter methods for the property.&#10;">
+        <generalization xmi:type="uml:Generalization" xmi:id="u8SmCbdCxY4Q0" general="uBdL2w5HKb46S"/>
+        <ownedAttribute xmi:type="uml:Property" xmi:id="u4jZFoEDWLI1L" name="priorWeight" comment="Default prior weight for nodes (if not specified at the node level).  Note that while vector values makes sense at the node level, they do not at the node level." visibility="private" type="uVXa2CfCgM9f7"/>
+        <ownedOperation xmi:type="uml:Operation" xmi:id="uZmOC9hVa3DUQ" name="as.Pnet" comment="Coerces object to be a Pnet (or throws an error).">
+          <ownedParameter xmi:type="uml:Parameter" xmi:id="utrL4k7pXxMAP" type="uP9whnbOrm4sN" direction="return"/>
+          <ownedParameter xmi:type="uml:Parameter" xmi:id="ulZZaa2efnQjF" name="x" visibility="private" type="uFp7g4uAaEqui" value=""/>
+        </ownedOperation>
+        <ownedOperation xmi:type="uml:Operation" xmi:id="upVf6ILeCX68v" name="is.Pnet" comment="Tests if object is a Pnet.">
+          <ownedParameter xmi:type="uml:Parameter" xmi:id="uraEW0KWq40GQ" type="uv27IWLqGxejq" direction="return"/>
+          <ownedParameter xmi:type="uml:Parameter" xmi:id="uC1PliFB1WaOB" name="x" visibility="private" type="uFp7g4uAaEqui" value=""/>
+        </ownedOperation>
+        <ownedOperation xmi:type="uml:Operation" xmi:id="uTfxrBKOw8tt0" name="Pnet" comment="Converts a native network object to a Pnet" visibility="protected">
+          <ownedParameter xmi:type="uml:Parameter" xmi:id="uVqM8PgzXq3Qd" type="uP9whnbOrm4sN" direction="return"/>
+          <ownedParameter xmi:type="uml:Parameter" xmi:id="uhKDFrUsm6goc" name="net" comment="Native network to convert." visibility="private" type="uFp7g4uAaEqui" value=""/>
+          <ownedParameter xmi:type="uml:Parameter" xmi:id="uuUiqNjm390O3" name="priorWeight" comment="default prior weight for nodes." visibility="private" type="uVXa2CfCgM9f7" value="10"/>
+          <ownedParameter xmi:type="uml:Parameter" xmi:id="urLKNhtBxhEPs" name="nodes" comment="List of nodes." visibility="private" type="uuD600Vsmn8V4" value="list()"/>
+        </ownedOperation>
+        <ownedOperation xmi:type="uml:Operation" xmi:id="uxTovjQcwSAxg" name="BuildAllTables" comment="Apply the `BuildTable` function to all nodes.">
+          <ownedParameter xmi:type="uml:Parameter" xmi:id="uE4vUG4TdJ2Yf" type="uP9whnbOrm4sN" direction="return"/>
+          <ownedParameter xmi:type="uml:Parameter" xmi:id="u8t7XFxy7K2t3" name="net" comment="Net to operate on." visibility="private" type="uP9whnbOrm4sN" value=""/>
+          <ownedParameter xmi:type="uml:Parameter" xmi:id="uFhqB1WqkQnO2" name="debug" comment="If true, apply additional debugging information." visibility="private" type="uv27IWLqGxejq" value="FALSE"/>
+        </ownedOperation>
+        <ownedOperation xmi:type="uml:Operation" xmi:id="uMgRBx7dolDTZ" name="GEMfit" comment="Performs the Generalized EM algorithm on the network.">
+          <ownedParameter xmi:type="uml:Parameter" xmi:id="uGSlmiEZZ3Ala" type="uP9whnbOrm4sN" direction="return"/>
+          <ownedParameter xmi:type="uml:Parameter" xmi:id="ufERG9kC8Pp4d" name="net" comment="The compiled network we are working with." visibility="private" type="uP9whnbOrm4sN" value=""/>
+          <ownedParameter xmi:type="uml:Parameter" xmi:id="uYz6O7cXZijvz" name="cases" comment="Currently, the model for case data is implementation specific.  May want to move to a data frame representation later." visibility="private" type="uFp7g4uAaEqui" value=""/>
+          <ownedParameter xmi:type="uml:Parameter" xmi:id="urDtuQdoPKC15" name="tol" comment="critera for convergence check." visibility="private" type="uVXa2CfCgM9f7" value="sqrt(.Machine$double.eps)"/>
+          <ownedParameter xmi:type="uml:Parameter" xmi:id="uJO0TIY8trSKw" name="maxit" comment="Maximum number of iterations in of the outer loop." visibility="private" type="uOOTJ85rljoD6" value="100"/>
+          <ownedParameter xmi:type="uml:Parameter" xmi:id="ugMC4vFUbEeAS" name="Estepit" comment="Maximum number of steps in inner call to calcExpTables" visibility="private" type="uOOTJ85rljoD6" value="1"/>
+          <ownedParameter xmi:type="uml:Parameter" xmi:id="ulTlj19gwBWd9" name="Mstepit" comment="Maximum iterations passed to inner calls to maxAllTableParams" visibility="private" type="uOOTJ85rljoD6" value="30"/>
+          <ownedParameter xmi:type="uml:Parameter" xmi:id="uvxmCACeyLMTj" name="trace" comment="If TRUE, information about loglikelihood is logged at each outer cycle." visibility="private" type="uv27IWLqGxejq" value="FALSE"/>
+          <ownedParameter xmi:type="uml:Parameter" xmi:id="udr5zSGWkEY7I" name="debugNo" comment="At this cycle number, the logging threshold is set to debug.  Allows for  debugging the later stages of the algorithm." visibility="private" type="uOOTJ85rljoD6" value="maxit+1"/>
+        </ownedOperation>
+        <ownedOperation xmi:type="uml:Operation" xmi:id="udfYw7uOi7q7P" name="calcPnetLLike" comment="Calculates the log-likelihood for the set of cases.">
+          <ownedParameter xmi:type="uml:Parameter" xmi:id="uQpkJpFXPNfOH" type="uVXa2CfCgM9f7" direction="return"/>
+          <ownedParameter xmi:type="uml:Parameter" xmi:id="uCHSysKTYXzvn" name="net" visibility="private" type="uP9whnbOrm4sN" value=""/>
+          <ownedParameter xmi:type="uml:Parameter" xmi:id="u2VGNsGhv43ym" name="cases" comment="The format for case specification is currently implementation specific." visibility="private" type="uFp7g4uAaEqui" value=""/>
+        </ownedOperation>
+        <ownedOperation xmi:type="uml:Operation" xmi:id="uOqy70TMmFugo" name="calcExpTables" comment="This calls the internal EM (or other algorithm) used for learning in the network.  It learns unconstrained CPTs.  Multiply the posterior weight by the estimated table gets the expected table for the node.">
+          <ownedParameter xmi:type="uml:Parameter" xmi:id="uiVOsoKfAUUB8" type="uP9whnbOrm4sN" direction="return"/>
+          <ownedParameter xmi:type="uml:Parameter" xmi:id="uulNWeaDyvJnb" name="net" visibility="private" type="uP9whnbOrm4sN" value=""/>
+          <ownedParameter xmi:type="uml:Parameter" xmi:id="u0IRNNLax1Ulr" name="cases" visibility="private" type="uFp7g4uAaEqui" value=""/>
+          <ownedParameter xmi:type="uml:Parameter" xmi:id="uaQMAUMLbOS8h" name="Estepit" comment="Number of steps the internal EM algorithm uses.  Noted, that the algorithm does not need to run to convergence, so a low number here will increase speed." visibility="private" type="uOOTJ85rljoD6" value="1"/>
+        </ownedOperation>
+        <ownedOperation xmi:type="uml:Operation" xmi:id="uGi9La3p1YBFk" name="maxAllTableParams" comment="Fits the individual tables:  mostly a call to maxCPTparam for each node.">
+          <ownedParameter xmi:type="uml:Parameter" xmi:id="uXBsk2o4Qujmt" type="uP9whnbOrm4sN" direction="return"/>
+          <ownedParameter xmi:type="uml:Parameter" xmi:id="u8Rk69DYKlLbP" name="net" visibility="private" type="uP9whnbOrm4sN" value=""/>
+          <ownedParameter xmi:type="uml:Parameter" xmi:id="uHiD9gU7RHoNb" name="Mstepit" comment="Maximum number of step to run in the maxCPTParam iterative procedure.  Note that convergence is checked at the outer level, so do not need to check here." visibility="private" type="uOOTJ85rljoD6" value="30"/>
+          <ownedParameter xmi:type="uml:Parameter" xmi:id="ubMgPGOwsZ9mu" name="tol" comment="convergence criteria for maxCPTParam&#10;" visibility="private" type="uVXa2CfCgM9f7" value=""/>
+          <ownedParameter xmi:type="uml:Parameter" xmi:id="ubRhtkVFTcfSi" name="debug" comment="If true, enters the debugger on error." visibility="private" type="uv27IWLqGxejq" value=""/>
+        </ownedOperation>
+        <ownedOperation xmi:type="uml:Operation" xmi:id="unWnPzR4ooa2D" name="PnetMakeStubNodes" comment="Copies nodes from another network so we can use them to build tables.  They become stubs after PnetRemoveStubNodes is called.  ">
+          <ownedParameter xmi:type="uml:Parameter" xmi:id="uSEEulaBMskRO" type="upYih0RerG21L" direction="return"/>
+          <ownedParameter xmi:type="uml:Parameter" xmi:id="u6ClvgVWTzDrh" name="net" visibility="private" type="uP9whnbOrm4sN" value=""/>
+          <ownedParameter xmi:type="uml:Parameter" xmi:id="uwPRH9SM0iWWt" name="nodes" comment="A list of nodes from another network.  References to them will be created in net." visibility="private" type="upYih0RerG21L" value=""/>
+        </ownedOperation>
+        <ownedOperation xmi:type="uml:Operation" xmi:id="uVMYw1KJS04YO" name="PnetRemoveStubNodes" comment="Removes nodes replacing them with stubs (references to nodes in another network).">
+          <ownedParameter xmi:type="uml:Parameter" xmi:id="ue68Y2VcFVzBo" type="uP9whnbOrm4sN" direction="return"/>
+          <ownedParameter xmi:type="uml:Parameter" xmi:id="uXf8F3SRw7FJF" name="net" comment="net" visibility="private" type="uP9whnbOrm4sN" value=""/>
+          <ownedParameter xmi:type="uml:Parameter" xmi:id="uuROMIJSwpBuF" name="nodes" visibility="private" type="upYih0RerG21L" value=""/>
+        </ownedOperation>
+        <ownedOperation xmi:type="uml:Operation" xmi:id="uw1soRx8QMNbm" name="PnetAdjoin" comment="This takes a hub and spoke network, and combines them into a motif.  Any stubs in the spoke are replaced with the corresponding hub node.">
+          <ownedParameter xmi:type="uml:Parameter" xmi:id="u7wMxgnb8VPVh" type="uP9whnbOrm4sN" direction="return"/>
+          <ownedParameter xmi:type="uml:Parameter" xmi:id="ur0HhYdspEPg5" name="hub" comment="Centeral node which will be the core of the motif." visibility="private" type="uP9whnbOrm4sN" value=""/>
+          <ownedParameter xmi:type="uml:Parameter" xmi:id="u9TXR9rupkUvX" name="spoke" comment="The subnet to be added to the hub.  This may contain Stub Nodes." visibility="private" type="uP9whnbOrm4sN" value=""/>
+        </ownedOperation>
+        <ownedOperation xmi:type="uml:Operation" xmi:id="uhUzUOVAG0ndG" name="PnetDetach" comment="Removes the nodes unique the the spoke subnet while leaving any entered evidence in the remaining hub.">
+          <ownedParameter xmi:type="uml:Parameter" xmi:id="uPHkWthzd5cNM" type="uP9whnbOrm4sN" direction="return"/>
+          <ownedParameter xmi:type="uml:Parameter" xmi:id="ukoDoXAooPyUD" name="motif" comment="Network containing both hub and spoke nodes." visibility="private" type="uP9whnbOrm4sN" value=""/>
+          <ownedParameter xmi:type="uml:Parameter" xmi:id="ueyVlS9tHSecb" name="spoke" comment="The evidence model to be deleted." visibility="private" type="uP9whnbOrm4sN" value=""/>
+        </ownedOperation>
+      </packagedElement>
+      <packagedElement xmi:type="uml:Class" xmi:id="ujNSW24puBsN1" name="PnetWarehouse" comment="Often this will reference a directory (or database) in which the various networks are stored.&#10;&#10;If the network is not already in the class, then it is read from disk (or database) if available.  If it is still not available, then a new empty network is created using info in the manifest.&#10;&#10;The key for a network is (netname).">
+        <generalization xmi:type="uml:Generalization" xmi:id="un9xptNBgW8ZU" general="uU2mtxS7oISNc"/>
+        <ownedOperation xmi:type="uml:Operation" xmi:id="uTqOPEpEGFX45" name="is.PnetWarehouse" comment="Returns true if the object in question is a Pnet Warehouse.">
+          <ownedParameter xmi:type="uml:Parameter" xmi:id="u453p1EXUET8z" type="uv27IWLqGxejq" direction="return"/>
+          <ownedParameter xmi:type="uml:Parameter" xmi:id="uoFyAxxptjoxq" name="obj" visibility="private" type="uFp7g4uAaEqui" value=""/>
+        </ownedOperation>
+        <ownedOperation xmi:type="uml:Operation" xmi:id="ub4gVpHzTmCTe" name="WarehouseSave" comment="Saves the network out to disk.">
+          <ownedParameter xmi:type="uml:Parameter" xmi:id="u7KOU3WsFBHPk" type="uP9whnbOrm4sN" direction="return"/>
+          <ownedParameter xmi:type="uml:Parameter" xmi:id="ubiTnsmSIgMnv" name="warehouse" visibility="private" type="uU2mtxS7oISNc" value=""/>
+          <ownedParameter xmi:type="uml:Parameter" xmi:id="u67GeyFRvJuvB" name="obj" comment="Object to save." visibility="private" type="uP9whnbOrm4sN" value=""/>
+        </ownedOperation>
+        <ownedOperation xmi:type="uml:Operation" xmi:id="usGFMR6dYucxR" name="WarehouseUnpack" comment="Unpacks serialized network.  Adds the serialized network into the cache.">
+          <ownedParameter xmi:type="uml:Parameter" xmi:id="uk05L0zmRqI2U" type="uP9whnbOrm4sN" direction="return"/>
+          <ownedParameter xmi:type="uml:Parameter" xmi:id="ulZZsTt6IFfZ0" name="warehouse" visibility="private" type="uU2mtxS7oISNc" value=""/>
+          <ownedParameter xmi:type="uml:Parameter" xmi:id="uRnACzenJtdeb" name="serial" comment="In this case, the warehouse is the factory, so only the name and data fields of the serialized networks." visibility="private" type="uqMMPVpOq3OY6" value=""/>
+        </ownedOperation>
+      </packagedElement>
+      <packagedElement xmi:type="uml:Class" xmi:id="ubVwm3Nh3rsYr" name="Pnode" isAbstract="true">
+        <generalization xmi:type="uml:Generalization" xmi:id="upRpVwYxRuJ0L" general="ugIELAi40XDWh"/>
+        <ownedAttribute xmi:type="uml:Property" xmi:id="uJxiyqnIDxTuV" name="rules" comment="Rules, either scalar or vector of length States-1,&#10;Values should be names of functions.&#10;Currently supported:&#10;Compensatory, OffsetConjunctive, OffsetDisjunctive" type="uc2ELbIFnyf0y"/>
+        <ownedAttribute xmi:type="uml:Property" xmi:id="ue0PiKOoQ2GsQ" name="link" comment="Name of link function.&#10;Currently supported values:  partialCredit, gradedResponse, normalLink" visibility="private" type="u7UUqPdBKbmEX"/>
+        <ownedAttribute xmi:type="uml:Property" xmi:id="uxKwD80iBBrtz" name="lnAlphas" comment="Log slope parameters.  (Log slope is used to avoid restriction to positive reals)&#10;Alphas is transformed version, and could be used as primary and LnAlphas as derived.&#10;This should be log(Alphas)." visibility="implementation" type="uDFCJnTq5bnct"/>
+        <ownedAttribute xmi:type="uml:Property" xmi:id="ulKN9pBg8lqah" name="betas" comment="The difficulty/demand/negative interecpt parameters." visibility="implementation" type="uDFCJnTq5bnct"/>
+        <ownedAttribute xmi:type="uml:Property" xmi:id="uvT6T78BmfP4N" name="Q" comment="Logical Matrix&#10;The &quot;inner&quot; q-matrix for the item.  As a special case if the value is 1, then it is interpreted as a matrix of 1's." visibility="private" type="uKrJpa0ZA4qtE"/>
+        <ownedAttribute xmi:type="uml:Property" xmi:id="uvD3JcTXD5V53" name="linkScale" comment="Currently only used in the normal link function.  Should be positive or NA." visibility="private" type="uVXa2CfCgM9f7"/>
+        <ownedAttribute xmi:type="uml:Property" xmi:id="umlH7S0ltaODi" name="priorWeight" comment="Note this will take a special value of NULL, meaning get default value from the Network.  If vector valued, should match the number of rows of the CPT." visibility="private" type="uYwDtPZKl4v9m" initialValue="NULL"/>
+        <ownedOperation xmi:type="uml:Operation" xmi:id="uqaeTyUwvhQYI" name="is.Pnode">
+          <ownedParameter xmi:type="uml:Parameter" xmi:id="ua21b2AOQiGtD" name="x" visibility="private" type="uFp7g4uAaEqui" value=""/>
+        </ownedOperation>
+        <ownedOperation xmi:type="uml:Operation" xmi:id="u6Hf0VFbZiIxD" name="as.Pnode">
+          <ownedParameter xmi:type="uml:Parameter" xmi:id="uGYjCMRzrBxkF" type="ubVwm3Nh3rsYr" direction="return"/>
+          <ownedParameter xmi:type="uml:Parameter" xmi:id="uh3Fa3pXCASnX" name="x" visibility="private" type="uFp7g4uAaEqui" value=""/>
+        </ownedOperation>
+        <ownedOperation xmi:type="uml:Operation" xmi:id="ugG1NGgOuorU5" name="PnodeNet">
+          <ownedParameter xmi:type="uml:Parameter" xmi:id="uTp9FdcaYiycg" type="uP9whnbOrm4sN" direction="return"/>
+          <ownedParameter xmi:type="uml:Parameter" xmi:id="urufsNZ1LhuMR" name="node" visibility="private" type="ubVwm3Nh3rsYr" value=""/>
+        </ownedOperation>
+        <ownedOperation xmi:type="uml:Operation" xmi:id="uTjCEipRamPzs" name="PnodeAlphas" comment="Default method is exp(Alphas)." visibility="protected">
+          <ownedParameter xmi:type="uml:Parameter" xmi:id="ucBfKK7WeEdJA" type="uDFCJnTq5bnct" direction="return"/>
+          <ownedParameter xmi:type="uml:Parameter" xmi:id="uwms2sbNIQLE8" name="node" visibility="private" type="ubVwm3Nh3rsYr" value=""/>
+        </ownedOperation>
+        <ownedOperation xmi:type="uml:Operation" xmi:id="uss8qrgRDM72S" name="PnodeAlphas&lt;-" visibility="protected">
+          <ownedParameter xmi:type="uml:Parameter" xmi:id="uts4gBGe0ZOj8" type="ubVwm3Nh3rsYr" direction="return"/>
+          <ownedParameter xmi:type="uml:Parameter" xmi:id="uw6r0h9SuuSXv" name="node" visibility="private" type="ubVwm3Nh3rsYr" value=""/>
+          <ownedParameter xmi:type="uml:Parameter" xmi:id="uMC9xGxRz38CD" name="value" visibility="private" type="uDFCJnTq5bnct" value=""/>
+        </ownedOperation>
+        <ownedOperation xmi:type="uml:Operation" xmi:id="upwvn5xh34dHf" name="Pnode" comment="This is for wrapping an object from another Bayes net package with the additional Pnode properties.">
+          <ownedParameter xmi:type="uml:Parameter" xmi:id="uvFKMOXJ4o24c" type="ubVwm3Nh3rsYr" direction="return"/>
+          <ownedParameter xmi:type="uml:Parameter" xmi:id="uCy2yoXPf4MV7" name="node" comment="The node from the object object system to be promoted to a Pnode." visibility="private" type="uFp7g4uAaEqui" value=""/>
+          <ownedParameter xmi:type="uml:Parameter" xmi:id="uY3oqHtaNpg10" name="lnAlphas" visibility="private" type="uDFCJnTq5bnct" value=""/>
+          <ownedParameter xmi:type="uml:Parameter" xmi:id="uJa6KLu35MMH5" name="betas" visibility="private" type="uDFCJnTq5bnct" value=""/>
+          <ownedParameter xmi:type="uml:Parameter" xmi:id="u6A6mwUqNUZrI" name="rules" visibility="private" type="u7UUqPdBKbmEX" value=""/>
+          <ownedParameter xmi:type="uml:Parameter" xmi:id="uPQ5S7Oa7tbBG" name="link" visibility="private" type="u7UUqPdBKbmEX" value="&quot;partialCredit&quot;"/>
+          <ownedParameter xmi:type="uml:Parameter" xmi:id="ulgHLWCIzKfm2" name="Q" visibility="private" type="uKrJpa0ZA4qtE" value="TRUE"/>
+          <ownedParameter xmi:type="uml:Parameter" xmi:id="uAJTOObmiN7IR" name="linkScale" visibility="private" type="uVXa2CfCgM9f7" value="NA"/>
+          <ownedParameter xmi:type="uml:Parameter" xmi:id="ubYCKBXsa2uVQ" name="priorWeight" visibility="private" type="ulDuqNhb5Qqy9" value="NULL"/>
+        </ownedOperation>
+        <ownedOperation xmi:type="uml:Operation" xmi:id="uT3xpfRWp5O1K" name="getPriorWeight" comment="Gets prior weight from node or network, depending." visibility="private">
+          <ownedParameter xmi:type="uml:Parameter" xmi:id="uEf8qq8Q5QrOG" type="uYwDtPZKl4v9m" direction="return"/>
+          <ownedParameter xmi:type="uml:Parameter" xmi:id="uJJo6q4esh42O" name="node" visibility="private" type="ubVwm3Nh3rsYr" value=""/>
+        </ownedOperation>
+        <ownedOperation xmi:type="uml:Operation" xmi:id="uCxHS7NNXwXwf" name="PnodePostWeight" comment="This is the posterior weight after incorporating data.">
+          <ownedParameter xmi:type="uml:Parameter" xmi:id="uLdllKp5szrwt" type="uYwDtPZKl4v9m" direction="return"/>
+        </ownedOperation>
+        <ownedOperation xmi:type="uml:Operation" xmi:id="u33ny1lDX3AZA" name="PnodeParentTVals" comment="Returns a list of values giving the effective-theta values associated with the parents states.">
+          <ownedParameter xmi:type="uml:Parameter" xmi:id="uydxh6yWnO3Ky" type="uuD600Vsmn8V4" direction="return"/>
+          <ownedParameter xmi:type="uml:Parameter" xmi:id="uzqDcWARz1b9m" name="node" visibility="private" type="ubVwm3Nh3rsYr" value=""/>
+        </ownedOperation>
+        <ownedOperation xmi:type="uml:Operation" xmi:id="u8rSba5mdpgfz" name="BuildTable" comment="Builds the CPT from the Pnode properties.">
+          <ownedParameter xmi:type="uml:Parameter" xmi:id="usPTb9YMljcHB" type="ubVwm3Nh3rsYr" direction="return"/>
+          <ownedParameter xmi:type="uml:Parameter" xmi:id="u3TAQKIJdzKjw" name="node" visibility="private" type="ubVwm3Nh3rsYr" value=""/>
+        </ownedOperation>
+        <ownedOperation xmi:type="uml:Operation" xmi:id="u0c5bBplZBcm9" name="maxCPTParams" comment="Updates node parameter to fit expected table data given in expected counts.&#10;Expected counts are essentiall currently estimated CPT times posterior weights.&#10;Then calls CPTtools::mapDPC tools to update the parameters.&#10;Finally, unpack the updated parameters and store back in the node.">
+          <ownedParameter xmi:type="uml:Parameter" xmi:id="uZj2yjSDMveuC" type="ubVwm3Nh3rsYr" direction="return"/>
+          <ownedParameter xmi:type="uml:Parameter" xmi:id="uUMXEh0KB5lBM" name="node" visibility="private" type="ubVwm3Nh3rsYr" value=""/>
+          <ownedParameter xmi:type="uml:Parameter" xmi:id="uKNOdkrfM5XSw" name="Mstepit" comment="maximum number of iterations on the mapDPC optimaiation loop." visibility="private" type="uOOTJ85rljoD6" value="30"/>
+          <ownedParameter xmi:type="uml:Parameter" xmi:id="usGxgSC17wJcd" name="tol" comment="Convergence criteria for optimization." visibility="private" type="uVXa2CfCgM9f7" value="sqrt(.Machine$double.eps)"/>
+        </ownedOperation>
+      </packagedElement>
+      <packagedElement xmi:type="uml:Class" xmi:id="uqVcEsDsiTcHl" name="PnodeWarehouse" comment="The PnodeWarehouse references the NodeWarehouse so it can get networks as needed.&#10;&#10;The key for a node is (Netname,Nodename).">
+        <generalization xmi:type="uml:Generalization" xmi:id="uurPsA79yYUBl" general="uU2mtxS7oISNc"/>
+        <ownedOperation xmi:type="uml:Operation" xmi:id="unJUuII66uMtO" name="is.PnodeWarehouse" comment="Returns true if &lt;obj&gt; is a PnetWarehouse">
+          <ownedParameter xmi:type="uml:Parameter" xmi:id="uLRbZkSws8SYK" type="uv27IWLqGxejq" direction="return"/>
+          <ownedParameter xmi:type="uml:Parameter" xmi:id="utOQrUh0qlS6O" name="obj" visibility="private" type="uFp7g4uAaEqui" value=""/>
+        </ownedOperation>
+      </packagedElement>
+      <packagedElement xmi:type="uml:Class" xmi:id="uBdL2w5HKb46S" name="GenericNet" comment="This is a set of operations expected from a generic Bayesian network.  These should mostly map onto the native methods, or maybe a combination of native methods.">
+        <ownedAttribute xmi:type="uml:Property" xmi:id="uWXIlUPGWXfkP" name="name" comment="A name for the network.  Must follow the PnetWarehouse.is.legal.name() convention.&#10;" visibility="private" type="u7UUqPdBKbmEX"/>
+        <ownedAttribute xmi:type="uml:Property" xmi:id="uiDmNvnDhcgOm" name="title" comment="A longer name with unrestricted syntax." visibility="private" type="u7UUqPdBKbmEX"/>
+        <ownedAttribute xmi:type="uml:Property" xmi:id="uVZHC1lCLaouA" name="description" comment="Documention for the network." visibility="private" type="u7UUqPdBKbmEX"/>
+        <ownedAttribute xmi:type="uml:Property" xmi:id="uJufSsSQowvtN" name="pathname" comment="Pathname where the network is saved.  Usually relative to the Warehouse." visibility="private" type="ueNruFOjycxKd"/>
+        <ownedOperation xmi:type="uml:Operation" xmi:id="u3D1lH4StwYaz" name="PnetFindNode" comment="Returns the node corresponding to a name.">
+          <ownedParameter xmi:type="uml:Parameter" xmi:id="uHdmaRwGCaYro" type="ubVwm3Nh3rsYr" direction="return"/>
+          <ownedParameter xmi:type="uml:Parameter" xmi:id="u5fvm3AZklW9n" name="net" visibility="private" type="uP9whnbOrm4sN" value=""/>
+          <ownedParameter xmi:type="uml:Parameter" xmi:id="uZwGlXSuPu9k7" name="name" visibility="private" type="u7UUqPdBKbmEX" value=""/>
+        </ownedOperation>
+        <ownedOperation xmi:type="uml:Operation" xmi:id="uJ7lXQkRfaslQ" name="PnetCompile" comment="Many Bayes net packages use a acyclic digraph for model contruction and a junction tree for inference.  In this model, networks must be compiled before inference can be done.&#10;">
+          <ownedParameter xmi:type="uml:Parameter" xmi:id="uVj235SNKV2MW" name="net" visibility="private" type="uP9whnbOrm4sN" value=""/>
+        </ownedOperation>
+        <ownedOperation xmi:type="uml:Operation" xmi:id="uvLkDDGllGYNb" name="PnetSerialize" comment="writes out the network as a character string.  The goal is to produce an object which can be stored in a database representing the network state.  The serialized network object is a list containing the network name, the name of the &quot;factory&quot; class which can rebuild the network, and the serialized data.">
+          <ownedParameter xmi:type="uml:Parameter" xmi:id="u6E0j3Q5Vnl45" type="uqMMPVpOq3OY6" direction="return"/>
+          <ownedParameter xmi:type="uml:Parameter" xmi:id="uupX0QYmKLJHw" name="net" visibility="private" type="uP9whnbOrm4sN" value=""/>
+        </ownedOperation>
+        <ownedOperation xmi:type="uml:Operation" xmi:id="uCPY4HFW052EG" name="PnetUnserialize" comment="This looks up the factory object and delegates to the unserializePnet method, which is the one which must be implemented." visibility="protected">
+          <ownedParameter xmi:type="uml:Parameter" xmi:id="uZhvVXINszLrq" type="uqMMPVpOq3OY6" direction="return"/>
+          <ownedParameter xmi:type="uml:Parameter" xmi:id="uDHi6tQgUVRYQ" name="serial" visibility="private" type="uqMMPVpOq3OY6" value=""/>
+        </ownedOperation>
+        <ownedOperation xmi:type="uml:Operation" xmi:id="ulVJhm18dqaed" name="unserializePnet" comment="This is the inner function which does the actual work of rebuilding the network.">
+          <ownedParameter xmi:type="uml:Parameter" xmi:id="uyVslAP3PmqhA" type="uP9whnbOrm4sN" direction="return"/>
+          <ownedParameter xmi:type="uml:Parameter" xmi:id="uVr0bSaQN7qqD" name="factory" comment="The factory object has two roles.  One, it provides a type for which the generic unserializePnet can use to interpret the serial data.&#10;&#10;Second, if the network needs to be created within some other environment (e.g., a session) it provides that." visibility="private" type="uFp7g4uAaEqui" value=""/>
+          <ownedParameter xmi:type="uml:Parameter" xmi:id="ujUF3UzqC2mHE" name="data" comment="The actual serialized network." visibility="private" type="u7UUqPdBKbmEX" value=""/>
+        </ownedOperation>
+      </packagedElement>
+      <packagedElement xmi:type="uml:Class" xmi:id="ugIELAi40XDWh" name="GenericNode">
+        <ownedAttribute xmi:type="uml:Property" xmi:id="ubtf7wX9ZHekW" name="probs" comment="The conditional probability table of the node expressed as a CPTtools::CPF.&#10;&#10;Note:  implementing methods will need to convert between CPF format and native format." visibility="private" type="u8DeYQ0pJwupG"/>
+        <ownedAttribute xmi:type="uml:Property" xmi:id="uHoS1Ntw4MeCB" name="name" comment="Note:  this must satisfy the `is.legal.name` method of the Warehouse." visibility="private" type="u7UUqPdBKbmEX"/>
+        <ownedAttribute xmi:type="uml:Property" xmi:id="uKHy8pOS6PT3j" name="title" comment="Longer name that has no syntax restrictions." visibility="private" type="u7UUqPdBKbmEX"/>
+        <ownedAttribute xmi:type="uml:Property" xmi:id="uVdgerhLDkIyH" name="description" comment="A paragraph long description of what the node represents.  User-level documenation." visibility="private" type="u7UUqPdBKbmEX"/>
+        <ownedAttribute xmi:type="uml:Property" xmi:id="uHmSUmKgenLtC" name="labels" comment="A set of labels or tags associate with a node which defines subsets of nodes.&#10;&#10;The Peanut protocol uses two:&#10;  pnodes -- parameterized nodes whose CPTs will be adjusted for data.&#10;  onodes -- nodes associated with observable variables.&#10;" visibility="private" type="uc2ELbIFnyf0y"/>
+        <ownedAttribute xmi:type="uml:Property" xmi:id="uJcgdr2Y0Cadl" name="states" comment="Vector of state names.  Must conform to Warehouse$is.legal.name method." visibility="private" type="uc2ELbIFnyf0y"/>
+        <ownedAttribute xmi:type="uml:Property" xmi:id="uomO4Fhr3hLHM" name="stateTitles" comment="Longer, unconstrained state names.  Indexed by states." visibility="private" type="uc2ELbIFnyf0y"/>
+        <ownedAttribute xmi:type="uml:Property" xmi:id="uTwiPyHOPxWtH" name="stateDescriptions" comment="State documentation.  Indexed by states." visibility="private" type="uc2ELbIFnyf0y"/>
+        <ownedAttribute xmi:type="uml:Property" xmi:id="uAe12ZssTLK7w" name="stateValues" comment="Maps the states to a real number.  Indexed by states.&#10;&#10;The function CPTtools::effectiveThetas() provides a useful default here." visibility="private" type="uYwDtPZKl4v9m"/>
+        <ownedAttribute xmi:type="uml:Property" xmi:id="uc1AEzzPoMwyx" name="isContinuous" comment="Note that in the current PNetica implementation, continuous nodes are approximated with discrete nodes, by cutting the values." visibility="private" type="uv27IWLqGxejq" initialValue="FALSE"/>
+        <ownedAttribute xmi:type="uml:Property" xmi:id="uKsQnVqMsQgHU" name="parents" comment="Note that manipulating the parent list is the method provides for adding/removing edges." visibility="private" type="upYih0RerG21L"/>
+        <ownedOperation xmi:type="uml:Operation" xmi:id="uf1sEa1HExbRf" name="PnodeNumStates">
+          <ownedParameter xmi:type="uml:Parameter" xmi:id="uLROGP1IT7ZAi" type="uOOTJ85rljoD6" direction="return"/>
+          <ownedParameter xmi:type="uml:Parameter" xmi:id="uTSGC9DMzvi11" name="node" visibility="private" type="ubVwm3Nh3rsYr" value=""/>
+        </ownedOperation>
+        <ownedOperation xmi:type="uml:Operation" xmi:id="uT8hwfkGqCyaI" name="PnodeEvidence&lt;-" comment="This sets &quot;observed value&quot; associated with the node.  The value should either be the name of a state or a vector of numbers associated with the states (virtual evidence).&#9;">
+          <ownedParameter xmi:type="uml:Parameter" xmi:id="uwNIiaZfSCKcf" type="ubVwm3Nh3rsYr" direction="return"/>
+          <ownedParameter xmi:type="uml:Parameter" xmi:id="uJHNBRoKSmx0m" name="node" visibility="private" type="ubVwm3Nh3rsYr" value=""/>
+          <ownedParameter xmi:type="uml:Parameter" xmi:id="u7gB7BHNC8uvM" name="value" visibility="private" type="uFp7g4uAaEqui" value=""/>
+        </ownedOperation>
+        <ownedOperation xmi:type="uml:Operation" xmi:id="umI6tMz2iB0dx" name="PnodeEvidence" comment="Returns the evidence associated with the node (if any).">
+          <ownedParameter xmi:type="uml:Parameter" xmi:id="u1ZCsQ72iOPsJ" type="uFp7g4uAaEqui" direction="return"/>
+          <ownedParameter xmi:type="uml:Parameter" xmi:id="ufNULVez8XAW0" name="node" visibility="private" type="ubVwm3Nh3rsYr" value=""/>
+        </ownedOperation>
+        <ownedOperation xmi:type="uml:Operation" xmi:id="uqgSKDgaY9XtR" name="PnodeParentNames" comment="The names of the parents">
+          <ownedParameter xmi:type="uml:Parameter" xmi:id="u1DypAtWfxEEu" type="uc2ELbIFnyf0y" direction="return"/>
+          <ownedParameter xmi:type="uml:Parameter" xmi:id="utrW7SniLCANn" name="node" visibility="private" type="ubVwm3Nh3rsYr" value=""/>
+        </ownedOperation>
+        <ownedOperation xmi:type="uml:Operation" xmi:id="u1jmtUvXH0ixN" name="PnodeNumParents" visibility="protected">
+          <ownedParameter xmi:type="uml:Parameter" xmi:id="uFY8zlNrRoIRP" type="uOOTJ85rljoD6" direction="return"/>
+          <ownedParameter xmi:type="uml:Parameter" xmi:id="uxHARW2mKr7wB" name="node" visibility="private" type="ubVwm3Nh3rsYr" value=""/>
+        </ownedOperation>
+      </packagedElement>
+      <packagedElement xmi:type="uml:Class" xmi:id="u8DeYQ0pJwupG" name="CPTtools::CPF"/>
+      <packagedElement xmi:type="uml:Association" xmi:id="u0g5DCSpJpYsP" name="">
+        <ownedEnd xmi:type="uml:AssociationEnd" xmi:id="uPzyJErveaTvY" name="PnodePnet" type="ugIELAi40XDWh" multiplicity="1" aggregation="aggregate" isNavigable="true" changeability="frozen"/>
+        <ownedEnd xmi:type="uml:AssociationEnd" xmi:id="uZVADKm9WqLn0" name="nodes" type="uBdL2w5HKb46S" multiplicity="*" aggregation="none" isNavigable="true" changeability="changeable"/>
+      </packagedElement>
+      <packagedElement xmi:type="uml:Class" xmi:id="uqMMPVpOq3OY6" name="serialized-network">
+        <ownedAttribute xmi:type="uml:Property" xmi:id="ucXAwhR1SjW2K" name="name" visibility="private" type="u7UUqPdBKbmEX"/>
+        <ownedAttribute xmi:type="uml:Property" xmi:id="uiEE9yxJzrv8q" name="factory" comment="Name of the class which can be used to generate the network." visibility="private" type="uz57ldKHptpgx"/>
+        <ownedAttribute xmi:type="uml:Property" xmi:id="uWcrSQFj9ykZd" name="data" comment="The serialized network." visibility="private" type="u7UUqPdBKbmEX"/>
+      </packagedElement>
+      <packagedElement xmi:type="uml:Class" xmi:id="uz57ldKHptpgx" name="name"/>
+      <packagedElement xmi:type="uml:Class" xmi:id="uzf20YtSpcOLO" name="100"/>
+      <packagedElement xmi:type="uml:Association" xmi:id="ur7zZfPizGSRz" name="">
+        <ownedEnd xmi:type="uml:AssociationEnd" xmi:id="uwBEmWb3eK1G8" name="" type="ubVwm3Nh3rsYr" aggregation="aggregate" isNavigable="true" changeability="changeable"/>
+        <ownedEnd xmi:type="uml:AssociationEnd" xmi:id="unRBXKHAWHMa5" name="" type="uqVcEsDsiTcHl" aggregation="none" isNavigable="true" changeability="changeable"/>
+      </packagedElement>
+      <packagedElement xmi:type="uml:Association" xmi:id="uuWJTv6ay1Ww3" name="">
+        <ownedEnd xmi:type="uml:AssociationEnd" xmi:id="uH3v0ppa5kDDI" name="" type="uP9whnbOrm4sN" aggregation="aggregate" isNavigable="true" changeability="changeable"/>
+        <ownedEnd xmi:type="uml:AssociationEnd" xmi:id="uYXEzjZjZDpza" name="" type="ujNSW24puBsN1" aggregation="none" isNavigable="true" changeability="changeable"/>
+      </packagedElement>
+      <packagedElement xmi:type="uml:Class" xmi:id="uU2mtxS7oISNc" name="Warehouse" comment="A Warehouse is a combination of a cache and a factory.  The key is a name (which could be a character vector).  If the object is already in the cache, WarehouseSupply() returns it.  If not, it uses the information in the manifest to construct a new instance.">
+        <ownedAttribute xmi:type="uml:Property" xmi:id="uB1GNCZNXNsgd" name="manifest" comment="Instructions for building objects of the designated types." visibility="private" type="udhu8WTxpgBf5"/>
+        <ownedOperation xmi:type="uml:Operation" xmi:id="uhQl6BN3CH4mk" name="ClearWarehouse" comment="Clears all cached objects from the warehouse (rendering them inactive).">
+          <ownedParameter xmi:type="uml:Parameter" xmi:id="uxrvYy092LzBi" type="uU2mtxS7oISNc" direction="return"/>
+          <ownedParameter xmi:type="uml:Parameter" xmi:id="u1caDi0vSLs8J" name="warehouse" visibility="private" type="uU2mtxS7oISNc" value=""/>
+        </ownedOperation>
+        <ownedOperation xmi:type="uml:Operation" xmi:id="uiHqVGu6wigmO" name="WarehouseData" comment="Returns the part of the manifest focused on the named object.">
+          <ownedParameter xmi:type="uml:Parameter" xmi:id="uDmmmQjuisjTV" type="udhu8WTxpgBf5" direction="return"/>
+          <ownedParameter xmi:type="uml:Parameter" xmi:id="uqvtojptPuh5I" name="warehouse" visibility="private" type="uU2mtxS7oISNc" value=""/>
+          <ownedParameter xmi:type="uml:Parameter" xmi:id="uI73CCJJJUpcj" name="name" comment="A name (or vector of names) which is a key into the Warehouse/Manifest." visibility="private" type="u7UUqPdBKbmEX" value=""/>
+        </ownedOperation>
+        <ownedOperation xmi:type="uml:Operation" xmi:id="ubZbIHCDVYH1o" name="WarehouseSupply" comment="Returns the object if it is in the cache; builds a new object from info in the manifest.  They type of return object is the type of warehouse (Pnet or Pnode).&#10;">
+          <ownedParameter xmi:type="uml:Parameter" xmi:id="uIruXSx89JB8T" type="uFp7g4uAaEqui" direction="return"/>
+          <ownedParameter xmi:type="uml:Parameter" xmi:id="uurglwbX1pFH2" name="warehouse" visibility="private" type="uU2mtxS7oISNc" value=""/>
+          <ownedParameter xmi:type="uml:Parameter" xmi:id="uovp6fJuocmrf" name="name" visibility="private" type="u7UUqPdBKbmEX" value=""/>
+        </ownedOperation>
+        <ownedOperation xmi:type="uml:Operation" xmi:id="utPQib5vx3bmI" name="WarehouseFetch" comment="Fetches a cached object from the warehouse, or returns NULL if the object is not in the cache.">
+          <ownedParameter xmi:type="uml:Parameter" xmi:id="uNCRw5v5SybKh" type="uFp7g4uAaEqui" direction="return"/>
+          <ownedParameter xmi:type="uml:Parameter" xmi:id="uDxQoiEb2Ksiw" name="warehouse" visibility="private" type="uU2mtxS7oISNc" value=""/>
+          <ownedParameter xmi:type="uml:Parameter" xmi:id="utul5pOjDINIE" name="name" comment="vector of names used as the key." visibility="private" type="u7UUqPdBKbmEX" value=""/>
+        </ownedOperation>
+        <ownedOperation xmi:type="uml:Operation" xmi:id="ufyRe259yIfQr" name="WarehouseInventory" comment="Returns a data.frame whose rows correspond to the build elements in the cache, and whose columns correspond to the dimensions of the key.">
+          <ownedParameter xmi:type="uml:Parameter" xmi:id="uk74GyLVgCIKq" type="udhu8WTxpgBf5" direction="return"/>
+          <ownedParameter xmi:type="uml:Parameter" xmi:id="uFtv5a7mn35lQ" name="warehouse" visibility="private" type="uU2mtxS7oISNc" value=""/>
+        </ownedOperation>
+        <ownedOperation xmi:type="uml:Operation" xmi:id="up5eIyt8w9QOD" name="WarehouseMake" comment="Makes the referenced object and adds it to (or replaced in) the cache.">
+          <ownedParameter xmi:type="uml:Parameter" xmi:id="uhFMU7p1iVnJL" type="uFp7g4uAaEqui" direction="return"/>
+          <ownedParameter xmi:type="uml:Parameter" xmi:id="uAPq4yY3jFbiJ" name="warehouse" visibility="private" type="uU2mtxS7oISNc" value=""/>
+          <ownedParameter xmi:type="uml:Parameter" xmi:id="uNXCjchz4CQFe" name="name" comment="Identifier for the object." visibility="private" type="u7UUqPdBKbmEX" value=""/>
+        </ownedOperation>
+        <ownedOperation xmi:type="uml:Operation" xmi:id="uvdKlUI3n5QNY" name="WarehouseFree" comment="Removes an object from the cache.  Any references to the object will likely become invalid.">
+          <ownedParameter xmi:type="uml:Parameter" xmi:id="uXyostLRGeKCe" type="uFp7g4uAaEqui" direction="return"/>
+          <ownedParameter xmi:type="uml:Parameter" xmi:id="uzYsNIjy0Z9Wu" name="warehouse" visibility="private" type="uU2mtxS7oISNc" value=""/>
+          <ownedParameter xmi:type="uml:Parameter" xmi:id="ugjqty5bmX3oU" name="name" comment="Key for the item to be freed." visibility="private" type="u7UUqPdBKbmEX" value=""/>
+        </ownedOperation>
+        <ownedOperation xmi:type="uml:Operation" xmi:id="u57IclN8DRrmD" name="WarehouseCopy" comment="Make a copy of &lt;obj&gt; with a new name, and adds it to the Warehouse cache.">
+          <ownedParameter xmi:type="uml:Parameter" xmi:id="u0ye5xxVI3Owi" type="uFp7g4uAaEqui" direction="return"/>
+          <ownedParameter xmi:type="uml:Parameter" xmi:id="u3DGKWlBTsEvL" name="warehouse" visibility="private" type="uU2mtxS7oISNc" value=""/>
+          <ownedParameter xmi:type="uml:Parameter" xmi:id="uZBfnV9JbmUj2" name="obj" comment="The object to be copied (should be of the type managed in the warehouse)." visibility="private" type="uFp7g4uAaEqui" value=""/>
+          <ownedParameter xmi:type="uml:Parameter" xmi:id="uV0m0pyaTS5yA" name="newname" comment="The name to be given to the copy." visibility="private" type="u7UUqPdBKbmEX" value=""/>
+        </ownedOperation>
+        <ownedOperation xmi:type="uml:Operation" xmi:id="uDtCi0lDVkVFV" name="is.legal.name" comment="Checks name to make sure it is a valid identifier for the object type in the implementation.">
+          <ownedParameter xmi:type="uml:Parameter" xmi:id="urtyZkisFFaiM" type="uv27IWLqGxejq" direction="return"/>
+          <ownedParameter xmi:type="uml:Parameter" xmi:id="u10mkt2J6aCoQ" name="warehouse" visibility="private" type="uU2mtxS7oISNc" value=""/>
+          <ownedParameter xmi:type="uml:Parameter" xmi:id="u8MhIXrQHm9kl" name="name" visibility="private" type="u7UUqPdBKbmEX" value=""/>
+        </ownedOperation>
+        <ownedOperation xmi:type="uml:Operation" xmi:id="uP9fNGCfeT3VN" name="as.legal.name" comment="Mangles the name until is a legal type for the Warehouse class.">
+          <ownedParameter xmi:type="uml:Parameter" xmi:id="uS5pm3LUdr6hn" name="warehouse" visibility="private" type="uU2mtxS7oISNc" value=""/>
+        </ownedOperation>
+        <ownedOperation xmi:type="uml:Operation" xmi:id="uwzv6wH5af9IM" name="is.valid" comment="If an object contains a reference to the heap of another application, a stale reference can be left in an R object (especially after a save restore cycle).  This method checks to make sure that any references in the object are still valid.">
+          <ownedParameter xmi:type="uml:Parameter" xmi:id="unRcXuupYyxcW" type="uv27IWLqGxejq" direction="return"/>
+          <ownedParameter xmi:type="uml:Parameter" xmi:id="uaLOe5q32CF62" name="warehouse" visibility="private" type="uU2mtxS7oISNc" value=""/>
+          <ownedParameter xmi:type="uml:Parameter" xmi:id="uWJB85gWynHxB" name="object" comment="The object to be tested." visibility="private" type="uFp7g4uAaEqui" value=""/>
+        </ownedOperation>
+      </packagedElement>
+      <packagedElement xmi:type="uml:Association" xmi:id="uoRzwKUP94Qk6" name="">
+        <ownedEnd xmi:type="uml:AssociationEnd" xmi:id="urXwg1d6CVSZy" name="" type="uqVcEsDsiTcHl" aggregation="aggregate" isNavigable="true" changeability="changeable"/>
+        <ownedEnd xmi:type="uml:AssociationEnd" xmi:id="ux0ZfgrOqcumr" name="" type="ujNSW24puBsN1" aggregation="none" isNavigable="true" changeability="changeable"/>
+      </packagedElement>
+      <packagedElement xmi:type="uml:Class" xmi:id="uqGejgiIVA2D5" name="Ware"/>
+      <packagedElement xmi:type="uml:Class" xmi:id="u1hK7VNGUvFYB" name="Statistic" comment="A callable function of a node.">
+        <ownedAttribute xmi:type="uml:Property" xmi:id="ugN6kf7G3WP5W" name="name" comment="Name of the statistic.  Should be unique within the project." visibility="private" type="u7UUqPdBKbmEX"/>
+        <ownedAttribute xmi:type="uml:Property" xmi:id="uOeb662FtGTma" name="node" comment="The name of the node (s) to calculate with." visibility="private" type="u7UUqPdBKbmEX"/>
+        <ownedAttribute xmi:type="uml:Property" xmi:id="ueQzB7TPBePN5" name="fun" comment="The name of the function which implements the calculation." visibility="private" type="udUh9cNtzugae"/>
+        <ownedOperation xmi:type="uml:Operation" xmi:id="utXHECFPc8YjC" name="calcStat" comment="Applies a statistic function to a network.  Finds the nodes by names and then calls the function.">
+          <ownedParameter xmi:type="uml:Parameter" xmi:id="uJawrN1hCOr6c" type="uFp7g4uAaEqui" direction="return"/>
+          <ownedParameter xmi:type="uml:Parameter" xmi:id="uEljYZnWOEyaS" name="stat" visibility="private" type="u1hK7VNGUvFYB" value=""/>
+          <ownedParameter xmi:type="uml:Parameter" xmi:id="uXwLdhndafH1L" name="net" visibility="private" type="uP9whnbOrm4sN" value=""/>
+        </ownedOperation>
+      </packagedElement>
+      <packagedElement xmi:type="uml:Class" xmi:id="udUh9cNtzugae" name="charater"/>
+      <packagedElement xmi:type="uml:Class" xmi:id="ugpCDoqavTPGc" name="StatisticOperator." comment="These are functions which are suitable for use with the Statistic class.  The attriubutes are the arguments of the functions.  The &quot;methods&quot; are all separate generic functions for which specific methods are needed." stereotype="u0Ld30NU62Quw">
+        <ownedAttribute xmi:type="uml:Property" xmi:id="uUuxrNRRnRuxS" name="net" visibility="private" type="uP9whnbOrm4sN"/>
+        <ownedAttribute xmi:type="uml:Property" xmi:id="uJEhO32GqDvVi" name="node" visibility="private" type="ubVwm3Nh3rsYr"/>
+        <ownedOperation xmi:type="uml:Operation" xmi:id="uvhermYNaEH7y" name="PnodeMargin" comment="Returns a vector indexed by the state of the nodes giving the probability of each state.">
+          <ownedParameter xmi:type="uml:Parameter" xmi:id="udU5boKR51VPf" type="uYwDtPZKl4v9m" direction="return"/>
+        </ownedOperation>
+        <ownedOperation xmi:type="uml:Operation" xmi:id="unOcQK2VbD9Ki" name="PnodeEAP" comment="Gives the expected value (mean) of the state values weighted by the node margin.">
+          <ownedParameter xmi:type="uml:Parameter" xmi:id="ufEaeVbSActIe" type="uVXa2CfCgM9f7" direction="return"/>
+        </ownedOperation>
+        <ownedOperation xmi:type="uml:Operation" xmi:id="uVW3lzhnQOYkw" name="PnodeSD" comment="Gives the standard deviation of the state values with respect to the node margin.">
+          <ownedParameter xmi:type="uml:Parameter" xmi:id="uECiXlljHO2ci" type="uVXa2CfCgM9f7" direction="return"/>
+        </ownedOperation>
+        <ownedOperation xmi:type="uml:Operation" xmi:id="uCjvoW8vPX3RW" name="PnodeMedian" comment="Gives the state value corresponding to 50% cumulative probability (assumes states are ordered).">
+          <ownedParameter xmi:type="uml:Parameter" xmi:id="umQtsfTqYlu0P" type="u7UUqPdBKbmEX" direction="return"/>
+        </ownedOperation>
+        <ownedOperation xmi:type="uml:Operation" xmi:id="uoHLO3pwZo2z2" name="PnodeMode" comment="Gives the name of the state with the highest probability.">
+          <ownedParameter xmi:type="uml:Parameter" xmi:id="u2K6uLMseQGDk" type="u7UUqPdBKbmEX" direction="return"/>
+        </ownedOperation>
+      </packagedElement>
+      <packagedElement xmi:type="uml:Association" xmi:id="uOzwJub8h1sN1" name="">
+        <ownedEnd xmi:type="uml:AssociationEnd" xmi:id="unXH6e3q8fL0J" name="" type="u1hK7VNGUvFYB" aggregation="none" isNavigable="true" changeability="changeable"/>
+        <ownedEnd xmi:type="uml:AssociationEnd" xmi:id="utHARqVbXLF59" name="" type="ugpCDoqavTPGc" aggregation="none" isNavigable="true" changeability="changeable"/>
+      </packagedElement>
+      <xmi:Extension extender="umbrello">
+        <diagrams resolution="120">
+          <diagram xmi.id="uYzf1zUyRdWBQ" name="Nets and Nodes" type="1" documentation="" backgroundcolor="#2d2d2d" fillcolor="#ffffc0" font="Fira Sans,10,-1,5,29,0,0,0,0,0,Book" griddotcolor="#2d2d2d" linecolor="#990000" linewidth="0" textcolor="#000000" usefillcolor="1" showattribassocs="1" showatts="1" showattsig="1" showops="1" showopsig="1" showpackage="1" showpubliconly="0" showscope="1" showstereotype="2" localid="-1" showgrid="0" snapgrid="0" snapcsgrid="0" snapx="25" snapy="25" zoom="114.066" canvasheight="800" canvaswidth="1100" isopen="1">
+            <widgets>
+              <classwidget xmi.id="ubVwm3Nh3rsYr" localid="uwnST0EuHAKlm" textcolor="#000000" linecolor="#990000" linewidth="0" usefillcolor="1" usesdiagramfillcolor="0" usesdiagramusefillcolor="0" fillcolor="#ffffc0" font="Fira Sans,10,-1,5,50,0,0,0,0,0,Book" autoresize="1" x="929.186" y="598.227" width="1000" height="380" isinstance="0" showstereotype="2" showoperations="1" showpubliconly="0" showopsigs="601" showpackage="1" showscope="1" showattributes="1" showattsigs="601" drawascircle="0"/>
+              <classwidget xmi.id="ugIELAi40XDWh" localid="uiFX4uT6Qq5HD" textcolor="#000000" linecolor="#990000" linewidth="0" usefillcolor="1" usesdiagramfillcolor="0" usesdiagramusefillcolor="0" fillcolor="#ffffc0" font="Fira Sans,10,-1,5,50,0,0,0,0,0,Book" autoresize="1" x="1010.86" y="-13.0625" width="429" height="340" isinstance="0" showstereotype="2" showoperations="1" showpubliconly="0" showopsigs="601" showpackage="1" showscope="1" showattributes="1" showattsigs="601"/>
+              <classwidget xmi.id="uqVcEsDsiTcHl" localid="u0tkg2Nknuac4" textcolor="#000000" linecolor="#990000" linewidth="0" usefillcolor="1" usesdiagramfillcolor="0" usesdiagramusefillcolor="0" fillcolor="#ffffc0" font="Fira Sans,10,-1,5,50,0,0,0,0,0,Book" autoresize="1" x="479" y="823" width="316" height="50" isinstance="0" showstereotype="2" showoperations="1" showpubliconly="0" showopsigs="601" showpackage="1" showscope="1" showattributes="1" showattsigs="601"/>
+              <classwidget xmi.id="ujNSW24puBsN1" localid="u6NVO8nwOGsrL" textcolor="#000000" linecolor="#990000" linewidth="0" usefillcolor="1" usesdiagramfillcolor="0" usesdiagramusefillcolor="0" fillcolor="#ffffc0" font="Fira Sans,10,-1,5,50,0,0,0,0,0,Book" autoresize="1" x="170" y="759" width="612" height="90" isinstance="0" showstereotype="2" showoperations="1" showpubliconly="0" showopsigs="601" showpackage="1" showscope="1" showattributes="1" showattsigs="601"/>
+              <classwidget xmi.id="uP9whnbOrm4sN" localid="un0O7mxNr5pW3" textcolor="#000000" linecolor="#990000" linewidth="0" usefillcolor="1" usesdiagramfillcolor="0" usesdiagramusefillcolor="0" fillcolor="#ffffc0" font="Fira Sans,10,-1,5,50,0,0,0,0,0,Book" autoresize="1" x="-1.6087" y="336.261" width="1000" height="280" isinstance="0" showstereotype="2" showoperations="1" showpubliconly="0" showopsigs="601" showpackage="1" showscope="1" showattributes="1" showattsigs="601"/>
+              <classwidget xmi.id="uBdL2w5HKb46S" localid="ueMfyt8U5yWFd" textcolor="#000000" linecolor="#990000" linewidth="0" usefillcolor="1" usesdiagramfillcolor="0" usesdiagramusefillcolor="0" fillcolor="#ffffc0" font="Fira Sans,10,-1,5,50,0,0,0,0,0,Book" autoresize="1" x="39.6522" y="42.1304" width="508" height="200" isinstance="0" showstereotype="2" showoperations="1" showpubliconly="0" showopsigs="601" showpackage="1" showscope="1" showattributes="1" showattsigs="601"/>
+            </widgets>
+            <messages/>
+            <associations>
+              <assocwidget xmi.id="u8SmCbdCxY4Q0" localid="uEckxs10xKWIq" textcolor="none" linecolor="#990000" linewidth="0" usefillcolor="1" usesdiagramfillcolor="1" usesdiagramusefillcolor="1" fillcolor="none" font="Fira Sans,10,-1,5,29,0,0,0,0,0,Book" autoresize="1" seqnum="" type="500" widgetaid="uP9whnbOrm4sN" widgetbid="uBdL2w5HKb46S" indexa="0" totalcounta="0" indexb="0" totalcountb="0">
+                <linepath layout="Direct">
+                  <startpoint startx="412.606" starty="336.261"/>
+                  <endpoint endx="354.927" endy="242.13"/>
+                </linepath>
+              </assocwidget>
+              <assocwidget xmi.id="upRpVwYxRuJ0L" localid="ubqY4Uook4jav" textcolor="none" linecolor="#990000" linewidth="0" usefillcolor="1" usesdiagramfillcolor="1" usesdiagramusefillcolor="1" fillcolor="none" font="Fira Sans,10,-1,5,29,0,0,0,0,0,Book" autoresize="1" seqnum="" type="500" widgetaid="ubVwm3Nh3rsYr" widgetbid="ugIELAi40XDWh" indexa="0" totalcounta="0" indexb="0" totalcountb="0">
+                <linepath layout="Direct">
+                  <startpoint startx="1299.52" starty="518.227"/>
+                  <endpoint endx="1260.25" endy="326.938"/>
+                </linepath>
+              </assocwidget>
+              <assocwidget xmi.id="uuWJTv6ay1Ww3" localid="uBArDJTEp8urz" textcolor="none" linecolor="#990000" linewidth="0" usefillcolor="1" usesdiagramfillcolor="1" usesdiagramusefillcolor="1" fillcolor="none" font="Fira Sans,10,-1,5,29,0,0,0,0,0,Book" autoresize="1" seqnum="" type="501" widgetaid="uP9whnbOrm4sN" widgetbid="ujNSW24puBsN1" indexa="0" totalcounta="0" indexb="0" totalcountb="0">
+                <linepath layout="Direct">
+                  <startpoint startx="488.826" starty="616.261"/>
+                  <endpoint endx="479.074" endy="759"/>
+                </linepath>
+              </assocwidget>
+              <assocwidget xmi.id="ur7zZfPizGSRz" localid="uWTGhSF4TJqUk" textcolor="none" linecolor="#990000" linewidth="0" usefillcolor="1" usesdiagramfillcolor="1" usesdiagramusefillcolor="1" fillcolor="none" font="Fira Sans,10,-1,5,29,0,0,0,0,0,Book" autoresize="1" seqnum="" type="501" widgetaid="ubVwm3Nh3rsYr" widgetbid="uqVcEsDsiTcHl" indexa="0" totalcounta="0" indexb="0" totalcountb="0">
+                <linepath layout="Direct">
+                  <startpoint startx="838.52" starty="793.795"/>
+                  <endpoint endx="623" endy="830.678"/>
+                </linepath>
+              </assocwidget>
+              <assocwidget xmi.id="u0g5DCSpJpYsP" localid="uEXQfvAAaf7wd" textcolor="#000000" linecolor="#990000" linewidth="0" usefillcolor="1" usesdiagramfillcolor="1" usesdiagramusefillcolor="1" fillcolor="none" font="Fira Sans,10,-1,5,29,0,0,0,0,0,Book" autoresize="1" seqnum="" type="501" widgetaid="ugIELAi40XDWh" widgetbid="uBdL2w5HKb46S" indexa="0" totalcounta="0" indexb="0" totalcountb="0">
+                <floatingtext xmi.id="uOidXDTvZZzcW" localid="ukcqxhUfCMGx3" textcolor="none" linecolor="#990000" linewidth="0" usefillcolor="1" usesdiagramfillcolor="1" usesdiagramusefillcolor="1" fillcolor="none" font="Fira Sans,10,-1,5,50,0,0,0,0,0,Book" autoresize="1" x="969.913" y="133.547" width="15" height="24" isinstance="0" showstereotype="2" text="1" pretext="" posttext="" role="701"/>
+                <floatingtext xmi.id="uPqJCAX8TqmnS" localid="u545EE5D4Vnw9" textcolor="none" linecolor="#990000" linewidth="0" usefillcolor="1" usesdiagramfillcolor="1" usesdiagramusefillcolor="1" fillcolor="none" font="Fira Sans,10,-1,5,50,0,0,0,0,0,Book" autoresize="1" x="897" y="135.842" width="100" height="24" isinstance="0" showstereotype="2" text="PnodePnet" pretext="+" posttext="" role="709"/>
+                <floatingtext xmi.id="uETZPQPOaKbir" localid="uLct1gr4TJz2o" textcolor="none" linecolor="#990000" linewidth="0" usefillcolor="1" usesdiagramfillcolor="1" usesdiagramusefillcolor="1" fillcolor="none" font="Fira Sans,10,-1,5,50,0,0,0,0,0,Book" autoresize="1" x="922" y="111.842" width="67" height="24" isinstance="0" showstereotype="2" text="frozen" pretext="{" posttext="}" role="711"/>
+                <floatingtext xmi.id="uWnVwHzrAHXnT" localid="u57N6Wp99IS9m" textcolor="none" linecolor="#990000" linewidth="0" usefillcolor="1" usesdiagramfillcolor="1" usesdiagramusefillcolor="1" fillcolor="none" font="Fira Sans,10,-1,5,50,0,0,0,0,0,Book" autoresize="1" x="559.739" y="144.956" width="15" height="24" isinstance="0" showstereotype="2" text="*" pretext="" posttext="" role="702"/>
+                <floatingtext xmi.id="u0dy2ZQM0Mbhu" localid="umXfBqdp4sUiz" textcolor="none" linecolor="#990000" linewidth="0" usefillcolor="1" usesdiagramfillcolor="1" usesdiagramusefillcolor="1" fillcolor="none" font="Fira Sans,10,-1,5,50,0,0,0,0,0,Book" autoresize="1" x="549.652" y="154.66" width="64" height="24" isinstance="0" showstereotype="2" text="nodes" pretext="+" posttext="" role="710"/>
+                <floatingtext xmi.id="uEaifQJvUtIRy" localid="uozkscwKTn6cG" textcolor="none" linecolor="#990000" linewidth="0" usefillcolor="1" usesdiagramfillcolor="1" usesdiagramusefillcolor="1" fillcolor="none" font="Fira Sans,10,-1,5,50,0,0,0,0,0,Book" autoresize="1" x="549.652" y="178.66" width="107" height="24" isinstance="0" showstereotype="2" text="changeable" pretext="{" posttext="}" role="712"/>
+                <linepath layout="Direct">
+                  <startpoint startx="1010.86" starty="153.529"/>
+                  <endpoint endx="547.652" endy="146.167"/>
+                </linepath>
+              </assocwidget>
+            </associations>
+          </diagram>
+          <diagram xmi.id="up7eJ3D8d0ctr" name="Warehouses" type="1" documentation="" backgroundcolor="#2d2d2d" fillcolor="#ffffc0" font="Fira Sans,10,-1,5,29,0,0,0,0,0,Book" griddotcolor="#2d2d2d" linecolor="#990000" linewidth="0" textcolor="#000000" usefillcolor="1" showattribassocs="1" showatts="1" showattsig="1" showops="1" showopsig="1" showpackage="1" showpubliconly="0" showscope="1" showstereotype="2" localid="-1" showgrid="0" snapgrid="0" snapcsgrid="0" snapx="25" snapy="25" zoom="99.1875" canvasheight="800" canvaswidth="1100" isopen="1">
+            <widgets>
+              <classwidget xmi.id="ujNSW24puBsN1" localid="u1nEiaU7fZLSX" textcolor="#000000" linecolor="#990000" linewidth="0" usefillcolor="1" usesdiagramfillcolor="0" usesdiagramusefillcolor="0" fillcolor="#ffffc0" font="Fira Sans,10,-1,5,50,0,0,0,0,0,Book" autoresize="1" x="187.32" y="434" width="612" height="90" isinstance="0" showstereotype="2" showoperations="1" showpubliconly="0" showopsigs="601" showpackage="1" showscope="1" showattributes="1" showattsigs="601"/>
+              <classwidget xmi.id="uU2mtxS7oISNc" localid="uUjHQldYPVDOT" textcolor="#000000" linecolor="#990000" linewidth="0" usefillcolor="1" usesdiagramfillcolor="0" usesdiagramusefillcolor="0" fillcolor="#ffffc0" font="Fira Sans,10,-1,5,50,0,0,0,0,0,Book" autoresize="1" x="230.82" y="-1.18841" width="624" height="260" isinstance="0" showstereotype="2" showoperations="1" showpubliconly="0" showopsigs="601" showpackage="1" showscope="1" showattributes="1" showattsigs="601"/>
+              <classwidget xmi.id="uqVcEsDsiTcHl" localid="u0RBMiqQlglor" textcolor="#000000" linecolor="#990000" linewidth="0" usefillcolor="1" usesdiagramfillcolor="0" usesdiagramusefillcolor="0" fillcolor="#ffffc0" font="Fira Sans,10,-1,5,50,0,0,0,0,0,Book" autoresize="1" x="769.04" y="345.312" width="316" height="50" isinstance="0" showstereotype="2" showoperations="1" showpubliconly="0" showopsigs="601" showpackage="1" showscope="1" showattributes="1" showattsigs="601"/>
+            </widgets>
+            <messages/>
+            <associations>
+              <assocwidget xmi.id="uurPsA79yYUBl" localid="uOsVCHkiUQmsb" textcolor="none" linecolor="#990000" linewidth="0" usefillcolor="1" usesdiagramfillcolor="1" usesdiagramusefillcolor="1" fillcolor="none" font="Fira Sans,10,-1,5,29,0,0,0,0,0,Book" autoresize="1" seqnum="" type="500" widgetaid="uqVcEsDsiTcHl" widgetbid="uU2mtxS7oISNc" indexa="0" totalcounta="0" indexb="0" totalcountb="0">
+                <linepath layout="Direct">
+                  <startpoint startx="638.818" starty="231"/>
+                  <endpoint endx="641.778" endy="241"/>
+                </linepath>
+              </assocwidget>
+              <assocwidget xmi.id="un9xptNBgW8ZU" localid="ujACNHfEmewem" textcolor="none" linecolor="#990000" linewidth="0" usefillcolor="1" usesdiagramfillcolor="1" usesdiagramusefillcolor="1" fillcolor="none" font="Fira Sans,10,-1,5,29,0,0,0,0,0,Book" autoresize="1" seqnum="" type="500" widgetaid="ujNSW24puBsN1" widgetbid="uU2mtxS7oISNc" indexa="0" totalcounta="0" indexb="0" totalcountb="0">
+                <linepath layout="Direct">
+                  <startpoint startx="365.634" starty="334"/>
+                  <endpoint endx="441.514" endy="281"/>
+                </linepath>
+              </assocwidget>
+              <assocwidget xmi.id="uoRzwKUP94Qk6" localid="urD7gjuO6BdZY" textcolor="#000000" linecolor="#990000" linewidth="0" usefillcolor="1" usesdiagramfillcolor="1" usesdiagramusefillcolor="1" fillcolor="none" font="Fira Sans,10,-1,5,29,0,0,0,0,0,Book" autoresize="1" seqnum="" type="501" widgetaid="uqVcEsDsiTcHl" widgetbid="ujNSW24puBsN1" indexa="0" totalcounta="0" indexb="0" totalcountb="0">
+                <linepath layout="Polyline">
+                  <startpoint startx="592.447" starty="271"/>
+                  <endpoint endx="398.553" endy="334"/>
+                </linepath>
+              </assocwidget>
+            </associations>
+          </diagram>
+          <diagram xmi.id="uGW4yasWwKhMd" name="Statistics" type="1" documentation="" backgroundcolor="#2d2d2d" fillcolor="#ffffc0" font="Fira Sans,10,-1,5,29,0,0,0,0,0,Book" griddotcolor="#2d2d2d" linecolor="#990000" linewidth="0" textcolor="#000000" usefillcolor="1" showattribassocs="1" showatts="1" showattsig="1" showops="1" showopsig="1" showpackage="1" showpubliconly="0" showscope="1" showstereotype="2" localid="-1" showgrid="0" snapgrid="0" snapcsgrid="0" snapx="25" snapy="25" zoom="100" canvasheight="800" canvaswidth="1100" isopen="1">
+            <widgets>
+              <classwidget xmi.id="u1hK7VNGUvFYB" localid="umbw1a2iG1TTj" textcolor="#000000" linecolor="#990000" linewidth="0" usefillcolor="1" usesdiagramfillcolor="0" usesdiagramusefillcolor="0" fillcolor="#ffffc0" font="Fira Sans,10,-1,5,50,0,0,0,0,0,Book" autoresize="1" x="313" y="41" width="325" height="100" isinstance="0" showstereotype="2" showoperations="1" showpubliconly="0" showopsigs="601" showpackage="1" showscope="1" showattributes="1" showattsigs="601"/>
+              <classwidget xmi.id="ugpCDoqavTPGc" localid="uAKRiFWYdpKcG" textcolor="#000000" linecolor="#990000" linewidth="0" usefillcolor="1" usesdiagramfillcolor="0" usesdiagramusefillcolor="0" fillcolor="#ffffc0" font="Fira Sans,10,-1,5,50,0,0,0,0,0,Book" autoresize="1" x="384" y="280" width="270" height="180" isinstance="0" showstereotype="2" showoperations="1" showpubliconly="0" showopsigs="601" showpackage="1" showscope="1" showattributes="1" showattsigs="601"/>
+            </widgets>
+            <messages/>
+            <associations>
+              <assocwidget xmi.id="uOzwJub8h1sN1" localid="u4j8nJdpOidVQ" textcolor="none" linecolor="#990000" linewidth="0" usefillcolor="1" usesdiagramfillcolor="1" usesdiagramusefillcolor="1" fillcolor="none" font="Fira Sans,10,-1,5,29,0,0,0,0,0,Book" autoresize="1" seqnum="" type="503" widgetaid="u1hK7VNGUvFYB" widgetbid="ugpCDoqavTPGc" indexa="0" totalcounta="0" indexb="0" totalcountb="0">
+                <linepath layout="Direct">
+                  <startpoint startx="483.296" starty="141"/>
+                  <endpoint endx="504.968" endy="280"/>
+                </linepath>
+              </assocwidget>
+            </associations>
+          </diagram>
+        </diagrams>
+      </xmi:Extension>
+    </packagedElement>
+    <packagedElement xmi:type="uml:Model" xmi:id="Use_Case_View" name="Use Case View"/>
+    <packagedElement xmi:type="uml:Model" xmi:id="Component_View" name="Component View"/>
+    <packagedElement xmi:type="uml:Model" xmi:id="Deployment_View" name="Deployment View"/>
+    <packagedElement xmi:type="uml:Model" xmi:id="Entity_Relationship_Model" name="Entity Relationship Model"/>
+  </uml:Model>
+  <xmi:Extension extender="umbrello">
+    <docsettings viewid="uYzf1zUyRdWBQ" documentation="" uniqueid="u2K6uLMseQGDk"/>
+    <listview>
+      <listitem id="Views" type="800" open="1">
+        <listitem id="Component_View" type="821" open="1"/>
+        <listitem id="Deployment_View" type="827" open="1"/>
+        <listitem id="Entity_Relationship_Model" type="836" open="1"/>
+        <listitem id="Logical_View" type="801" open="1">
+          <listitem id="uzf20YtSpcOLO" type="813" open="1"/>
+          <listitem id="udUh9cNtzugae" type="813" open="1"/>
+          <listitem id="u8DeYQ0pJwupG" type="813" open="1"/>
+          <listitem id="Datatypes" type="830" open="1">
+            <listitem id="uFp7g4uAaEqui" type="829" open="1"/>
+            <listitem id="u7UUqPdBKbmEX" type="829" open="1"/>
+            <listitem id="udhu8WTxpgBf5" type="829" open="1"/>
+            <listitem id="uvT3XqkeG3iP8" type="829" open="0"/>
+            <listitem id="uuD600Vsmn8V4" type="829" open="0"/>
+            <listitem id="uDFCJnTq5bnct" type="829" open="1"/>
+            <listitem id="upYih0RerG21L" type="829" open="1"/>
+            <listitem id="uv27IWLqGxejq" type="829" open="0"/>
+            <listitem id="unOTAe8Kdp8Oy" type="829" open="1"/>
+            <listitem id="uKrJpa0ZA4qtE" type="829" open="0"/>
+            <listitem id="uVXa2CfCgM9f7" type="829" open="1"/>
+            <listitem id="ueNruFOjycxKd" type="829" open="1"/>
+            <listitem id="uc2ELbIFnyf0y" type="829" open="0"/>
+            <listitem id="uYwDtPZKl4v9m" type="829" open="1"/>
+          </listitem>
+          <listitem id="uBdL2w5HKb46S" type="813" open="1">
+            <listitem id="uVZHC1lCLaouA" type="814" open="0"/>
+            <listitem id="uWXIlUPGWXfkP" type="814" open="0"/>
+            <listitem id="uJufSsSQowvtN" type="814" open="0"/>
+            <listitem id="uJ7lXQkRfaslQ" type="815" open="0"/>
+            <listitem id="u3D1lH4StwYaz" type="815" open="0"/>
+            <listitem id="uvLkDDGllGYNb" type="815" open="0"/>
+            <listitem id="uCPY4HFW052EG" type="815" open="0"/>
+            <listitem id="uiDmNvnDhcgOm" type="814" open="0"/>
+            <listitem id="ulVJhm18dqaed" type="815" open="0"/>
+          </listitem>
+          <listitem id="ugIELAi40XDWh" type="813" open="1">
+            <listitem id="uVdgerhLDkIyH" type="814" open="0"/>
+            <listitem id="uc1AEzzPoMwyx" type="814" open="0"/>
+            <listitem id="uHmSUmKgenLtC" type="814" open="0"/>
+            <listitem id="uHoS1Ntw4MeCB" type="814" open="0"/>
+            <listitem id="uKsQnVqMsQgHU" type="814" open="0"/>
+            <listitem id="umI6tMz2iB0dx" type="815" open="0"/>
+            <listitem id="uT8hwfkGqCyaI" type="815" open="0"/>
+            <listitem id="u1jmtUvXH0ixN" type="815" open="0"/>
+            <listitem id="uf1sEa1HExbRf" type="815" open="0"/>
+            <listitem id="uqgSKDgaY9XtR" type="815" open="0"/>
+            <listitem id="ubtf7wX9ZHekW" type="814" open="0"/>
+            <listitem id="uTwiPyHOPxWtH" type="814" open="0"/>
+            <listitem id="uJcgdr2Y0Cadl" type="814" open="0"/>
+            <listitem id="uomO4Fhr3hLHM" type="814" open="0"/>
+            <listitem id="uAe12ZssTLK7w" type="814" open="0"/>
+            <listitem id="uKHy8pOS6PT3j" type="814" open="0"/>
+          </listitem>
+          <listitem id="uz57ldKHptpgx" type="813" open="1"/>
+          <listitem id="uYzf1zUyRdWBQ" type="807" label="Nets and Nodes" open="0"/>
+          <listitem id="uP9whnbOrm4sN" type="813" open="1">
+            <listitem id="uZmOC9hVa3DUQ" type="815" open="0"/>
+            <listitem id="uxTovjQcwSAxg" type="815" open="0"/>
+            <listitem id="uOqy70TMmFugo" type="815" open="0"/>
+            <listitem id="udfYw7uOi7q7P" type="815" open="0"/>
+            <listitem id="uMgRBx7dolDTZ" type="815" open="0"/>
+            <listitem id="upVf6ILeCX68v" type="815" open="0"/>
+            <listitem id="uGi9La3p1YBFk" type="815" open="0"/>
+            <listitem id="uTfxrBKOw8tt0" type="815" open="0"/>
+            <listitem id="uw1soRx8QMNbm" type="815" open="0"/>
+            <listitem id="uhUzUOVAG0ndG" type="815" open="0"/>
+            <listitem id="unWnPzR4ooa2D" type="815" open="0"/>
+            <listitem id="uVMYw1KJS04YO" type="815" open="0"/>
+            <listitem id="u4jZFoEDWLI1L" type="814" open="0"/>
+          </listitem>
+          <listitem id="ujNSW24puBsN1" type="813" open="1">
+            <listitem id="uTqOPEpEGFX45" type="815" open="0"/>
+            <listitem id="ub4gVpHzTmCTe" type="815" open="0"/>
+            <listitem id="usGFMR6dYucxR" type="815" open="0"/>
+          </listitem>
+          <listitem id="ubVwm3Nh3rsYr" type="813" open="1">
+            <listitem id="u6Hf0VFbZiIxD" type="815" open="0"/>
+            <listitem id="ulKN9pBg8lqah" type="814" open="0"/>
+            <listitem id="u8rSba5mdpgfz" type="815" open="0"/>
+            <listitem id="uT3xpfRWp5O1K" type="815" open="0"/>
+            <listitem id="uqaeTyUwvhQYI" type="815" open="0"/>
+            <listitem id="ue0PiKOoQ2GsQ" type="814" open="0"/>
+            <listitem id="uvD3JcTXD5V53" type="814" open="0"/>
+            <listitem id="uxKwD80iBBrtz" type="814" open="0"/>
+            <listitem id="u0c5bBplZBcm9" type="815" open="0"/>
+            <listitem id="upwvn5xh34dHf" type="815" open="0"/>
+            <listitem id="uTjCEipRamPzs" type="815" open="0"/>
+            <listitem id="uss8qrgRDM72S" type="815" open="0"/>
+            <listitem id="ugG1NGgOuorU5" type="815" open="0"/>
+            <listitem id="u33ny1lDX3AZA" type="815" open="0"/>
+            <listitem id="uCxHS7NNXwXwf" type="815" open="0"/>
+            <listitem id="umlH7S0ltaODi" type="814" open="0"/>
+            <listitem id="uvT6T78BmfP4N" type="814" open="0"/>
+            <listitem id="uJxiyqnIDxTuV" type="814" open="0"/>
+          </listitem>
+          <listitem id="uqVcEsDsiTcHl" type="813" open="1">
+            <listitem id="unJUuII66uMtO" type="815" open="0"/>
+          </listitem>
+          <listitem id="uqMMPVpOq3OY6" type="813" open="1">
+            <listitem id="uWcrSQFj9ykZd" type="814" open="0"/>
+            <listitem id="uiEE9yxJzrv8q" type="814" open="0"/>
+            <listitem id="ucXAwhR1SjW2K" type="814" open="0"/>
+          </listitem>
+          <listitem id="u1hK7VNGUvFYB" type="813" open="1">
+            <listitem id="utXHECFPc8YjC" type="815" open="0"/>
+            <listitem id="ueQzB7TPBePN5" type="814" open="0"/>
+            <listitem id="ugN6kf7G3WP5W" type="814" open="0"/>
+            <listitem id="uOeb662FtGTma" type="814" open="0"/>
+          </listitem>
+          <listitem id="ugpCDoqavTPGc" type="813" open="1">
+            <listitem id="uUuxrNRRnRuxS" type="814" open="0"/>
+            <listitem id="uJEhO32GqDvVi" type="814" open="0"/>
+            <listitem id="unOcQK2VbD9Ki" type="815" open="0"/>
+            <listitem id="uvhermYNaEH7y" type="815" open="0"/>
+            <listitem id="uCjvoW8vPX3RW" type="815" open="0"/>
+            <listitem id="uoHLO3pwZo2z2" type="815" open="0"/>
+            <listitem id="uVW3lzhnQOYkw" type="815" open="0"/>
+          </listitem>
+          <listitem id="uGW4yasWwKhMd" type="807" label="Statistics" open="0"/>
+          <listitem id="uqGejgiIVA2D5" type="813" open="1"/>
+          <listitem id="uU2mtxS7oISNc" type="813" open="1">
+            <listitem id="uP9fNGCfeT3VN" type="815" open="0"/>
+            <listitem id="uhQl6BN3CH4mk" type="815" open="0"/>
+            <listitem id="uDtCi0lDVkVFV" type="815" open="0"/>
+            <listitem id="uwzv6wH5af9IM" type="815" open="0"/>
+            <listitem id="uB1GNCZNXNsgd" type="814" open="0"/>
+            <listitem id="u57IclN8DRrmD" type="815" open="0"/>
+            <listitem id="uiHqVGu6wigmO" type="815" open="0"/>
+            <listitem id="utPQib5vx3bmI" type="815" open="0"/>
+            <listitem id="uvdKlUI3n5QNY" type="815" open="0"/>
+            <listitem id="ufyRe259yIfQr" type="815" open="0"/>
+            <listitem id="up5eIyt8w9QOD" type="815" open="0"/>
+            <listitem id="ubZbIHCDVYH1o" type="815" open="0"/>
+          </listitem>
+          <listitem id="up7eJ3D8d0ctr" type="807" label="Warehouses" open="0"/>
+        </listitem>
+        <listitem id="Use_Case_View" type="802" open="1"/>
+      </listitem>
+    </listview>
+  </xmi:Extension>
+</xmi:XMI>

@@ -21,10 +21,10 @@
   the warehouse's manifest.
 }
 \usage{
-WarehouseSupply(warehouse, name)
-\S4method{WarehouseSupply}{ANY}(warehouse, name)
+WarehouseSupply(warehouse, name, restoreOnly=FALSE)
+\S4method{WarehouseSupply}{ANY}(warehouse, name, restoreOnly=FALSE)
 WarehouseFetch(warehouse, name)
-WarehouseMake(warehouse, name)
+WarehouseMake(warehouse, name, restoreOnly=FALSE)
 WarehouseFree(warehouse, name)
 WarehouseSave(warehouse, obj)
 ClearWarehouse(warehouse)
@@ -44,6 +44,9 @@ is.PnodeWarehouse(obj)
     be saved.}
   \item{object}{An object to be tested to see if it a valid object from
     this warehouse.}
+  \item{restoreOnly}{A logical value.  If true, then WarehouseMake will
+    restore an object from a file, if available, but will generate an
+    error if the instruction file is not available.}
 }
 \details{
 
@@ -67,7 +70,10 @@ is.PnodeWarehouse(obj)
 
   The function \code{WarehouseSave} saves the object back out to long
   term storage.  This is particularly used for networks which are often
-  prebuilt and then loaded when needed.
+  prebuilt and then loaded when needed.  Setting the argument
+  \code{restoreOnly=TRUE} in \code{WarehouseMake} or
+  \code{WarehouseSupply} will recreate an object from a save, but not
+  create a new object.
 
   The \code{WarehouseFree} and \code{WarehouseClear} functions complete
   the Warehouse prototocl.  These respectively remove the named object
@@ -136,6 +142,16 @@ is.PnodeWarehouse(obj)
 
   
 }
+\note{
+
+  There seem to be two use cases for \code{WarehouseMake} and
+  \code{WarehouseSupply} when working with networks.  During
+  model construction, calling this function should create a new blank
+  network.  During scoring, it should load a prebuilt network and signal
+  an error if the network is missing.  The \code{restoreOnly} flag is
+  designed to distinguish between these cases.
+
+}
 \value{
   The return type of most functions will depend on the type of the
   warehouse.  In most cases, the functions return an object of the type
@@ -203,20 +219,19 @@ startSession(sess)
 
 ### This tests the manifest and factory protocols.
 
-nodeman1 <- read.csv(paste(library(help="Peanut")$path, "auxdata",
-                           "Mini-PP-Nodes.csv", sep=.Platform$file.sep),
-                     row.names=1,stringsAsFactors=FALSE)
+netman1 <- read.csv(system.file("auxdata", "Mini-PP-Nets.csv", 
+                                package="PNetica"),
+                    row.names=1,stringsAsFactors=FALSE)
 
-netman1 <- read.csv(paste(library(help="Peanut")$path, "auxdata",
-                          "Mini-PP-Nets.csv", sep=.Platform$file.sep),
-                    row.names=1, stringsAsFactors=FALSE)
-
+nodeman1 <- read.csv(system.file("auxdata", "Mini-PP-Nodes.csv", 
+                                package="PNetica"),
+                     stringsAsFactors=FALSE)
 
 ### Test Net building
 Nethouse <- BNWarehouse(manifest=netman1,session=sess,key="Name")
 stopifnot(is.PnetWarehouse(Nethouse))
 
-setwd(paste(library(help="PNetica")$path, "testnets",sep=.Platform$file.sep))
+curd <- setwd(system.file("testnets",package="PNetica"))
 CM <- WarehouseSupply(Nethouse,"miniPP_CM")
 stopifnot(is.null(WarehouseFetch(Nethouse,"PPcompEM")))
 EM1 <- WarehouseMake(Nethouse,"PPcompEM")
@@ -250,7 +265,7 @@ WarehouseFree(Nethouse,PnetName(EM1))
 stopifnot(!is.valid(Nethouse,EM1))
 
 
-
+setwd(curd)
 stopSession(sess)
 
 }}

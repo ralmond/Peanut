@@ -186,8 +186,8 @@ Sydney, Australia. (International) Retrieved from \url{http://bmaw2017.azurewebs
 \examples{
 
 ## This expression provides an example Node manifest
-nodeman1 <- read.csv(file.path(library(help="Peanut")$path, "auxdata",
-                           "Mini-PP-Nodes.csv"),
+nodeman1 <- read.csv(system.file("auxdata", "Mini-PP-Nodes.csv",
+                                package="Peanut"),
                      row.names=1,stringsAsFactors=FALSE)
 
 \dontrun{
@@ -195,7 +195,7 @@ library(PNetica) ## Requires PNetica
 sess <- NeticaSession()
 startSession(sess)
 
-netpath <- file.path(library(help="PNetica")$path, "testnets")
+netpath <- system.file("testnets",package="PNetica")
 netnames <- paste(c("miniPP-CM","PPcompEM","PPconjEM","PPtwostepEM",
                   "PPdurAttEM"),"dne",sep=".")
 

@@ -35,8 +35,8 @@ PnodeLinkScale(node) <- value
   \code{\link[CPTtools]{partialCredit}}  and
   \code{\link[CPTtools]{gradedResponse}}, require a link scale
   parameter.  However, the DiBello-normal model
-  (see \code{\link[CPTtools]{calcDNTable}}) uses a link scale parameter
-  so it may be useful in the future.
+  (see \code{\link[CPTtools]{normalLink}}) defines the residual variance
+  as a link scale parameter.
 
 
 }
